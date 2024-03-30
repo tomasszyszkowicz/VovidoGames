@@ -70,9 +70,13 @@
         <p>Placeholder</p>
     </div>
     <h1>You selected level: <span th:text="${difficulty}"></span></h1>
-    <div class="board" th:classappend="${difficulty}">
-        <!-- Use Thymeleaf expression to dynamically generate cards -->
-        <div th:each="cardNumber : ${#numbers.sequence(1, difficulty == 'easy' ? 16 : difficulty == 'medium' ? 36 : 64)}" class="card"></div>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <!-- Use Thymeleaf expression to dynamically generate cards -->
+            <div class="board" th:classappend="${difficulty}">
+                <div th:each="cardNumber : ${#numbers.sequence(1, difficulty == 'easy' ? 16 : difficulty == 'medium' ? 36 : 64)}" class="card"></div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
