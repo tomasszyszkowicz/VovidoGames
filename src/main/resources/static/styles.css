@@ -173,8 +173,7 @@ button {
     flex-wrap: wrap; /* Allow items to wrap */
     align-items: flex-start; 
     justify-content: center; /* Center the items horizontally */
-    margin: 0 auto;
-    max-width: 660px; /* Adjust based on your layout's width */
+    margin: 0 auto;/* Adjust based on your layout's width */
 }
 
 .left-wrapper {
