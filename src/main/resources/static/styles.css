@@ -174,6 +174,7 @@ button {
     align-items: flex-start; 
     justify-content: center; /* Center the items horizontally */
     margin: 0 auto;/* Adjust based on your layout's width */
+    max-width: 660px;
 }
 
 .left-wrapper {

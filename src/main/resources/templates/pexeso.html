@@ -23,7 +23,7 @@
         }
 
         .board.hard {
-            grid-template-columns: repeat(8, 70px);
+            grid-template-columns: repeat(8, 65px);
         }
 
         .card {
@@ -48,8 +48,8 @@
         }
 
         .board.hard .card {
-            width: 70px;
-            height: 70px;
+            width: 65px;
+            height: 65px;
         }
     </style>
 </head>
@@ -75,6 +75,18 @@
             <!-- Use Thymeleaf expression to dynamically generate cards -->
             <div class="board" th:classappend="${difficulty}">
                 <div th:each="cardNumber : ${#numbers.sequence(1, difficulty == 'easy' ? 16 : difficulty == 'medium' ? 36 : 64)}" class="card"></div>
+            </div>
+        </div>
+    </div>
+    <div class="sub-container-wrapper">
+        <div class="left-wrapper">
+            <div class="sub-container">
+                <h2>Placeholder</h2>
+            </div>
+        </div>
+        <div class="right-wrapper">
+            <div class="sub-container">
+                <h2>Placeholder</h2>
             </div>
         </div>
     </div>
