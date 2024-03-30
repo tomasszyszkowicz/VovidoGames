@@ -86,12 +86,15 @@
     <div class="sub-container-wrapper">
         <div class="left-wrapper">
             <div class="sub-container">
-                <h2>Placeholder</h2>
+                <p>Clicks: <span id="clicks">0</span></p>
+                <p>Matches: <span id="matches">0</span></p>
             </div>
         </div>
         <div class="right-wrapper">
             <div class="sub-container">
-                <h2>Placeholder</h2>
+                <a href="/pexeso-menu">Back to Menu</a>
+                <a th:href="@{/pexeso-game(difficulty=${difficulty})}">Restart Game</a>
+
             </div>
         </div>
     </div>
@@ -99,6 +102,9 @@
     <script>
         // Define your values array
         var values = ["A", "A", "B", "B", "C", "C", "D", "D", "E", "E", "F", "F", "G", "G", "H", "H"];
+
+        var numberOfClicks = 0;
+        var numberOfMatches = 0;
 
         var firstFlippedCard = null;
     
@@ -132,6 +138,8 @@
         // Function to flip the card and display its text content
         function flipCard() {
             var clickedCard = this; // Preserve the reference to the clicked card
+            numberOfClicks++;
+            document.getElementById("clicks").textContent = numberOfClicks;
 
             if (clickedCard.classList.contains('flipped')) {
                 clickedCard.classList.remove('flipped');
@@ -146,8 +154,11 @@
                     if (firstFlippedCard.textContent === clickedCard.textContent) {
                         // Match found: keep both cards flipped
                         console.log("Match found!");
+                        numberOfMatches++;
+                        document.getElementById("matches").textContent = numberOfMatches;
                         firstFlippedCard.removeEventListener('click', flipCard);
                         clickedCard.removeEventListener('click', flipCard);
+                        setTimeout(checkEndGame, 200);
                     } else {
 
                         var cards = document.querySelectorAll('.card');
@@ -174,6 +185,13 @@
                     // Reset the firstFlippedCard variable after checking for a match
                     firstFlippedCard = null;
                 }
+            }
+        }
+
+        // Function to check if the game has ended
+        function checkEndGame() {
+            if (numberOfMatches === values.length / 2) {
+                alert("Congratulations! You have completed the game with " + numberOfClicks + " clicks.");
             }
         }
     
