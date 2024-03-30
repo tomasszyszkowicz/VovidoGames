@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles.css" th:href="@{/styles.css}">
+    <title>Players SQL</title>
+</head>
+<body>
+    <h1>Players SQL console</h1>
+    <p>You can perform CRUD operations here</p>
+
+    <h2>GET</h2>
+    <button type="button" onclick="getAllPlayers()">Show Players</button>
+    <div id="playersContainer"></div>
+
+    <h2>POST</h2>
+    <form id="nameForm">
+        <label for="postUserName">username:</label>
+        <input type="text" id="postUserName" name="userName"><br><br>
+        <button type="button" onclick="submitPlayer()">Submit</button>
+    </form>
+
+    <h2>PUT</h2>
+    <form id="nameForm">
+        <label for = "putUserId">user id:</label>
+        <input type="text" id="putUserId" name="userId"><br><br>
+        <label for="putUserName">username:</label>
+        <input type="text" id="putUserName" name="userName"><br><br>
+        <button type="button" onclick="updatePlayer()">Submit</button>
+    </form>
+
+    <h2>DELETE</h2>
+    <form id="nameForm">
+        <label for="deleteUserId">user id:</label>
+        <input type="text" id="deleteUserId" name="userId"><br><br>
+        <button type="button" onclick="deletePlayer()">Submit</button>
+    </form>
+    <script>
+        function getAllPlayers() {
+            fetch('/players')
+                .then(response => response.json())
+                .then(data => {
+                    const playersContainer = document.getElementById('playersContainer');
+                    playersContainer.innerHTML = '';
+                    data.forEach(player => {
+                        const playerDiv = document.createElement('div');
+                        playerDiv.innerHTML = player.id + ' ' + player.userName;
+                        playersContainer.appendChild(playerDiv);
+                    });
+                });
+        }
+
+        function submitPlayer() {
+            const postUserName = document.getElementById('postUserName').value;
+            console.log(postUserName);
+            fetch('/players', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({userName: postUserName})
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                });
+        }
+
+        function updatePlayer() {
+            const putUserId = document.getElementById('putUserId').value;
+            const putUserName = document.getElementById('putUserName').value;
+            console.log(putUserId);
+            console.log(putUserName);
+            fetch('/players/' + putUserId, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({userName: putUserName})
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                });
+        }
+
+        function deletePlayer() {
+            const deleteUserId = document.getElementById('deleteUserId').value;
+            console.log(deleteUserId);
+            fetch('/players/' + deleteUserId, {
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                });
+        }
+    </script>
+</body>
+</html>
