@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pexeso Board</title>
-    <!-- Link to your CSS file -->
     <link rel="stylesheet" href="/styles.css" th:href="@{/styles.css}">
     <style>
         .board {
@@ -100,11 +99,11 @@
     </div>
 
     <script>
-        // Define your values array
-        var values = ["A", "A", "B", "B", "C", "C", "D", "D", "E", "E", "F", "F", "G", "G", "H", "H"];
 
         var numberOfClicks = 0;
         var numberOfMatches = 0;
+
+        var values = [];
 
         var firstFlippedCard = null;
     
@@ -149,6 +148,7 @@
                 if (firstFlippedCard === null) {
                     // If no card is flipped, set this card as the first flipped card
                     firstFlippedCard = clickedCard;
+                    firstFlippedCard.removeEventListener('click', flipCard);
                 } else {
                     // If one card is already flipped, check for a match
                     if (firstFlippedCard.textContent === clickedCard.textContent) {
@@ -163,9 +163,7 @@
 
                         var cards = document.querySelectorAll('.card');
                         cards.forEach(card => {
-                            if (!card.classList.contains('flipped')) {
-                                card.removeEventListener('click', flipCard);
-                            }
+                            card.removeEventListener('click', flipCard);
                         });
 
                         setTimeout(function(card1, card2) {
@@ -194,9 +192,34 @@
                 alert("Congratulations! You have completed the game with " + numberOfClicks + " clicks.");
             }
         }
+
+        function setupValues(){
+                // Define your values array
+            var easyValues = ["A", "A", "B", "B", "C", "C", "D", "D", "E", "E", "F", "F", "G", "G", "H", "H"];
+            var mediumValues = ["A", "A", "B", "B", "C", "C", "D", "D", "E", "E", "F", "F", "G", "G", "H", "H", "I", "I", "J", "J", "K", "K", "L", "L", "M", "M", "N", "N", "O", "O", "P", "P", "Q", "Q", "R", "R"];
+            var hardValues = ["A", "A", "B", "B", "C", "C", "D", "D", "E", "E", "F", "F", "G", "G", "H", "H", "I", "I", "J", "J", "K", "K", "L", "L", "M", "M", "N", "N", "O", "O", "P", "P", "Q", "Q", "R", "R", "S", "S", "T", "T", "U", "U", "V", "V", "W", "W", "X", "X", "Y", "Y", "Z", "Z", "1", "1", "2", "2", "3", "3", "4", "4", "5", "5", "6", "6"];
+
+            // Create a URLSearchParams object from the current URL
+            const urlParams = new URLSearchParams(window.location.search);
+
+            // Get the 'difficulty' parameter from the URL
+            const difficulty = urlParams.get('difficulty');
+            switch (difficulty) {
+                case 'easy':
+                    values = easyValues;
+                    break;
+                case 'medium':
+                    values = mediumValues;
+                    break;
+                case 'hard':
+                    values = hardValues;
+                    break;
+            }
+        }
     
         // Call the function to assign values to cards when the page loads
         window.onload = function() {
+            setupValues();
             assignCardValues();
     
             // Add event listener to each card to flip it on click
