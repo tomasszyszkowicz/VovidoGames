@@ -62,7 +62,6 @@ public class PlayerController {
         if (playerRepository.existsById(id)) {
             Player existingPlayer = playerRepository.findById(id).get();
             existingPlayer.setUserName(newPlayer.getUserName());
-            // Make sure to handle other fields that need to be updated here
             playerRepository.save(existingPlayer);
             return new ResponseEntity<>(existingPlayer, HttpStatus.OK);
         }
