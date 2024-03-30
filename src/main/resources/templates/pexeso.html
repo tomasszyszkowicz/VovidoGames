@@ -109,7 +109,10 @@
         var values = [];
 
         var firstFlippedCard = null;
-    
+        
+        /**
+         * Assigns shuffled values to cards on the board.
+         */
         function assignCardValues() {
             var cards = document.querySelectorAll('.card');
             var randomIndexes = generateRandomIndexes(cards.length);
@@ -118,7 +121,12 @@
                 cards[i].textContent = values[randomIndexes[i]];
             }
         }
-    
+
+        /**
+         * Generates a shuffled array of indexes to randomly assign card values.
+         * @param {number} length - The length of the values array.
+         * @returns {Array} An array of shuffled indexes.
+         */
         function generateRandomIndexes(length) {
             var indexes = [];
     
@@ -134,6 +142,9 @@
             return indexes;
         }
 
+        /**
+         * Flips the card and checks for a match.
+         */
         function flipCard() {
             var clickedCard = this;
             numberOfClicks++;
@@ -178,13 +189,19 @@
                 }
             }
         }
-
+        
+        /**
+         * Checks if the game has ended.
+         */
         function checkEndGame() {
             if (numberOfMatches === values.length / 2) {
                 alert("Congratulations! You have completed the game with " + numberOfClicks + " clicks.");
             }
         }
 
+        /**
+         * Sets up values based on the selected difficulty.
+         */
         function setupValues(){
             var easyValues = ["A", "A", "B", "B", "C", "C", "D", "D", "E", "E", "F", "F", "G", "G", "H", "H"];
             var mediumValues = ["A", "A", "B", "B", "C", "C", "D", "D", "E", "E", "F", "F", "G", "G", "H", "H", "I", "I", "J", "J", "K", "K", "L", "L", "M", "M", "N", "N", "O", "O", "P", "P", "Q", "Q", "R", "R"];
@@ -204,7 +221,8 @@
                     break;
             }
         }
-    
+        
+
         window.onload = function() {
             setupValues();
             assignCardValues();
