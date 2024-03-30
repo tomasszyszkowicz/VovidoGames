@@ -6,15 +6,27 @@
     <title>Pexeso Board</title>
     <!-- Link to your CSS file -->
     <link rel="stylesheet" href="/styles.css" th:href="@{/styles.css}">
-    <title>Pexeso Board</title>
     <style>
         .board {
             display: grid;
-            grid-template-columns: repeat(4, 100px);
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             grid-gap: 10px;
             justify-content: center; /* Add this line */
             align-items: center; /* Add this line */
         }
+
+        .board.easy {
+            grid-template-columns: repeat(4, 100px);
+        }
+
+        .board.medium {
+            grid-template-columns: repeat(6, 100px);
+        }
+
+        .board.hard {
+            grid-template-columns: repeat(8, 100px);
+        }
+
         .card {
             width: 100px;
             height: 100px;
@@ -36,7 +48,7 @@
         <a href="{% url 'logout' %}">Logout</a>
     </div>
     <div class="top-left-container">
-        <p><b>Weather App</b></p>
+        <p><b>Fun Games</b></p>
         <a>Home</a>
     </div>
     <div class="middle-right-container">
@@ -44,23 +56,10 @@
         <p>Placeholder</p>
         <p>Placeholder</p>
     </div>
-    <div class="board">
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
+    <h1>You selected level: <span th:text="${difficulty}"></span></h1>
+    <div class="board" th:classappend="${difficulty}">
+        <!-- Use Thymeleaf expression to dynamically generate cards -->
+        <div th:each="cardNumber : ${#numbers.sequence(1, difficulty == 'easy' ? 16 : difficulty == 'medium' ? 36 : 64)}" class="card"></div>
     </div>
 </body>
 </html>
