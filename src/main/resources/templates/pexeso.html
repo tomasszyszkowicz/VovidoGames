@@ -34,8 +34,12 @@
             align-items: center;
             font-size: 24px;
             cursor: pointer;
+            color: lightgray;
         }
 
+        .card.flipped {
+            color: black; /* Change the text color when flipped */
+        }
         /* Adjust the width and height of the cards based on the grid-template-columns */
         .board.easy .card {
             width: 120px;
@@ -74,7 +78,8 @@
         <div class="sub-container">
             <!-- Use Thymeleaf expression to dynamically generate cards -->
             <div class="board" th:classappend="${difficulty}">
-                <div th:each="cardNumber : ${#numbers.sequence(1, difficulty == 'easy' ? 16 : difficulty == 'medium' ? 36 : 64)}" class="card"></div>
+                <div th:each="cardNumber : ${#numbers.sequence(1, difficulty == 'easy' ? 16 : difficulty == 'medium' ? 36 : 64)}" class="card">
+                </div>
             </div>
         </div>
     </div>
@@ -90,5 +95,96 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Define your values array
+        var values = ["A", "A", "B", "B", "C", "C", "D", "D", "E", "E", "F", "F", "G", "G", "H", "H"];
+
+        var firstFlippedCard = null;
+    
+        // Function to assign values to cards
+        function assignCardValues() {
+            var cards = document.querySelectorAll('.card');
+            var randomIndexes = generateRandomIndexes(cards.length);
+    
+            for (var i = 0; i < cards.length; i++) {
+                cards[i].textContent = values[randomIndexes[i]];
+            }
+        }
+    
+        // Function to generate random indexes for shuffling the values
+        function generateRandomIndexes(length) {
+            var indexes = [];
+    
+            for (var i = 0; i < length; i++) {
+                indexes.push(i);
+            }
+    
+            // Shuffle the indexes using Fisher-Yates algorithm
+            for (var i = indexes.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                [indexes[i], indexes[j]] = [indexes[j], indexes[i]]; // Swap elements
+            }
+    
+            return indexes;
+        }
+    
+        // Function to flip the card and display its text content
+        function flipCard() {
+            var clickedCard = this; // Preserve the reference to the clicked card
+
+            if (clickedCard.classList.contains('flipped')) {
+                clickedCard.classList.remove('flipped');
+            } else {
+                clickedCard.classList.add('flipped');
+
+                if (firstFlippedCard === null) {
+                    // If no card is flipped, set this card as the first flipped card
+                    firstFlippedCard = clickedCard;
+                } else {
+                    // If one card is already flipped, check for a match
+                    if (firstFlippedCard.textContent === clickedCard.textContent) {
+                        // Match found: keep both cards flipped
+                        console.log("Match found!");
+                        firstFlippedCard.removeEventListener('click', flipCard);
+                        clickedCard.removeEventListener('click', flipCard);
+                    } else {
+
+                        var cards = document.querySelectorAll('.card');
+                        cards.forEach(card => {
+                            if (!card.classList.contains('flipped')) {
+                                card.removeEventListener('click', flipCard);
+                            }
+                        });
+
+                        setTimeout(function(card1, card2) {
+                            // Remove 'flipped' class from both cards
+                            card1.classList.remove('flipped');
+                            card2.classList.remove('flipped');
+
+                            // Re-enable click event for unmatched cards after the timeout
+                            cards.forEach(card => {
+                                if (!card.classList.contains('flipped')) {
+                                    card.addEventListener('click', flipCard);
+                                }
+                            });
+                        }, 1000, firstFlippedCard, clickedCard); // Pass cards as arguments
+            }
+
+                    // Reset the firstFlippedCard variable after checking for a match
+                    firstFlippedCard = null;
+                }
+            }
+        }
+    
+        // Call the function to assign values to cards when the page loads
+        window.onload = function() {
+            assignCardValues();
+    
+            // Add event listener to each card to flip it on click
+            var cards = document.querySelectorAll('.card');
+            cards.forEach(card => card.addEventListener('click', flipCard));
+        };
+    </script>
 </body>
 </html>
