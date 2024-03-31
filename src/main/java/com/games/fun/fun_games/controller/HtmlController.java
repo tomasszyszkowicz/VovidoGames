@@ -1,8 +1,10 @@
 package com.games.fun.fun_games.controller;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.core.Authentication;
 
 import org.springframework.ui.Model;
 
@@ -15,7 +17,10 @@ public class HtmlController {
     }
 
     @GetMapping("/pexeso-menu")
-    public String pexesoMenu() {
+    public String pexesoMenu(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName(); // Get logged in username
+        model.addAttribute("username", username);
         return "pexeso-menu";
     }
 
@@ -23,6 +28,11 @@ public class HtmlController {
     public String pexeso(@RequestParam(name = "difficulty", defaultValue = "easy") String difficulty, Model model) {
         model.addAttribute("difficulty", difficulty);
         return "pexeso";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 
 }
