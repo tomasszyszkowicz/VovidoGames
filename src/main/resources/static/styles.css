@@ -49,7 +49,6 @@ button {
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     font-size: 14px;
-    z-index: 10;
 }
 
 .middle-right-container {
@@ -62,7 +61,6 @@ button {
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     font-size: 14px;
-    z-index: 10;
 }
 
 .plot-container {
@@ -243,4 +241,41 @@ h1, .sub-heading {
 .day-container p {
     font-size: 12px; /* Override the font-size */
     color: black; /* Override the color */
+}
+
+/* CSS for modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    width: 50%;
+    height: 50%;
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }

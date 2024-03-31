@@ -61,6 +61,9 @@
     </style>
 </head>
 <body>
+    <div id="modal" class="modal">
+        <div class="modal-content" id="game-details"></div>
+    </div>
     <div class="top-right-container">
         <p><b>Logged in as:</b></p>
         <p>Placeholder</p>
@@ -76,7 +79,7 @@
         <p>Placeholder</p>
         <p>Placeholder</p>
     </div>
-    <h1>You selected level: <span th:text="${difficulty}"></span></h1>
+    <h1>Pexeso</h1>
     <div class="sub-container-wrapper">
         <div class="sub-container">
             <div class="board" th:classappend="${difficulty}">
@@ -196,6 +199,13 @@
         function checkEndGame() {
             if (numberOfMatches === values.length / 2) {
                 alert("Congratulations! You have completed the game with " + numberOfClicks + " clicks.");
+                const modal = document.getElementById('modal');
+                const gameDetails = document.getElementById('game-details');
+                gameDetails.innerHTML = `
+                    <h1>You have solved the pexeso!</h1>
+                    <p>Clicks: </p>
+                `;
+                modal.style.display = 'block';
             }
         }
 
