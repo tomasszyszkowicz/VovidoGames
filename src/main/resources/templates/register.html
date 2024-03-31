@@ -6,19 +6,21 @@
     <title>Register</title>
 </head>
 <body>
+    <div class="login-container">
     <h2>Register</h2>
-    <form th:action="@{/register}" method="post" th:object="${userDto}">
-        <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" th:field="*{username}" required>
-        </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" th:field="*{password}" required>
-        </div>
-        <div>
-            <button type="submit">Register</button>
-        </div>
-    </form>
+        <form th:action="@{/register}" method="post" th:object="${userDto}">
+            <div>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" th:field="*{username}" required>
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" th:field="*{password}" required>
+            </div>
+            <div>
+                <button type="submit">Register</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

@@ -18,15 +18,19 @@ public class HtmlController {
 
     @GetMapping("/pexeso-menu")
     public String pexesoMenu(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName(); // Get logged in username
-        model.addAttribute("username", username);
+        model.addAttribute("username", getLoggedInUsername());
         return "pexeso-menu";
     }
 
     @GetMapping("/pexeso-game")
     public String pexeso(@RequestParam(name = "difficulty", defaultValue = "easy") String difficulty, Model model) {
         model.addAttribute("difficulty", difficulty);
+        model.addAttribute("username", getLoggedInUsername());
         return "pexeso";
+    }
+
+    private String getLoggedInUsername() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth.getName(); // Get logged in username
     }
 }

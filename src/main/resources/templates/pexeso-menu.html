@@ -9,9 +9,9 @@
     <h1>Welcome to Pexeso Menu</h1>
     <div class="top-right-container">
         <p><b>Logged in as:</b></p>
-        <p sec:authentication="name">Username</p>
+        <p><span th:text="${username}">Username</span></p>
         <p>Placeholder</p>
-        <a href="{% url 'logout' %}">Logout</a>
+        <a href="/logout">Logout</a>
     </div>
     <div class="top-left-container">
         <p><b>Fun Games</b></p>

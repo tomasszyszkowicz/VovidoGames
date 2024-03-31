@@ -66,7 +66,7 @@
     </div>
     <div class="top-right-container">
         <p><b>Logged in as:</b></p>
-        <p>Placeholder</p>
+        <p><span th:text="${username}">Username</span></p>
         <p>Placeholder</p>
         <a href="{% url 'logout' %}">Logout</a>
     </div>
