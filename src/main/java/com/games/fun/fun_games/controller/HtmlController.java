@@ -29,10 +29,4 @@ public class HtmlController {
         model.addAttribute("difficulty", difficulty);
         return "pexeso";
     }
-
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
 }

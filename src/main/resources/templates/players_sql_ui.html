@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/styles.css" th:href="@{/styles.css}">
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
     <title>Players SQL</title>
 </head>
 <body>
@@ -13,6 +13,10 @@
     <h2>GET</h2>
     <button type="button" onclick="getAllPlayers()">Show Players</button>
     <div id="playersContainer"></div>
+
+    <h2>GET</h2>
+    <button type="button" onclick="getAllUsers()">Show Players</button>
+    <div id="usersContainer"></div>
 
     <h2>POST</h2>
     <form id="nameForm">
@@ -47,6 +51,20 @@
                         const playerDiv = document.createElement('div');
                         playerDiv.innerHTML = player.id + ' ' + player.userName;
                         playersContainer.appendChild(playerDiv);
+                    });
+                });
+        }
+
+        function getAllUsers() {
+            fetch('/users')
+                .then(response => response.json())
+                .then(data => {
+                    const usersContainer = document.getElementById('usersContainer');
+                    usersContainer.innerHTML = '';
+                    data.forEach(user => {
+                        const userDiv = document.createElement('div');
+                        userDiv.innerHTML = user.id + ' ' + user.username;
+                        usersContainer.appendChild(userDiv);
                     });
                 });
         }
