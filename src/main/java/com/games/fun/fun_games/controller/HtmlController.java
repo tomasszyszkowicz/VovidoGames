@@ -8,20 +8,41 @@ import org.springframework.security.core.Authentication;
 
 import org.springframework.ui.Model;
 
+/**
+ * This class is a controller for handling HTML requests related to games.
+ */
 @Controller
 public class HtmlController {
 
+    /**
+     * Handles the request for the players UI page.
+     *
+     * @return the name of the players SQL UI template
+     */
     @GetMapping("/players-ui")
     public String players() {
         return "players_sql_ui";
     }
 
+    /**
+     * Handles the request for the pexeso menu page.
+     *
+     * @param model the model object to be populated with data
+     * @return the name of the pexeso menu template
+     */
     @GetMapping("/pexeso-menu")
     public String pexesoMenu(Model model) {
         model.addAttribute("username", getLoggedInUsername());
         return "pexeso-menu";
     }
 
+    /**
+     * Handles the request for the pexeso game page.
+     *
+     * @param difficulty the difficulty level of the game
+     * @param model the model object to be populated with data
+     * @return the name of the pexeso template
+     */
     @GetMapping("/pexeso-game")
     public String pexeso(@RequestParam(name = "difficulty", defaultValue = "easy") String difficulty, Model model) {
         model.addAttribute("difficulty", difficulty);
@@ -29,6 +50,11 @@ public class HtmlController {
         return "pexeso";
     }
 
+    /**
+     * Retrieves the logged in username.
+     *
+     * @return the logged in username
+     */
     private String getLoggedInUsername() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return auth.getName(); // Get logged in username
