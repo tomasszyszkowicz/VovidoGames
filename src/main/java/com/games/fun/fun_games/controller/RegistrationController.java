@@ -69,6 +69,7 @@ public class RegistrationController {
         User newUser = new User();
         newUser.setUsername(userDto.getUsername());
         newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        newUser.setEmail(userDto.getEmail());
         userRepository.save(newUser);
 
         // Add a flash attribute to show a success message on the next page after redirect

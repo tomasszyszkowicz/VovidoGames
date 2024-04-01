@@ -1,11 +1,17 @@
 package com.games.fun.fun_games.entity;
 
+import java.util.ArrayList;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
+import java.util.List;
 
 /**
  * Represents a user entity in the application.
@@ -23,6 +29,9 @@ public class User {
     
     private String password;
     private String email;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PexesoResult> results = new ArrayList<>();
 
     /**
      * Retrieves the ID of the user.
@@ -94,5 +103,23 @@ public class User {
      */
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    /**
+     * Retrieves the results of the user.
+     * 
+     * @return The results of the user.
+     */
+    public List<PexesoResult> getResults() {
+        return results;
+    }
+
+    /**
+     * Sets the results of the user.
+     * 
+     * @param results The results of the user.
+     */
+    public void setResults(List<PexesoResult> results) {
+        this.results = results;
     }
 }

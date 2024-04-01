@@ -61,9 +61,10 @@
                 .then(data => {
                     const usersContainer = document.getElementById('usersContainer');
                     usersContainer.innerHTML = '';
+                    console.log(data);
                     data.forEach(user => {
                         const userDiv = document.createElement('div');
-                        userDiv.innerHTML = user.id + ' ' + user.username;
+                        userDiv.innerHTML = user.id + ' ' + user.username + ' ' + user.email + ' ' + user.results;
                         usersContainer.appendChild(userDiv);
                     });
                 });
