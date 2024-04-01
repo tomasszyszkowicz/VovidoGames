@@ -334,3 +334,92 @@ h1, .sub-heading {
 .login-container p a:hover {
     text-decoration: underline;
 }
+
+.board {
+    display: grid;
+    grid-gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.board.easy {
+    grid-template-columns: repeat(4, 120px);
+}
+
+.board.medium {
+    grid-template-columns: repeat(6, 80px);
+}
+
+.board.hard {
+    grid-template-columns: repeat(8, 65px);
+}
+
+.card {
+    background-color: lightgray;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+    color: lightgray;
+}
+
+.card.flipped {
+    color: black;
+}
+
+.card.matched {
+    background-color: lightgreen;
+}
+
+.board.easy .card {
+    width: 120px;
+    height: 120px;
+}
+
+.board.medium .card {
+    width: 80px;
+    height: 80px;
+}
+
+.board.hard .card {
+    width: 65px;
+    height: 65px;
+}
+
+/* Style the table */
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+/* Style the table header */
+thead th {
+    background-color: #f2f2f2;
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+/* Style the table rows */
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Style the cells */
+tbody td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+}
+
+/* Highlight the top 3 ranks */
+tbody tr:nth-child(1) {
+    background-color: #ffd700; /* Gold for 1st place */
+}
+tbody tr:nth-child(2) {
+    background-color: #c0c0c0; /* Silver for 2nd place */
+}
+tbody tr:nth-child(3) {
+    background-color: #cd7f32; /* Bronze for 3rd place */
+}
