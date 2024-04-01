@@ -15,11 +15,19 @@ public class PexesoResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
-    
+
     private int score;
+
+    public PexesoResult() {
+    }
+
+    public PexesoResult(User user, int score) {
+        this.user = user;
+        this.score = score;
+    }
 
     public Long getId() {
         return id;

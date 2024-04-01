@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Pexeso Board</title>
     <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
     <style>
@@ -66,7 +68,7 @@
     </div>
     <div class="top-right-container">
         <p><b>Logged in as:</b></p>
-        <p><span th:text="${username}">Username</span></p>
+        <p><span id="username" th:text="${username}">Username</span></p>
         <p>Placeholder</p>
         <a href="{% url 'logout' %}">Logout</a>
     </div>
@@ -206,6 +208,7 @@
                     <p>Clicks: </p>
                 `;
                 modal.style.display = 'block';
+                createResult();
             }
         }
 
@@ -230,6 +233,52 @@
                     values = hardValues;
                     break;
             }
+        }
+
+        /**
+         * Sends a POST request to create a new PexesoResult.
+         * 
+         * @param {Object} result - The result object to be sent to the server.
+         */
+        function createResult() {
+
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            username = document.getElementById("username").textContent;
+            // Replace the URL with the actual endpoint
+            const url = '/results';
+            const result = {
+                score: numberOfClicks,
+                username: username
+            };
+
+            console.log(result);
+
+            // Configure the request options
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken
+                },
+                body: JSON.stringify(result),
+            };
+
+            // Use the Fetch API to send the POST request
+            fetch(url, requestOptions)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Parse the JSON response body
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(data => {
+                    console.log('Result created:', data); // Handle the response data
+                })
+                .catch(error => {
+                    console.error('There was a problem with your fetch operation:', error);
+                });
         }
         
 
