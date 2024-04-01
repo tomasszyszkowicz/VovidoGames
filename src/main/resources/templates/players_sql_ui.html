@@ -3,10 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
     <title>Players SQL</title>
 </head>
 <body>
+    <div class="top-right-container">
+        <p><b>Logged in as:</b></p>
+        <p><span id="username" th:text="${username}">Username</span></p>
+        <p>Placeholder</p>
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
     <h1>Players SQL console</h1>
     <p>You can perform CRUD operations here</p>
 
@@ -40,6 +48,9 @@
         <input type="text" id="deleteUserId" name="userId"><br><br>
         <button type="button" onclick="deletePlayer()">Submit</button>
     </form>
+
+    <button onclick="create20results()">Create 20 results</button>
+    <script src="/js/dataOperations.js" th:src="@{/js/dataOperations.js}"></script>
     <script>
         function getAllPlayers() {
             fetch('/players')
@@ -114,6 +125,14 @@
                 .then(data => {
                     console.log(data);
                 });
+        }
+
+        numberOfClicks = 26;
+
+        function create20results() {
+            for (let i = 0; i < 20; i++) {
+                createResult();
+            }
         }
     </script>
 </body>

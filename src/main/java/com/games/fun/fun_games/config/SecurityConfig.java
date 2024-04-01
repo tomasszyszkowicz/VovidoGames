@@ -40,7 +40,7 @@ public class SecurityConfig {
                 })
                 .successHandler((request, response, authentication) -> {
                     // Your custom logic here
-                    response.sendRedirect("/pexeso-menu"); // Redirect to the page after successful login
+                    response.sendRedirect("/home"); // Redirect to the page after successful login
                 })
                 .permitAll())
             .logout(logout -> logout

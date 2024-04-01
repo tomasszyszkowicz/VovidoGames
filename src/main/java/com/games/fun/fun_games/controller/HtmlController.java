@@ -20,8 +20,39 @@ public class HtmlController {
      * @return the name of the players SQL UI template
      */
     @GetMapping("/players-ui")
-    public String players() {
+    public String players(Model model) {
+        model.addAttribute("username", getLoggedInUsername());
         return "players_sql_ui";
+    }
+
+    /**
+     * Handles the request for the games UI page.
+     *
+     * @return the home page template
+     */
+    @GetMapping("/home")
+    public String home() {
+        return "main-menu";
+    }
+
+    /**
+     * Handles the request for the game menu page.
+     *
+     * @return the name of the game menu template
+     */
+    @GetMapping("/game-menu")
+    public String gameMenu() {
+        return "game-menu";
+    }
+
+    /**
+     * Handles the request for the leaderboards page.
+     *
+     * @return the name of the leaderboards template
+     */
+    @GetMapping("/leaderboards")
+    public String leaderboards() {
+        return "leaderboards";
     }
 
     /**

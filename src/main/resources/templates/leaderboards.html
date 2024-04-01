@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+    <title>Leaderboards</title>
+</head>
+<body>
+    <h1>Games</h1>
+    <div class="top-right-container">
+        <p><b>Logged in as:</b></p>
+        <p><span th:text="${username}">Username</span></p>
+        <p>Placeholder</p>
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="top-left-container">
+        <p><b>Fun Games</b></p>
+        <a href="/home">Home</a>
+    </div>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <h2>Leaderboard</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                    <!-- Leaderboard data will be populated here -->
+                </tbody>
+            </table>
+    </div>
+
+    <script>
+        function getResultsToLeaderboard() {
+            fetch('/results?top=20')
+                .then(response => response.json())
+                .then(data => {
+                    const leaderboardBody = document.getElementById("leaderboardBody");
+                    leaderboardBody.innerHTML = ""; // Clear existing rows
+                    data.forEach((result, index) => {
+                        const row = document.createElement("tr");
+                        const rankCell = document.createElement("td");
+                        rankCell.textContent = (index + 1);
+                        const playerCell = document.createElement("td");
+                        playerCell.textContent = result.user.username;
+                        const scoreCell = document.createElement("td");
+                        scoreCell.textContent = result.score;
+                        row.appendChild(rankCell);
+                        row.appendChild(playerCell);
+                        row.appendChild(scoreCell);
+                        leaderboardBody.appendChild(row);
+                    });
+                });
+        }
+
+        window.onload = getResultsToLeaderboard;
+    </script>
+</body>
+</html>
