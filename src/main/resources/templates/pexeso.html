@@ -60,6 +60,43 @@
             width: 65px;
             height: 65px;
         }
+
+        /* Style the table */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        /* Style the table header */
+        thead th {
+            background-color: #f2f2f2;
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        /* Style the table rows */
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Style the cells */
+        tbody td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+        }
+
+        /* Highlight the top 3 ranks */
+        tbody tr:nth-child(1) {
+            background-color: #ffd700; /* Gold for 1st place */
+        }
+        tbody tr:nth-child(2) {
+            background-color: #c0c0c0; /* Silver for 2nd place */
+        }
+        tbody tr:nth-child(3) {
+            background-color: #cd7f32; /* Bronze for 3rd place */
+        }
+
     </style>
 </head>
 <body>
@@ -78,8 +115,19 @@
     </div>
     <div class="middle-right-container">
         <p><b>Leaderboard</b></p>
-        <p>Placeholder</p>
-        <p>Placeholder</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboardBody">
+                <!-- Leaderboard data will be populated here -->
+            </tbody>
+        </table>
+        <a style="margin-top: 10px;">Full Leadeboards</a>
     </div>
     <h1>Pexeso</h1>
     <div class="sub-container-wrapper">
@@ -280,11 +328,34 @@
                     console.error('There was a problem with your fetch operation:', error);
                 });
         }
+
+        function getResultsToLeaderboard() {
+            fetch('/results?top=5')
+                .then(response => response.json())
+                .then(data => {
+                    const leaderboardBody = document.getElementById("leaderboardBody");
+                    leaderboardBody.innerHTML = ""; // Clear existing rows
+                    data.forEach((result, index) => {
+                        const row = document.createElement("tr");
+                        const rankCell = document.createElement("td");
+                        rankCell.textContent = (index + 1);
+                        const playerCell = document.createElement("td");
+                        playerCell.textContent = result.user.username;
+                        const scoreCell = document.createElement("td");
+                        scoreCell.textContent = result.score;
+                        row.appendChild(rankCell);
+                        row.appendChild(playerCell);
+                        row.appendChild(scoreCell);
+                        leaderboardBody.appendChild(row);
+                    });
+                });
+        }
         
 
         window.onload = function() {
             setupValues();
             assignCardValues();
+            getResultsToLeaderboard();
     
             var cards = document.querySelectorAll('.card');
             cards.forEach(card => card.addEventListener('click', flipCard));
