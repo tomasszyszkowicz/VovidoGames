@@ -4,9 +4,30 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
     <title>Pexeso Menu</title>
+    <style>
+        .fade-out {
+            animation: fadeOut 0.5s;
+            opacity: 0;
+        }
+    
+        .fade-in {
+            animation: fadeIn 0.5s;
+            opacity: 1;
+        }
+    
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+    
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
 </head>
 <body>
-    <h1>Main Menu</h1>
+    <h1>Welcome to Fun Games</h1>
     <div class="top-right-container">
         <p><b>Logged in as:</b></p>
         <p><span th:text="${username}">Username</span></p>
@@ -34,15 +55,111 @@
     <div class="sub-container-wrapper">
         <div class="left-wrapper">
             <div class="sub-container">
-                <a href="/game-menu">Pexeso</a>
-                <a href="/leaderboards">Leaderboards</a>
+                <h2>Games</h2>
+                <p>Let's see what's in you!</p>
+                <a href="/game-menu">Games menu</a>
             </div>
         </div>
         <div class="right-wrapper">
             <div class="sub-container">
-                <a href="/pexeso-menu">Pexeso</a>
-                <a href="/leaderboards">Forum</a>
+                <h2>Leaderboards</h2>
+                <p>Compare yourself with others</p>
+                <a href="/leaderboards">Leaderboards</a>
             </div>
+        </div>
     </div>
+    <div id="hallOfFame" class="sub-container-wrapper">
+        <div class="sub-container">
+            <h2><span id="game"></span></h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                    <!-- Leaderboard data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="sub-container-wrapper">
+        <div class="left-wrapper">
+            <div class="sub-container">
+                <h2>Forum</h2>
+                <p>Discuss with others</p>
+            </div>
+        </div>
+        <div class="right-wrapper">
+            <div class="sub-container">
+                <h2>Placeholder</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        var currentDifficulty = 1; // Start with difficulty level 1
+        var games = ["Easy pexeso", "Medium pexeso", "Hard pexeso"];
+    
+        function getResultsToLeaderboard(top, difficulty) {
+            game = document.getElementById("game");
+            game.textContent = games[difficulty - 1];
+            const hallOfFameContainer = document.getElementById("hallOfFame"); // Targeting the hallOfFame container
+            // Start fade-out
+            hallOfFameContainer.classList.add('fade-out');
+            hallOfFameContainer.classList.remove('fade-in');
+    
+            var url = '/results';
+            if (top) {
+                url += '?top=' + top;
+            }
+            if (difficulty) {
+                url += '&difficulty=' + difficulty;
+            }
+    
+            // Delay fetching and updating the leaderboard to allow fade-out to occur
+            setTimeout(() => {
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        const leaderboardBody = document.getElementById("leaderboardBody");
+                        leaderboardBody.innerHTML = ""; // Clear existing rows within the body
+                        data.forEach((result, index) => {
+                            const row = document.createElement("tr");
+                            const rankCell = document.createElement("td");
+                            rankCell.textContent = (index + 1);
+                            const playerCell = document.createElement("td");
+                            playerCell.textContent = result.user.username;
+                            const scoreCell = document.createElement("td");
+                            scoreCell.textContent = result.score;
+                            row.appendChild(rankCell);
+                            row.appendChild(playerCell);
+                            row.appendChild(scoreCell);
+                            leaderboardBody.appendChild(row);
+                        });
+                        // Fade-in the updated container
+                        hallOfFameContainer.classList.remove('fade-out');
+                        hallOfFameContainer.classList.add('fade-in');
+                    });
+            }, 500); // This delay should match the fade-out animation duration
+        }
+    
+        function updateLeaderboard() {
+            getResultsToLeaderboard(3, currentDifficulty);
+            currentDifficulty += 1;
+            if (currentDifficulty > 3) {
+                currentDifficulty = 1; // Reset difficulty after 3
+            }
+        }
+    
+        window.onload = function() {
+            updateLeaderboard(); // Initial call to display the leaderboard
+            setInterval(updateLeaderboard, 6000); // Adjusted to account for animation time plus a little buffer
+        };
+    </script>
+       
 </body>
 </html>
