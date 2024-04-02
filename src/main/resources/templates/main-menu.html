@@ -70,7 +70,7 @@
     </div>
     <div id="hallOfFame" class="sub-container-wrapper">
         <div class="sub-container">
-            <h2><span id="game"></span></h2>
+            <h2><span id="game">Easy pexeso</span></h2>
             <table>
                 <thead>
                     <tr>
@@ -101,27 +101,32 @@
     </div>
 
     <script>
-        var currentDifficulty = 1; // Start with difficulty level 1
-        var games = ["Easy pexeso", "Medium pexeso", "Hard pexeso"];
-    
+        var currentDifficulty = 1;
+        var isFirstLoad = true;
+
+
         function getResultsToLeaderboard(top, difficulty) {
-            game = document.getElementById("game");
-            game.textContent = games[difficulty - 1];
-            const hallOfFameContainer = document.getElementById("hallOfFame"); // Targeting the hallOfFame container
-            // Start fade-out
-            hallOfFameContainer.classList.add('fade-out');
-            hallOfFameContainer.classList.remove('fade-in');
-    
-            var url = '/results';
-            if (top) {
-                url += '?top=' + top;
+            const hallOfFameContainer = document.getElementById("hallOfFame");
+
+            if (!isFirstLoad) {
+                hallOfFameContainer.classList.add('fade-out');
+                hallOfFameContainer.classList.remove('fade-in');
             }
-            if (difficulty) {
-                url += '&difficulty=' + difficulty;
-            }
-    
-            // Delay fetching and updating the leaderboard to allow fade-out to occur
+
+            const updateDelay = isFirstLoad ? 0 : 500;
+
             setTimeout(() => {
+                // Update the difficulty text when the container is fully invisible
+                updateDifficultyLabel(difficulty);
+
+                var url = '/results';
+                if (top) {
+                    url += '?top=' + top;
+                }
+                if (difficulty) {
+                    url += '&difficulty=' + difficulty;
+                }
+
                 fetch(url)
                     .then(response => response.json())
                     .then(data => {
@@ -140,13 +145,39 @@
                             row.appendChild(scoreCell);
                             leaderboardBody.appendChild(row);
                         });
-                        // Fade-in the updated container
-                        hallOfFameContainer.classList.remove('fade-out');
-                        hallOfFameContainer.classList.add('fade-in');
+
+                        if (!isFirstLoad) {
+                            // Wait a bit before starting the fade-in to ensure changes have been made
+                            setTimeout(() => {
+                                // Fade-in the updated container after data is loaded and difficulty label is updated
+                                hallOfFameContainer.classList.remove('fade-out');
+                                hallOfFameContainer.classList.add('fade-in');
+                            }, 100); // A short delay before fading in ensures any DOM updates are rendered
+                        } else {
+                            // Immediately show the content without fade-in animation for the first load
+                            isFirstLoad = false; // Update the flag after the first load completes
+                        }
                     });
-            }, 500); // This delay should match the fade-out animation duration
+            }, updateDelay); // Match this delay to the duration of the fade-out animation
         }
-    
+
+        function updateDifficultyLabel(difficulty) {
+            const difficultySpan = document.getElementById("game");
+            switch(difficulty) {
+                case 1:
+                    difficultySpan.textContent = "Easy pexeso";
+                    break;
+                case 2:
+                    difficultySpan.textContent = "Medium pexeso";
+                    break;
+                case 3:
+                    difficultySpan.textContent = "Hard pexeso";
+                    break;
+                default:
+                    difficultySpan.textContent = "Difficulty";
+            }
+        }
+
         function updateLeaderboard() {
             getResultsToLeaderboard(3, currentDifficulty);
             currentDifficulty += 1;
@@ -154,11 +185,12 @@
                 currentDifficulty = 1; // Reset difficulty after 3
             }
         }
-    
+
         window.onload = function() {
             updateLeaderboard(); // Initial call to display the leaderboard
             setInterval(updateLeaderboard, 6000); // Adjusted to account for animation time plus a little buffer
         };
+
     </script>
        
 </body>
