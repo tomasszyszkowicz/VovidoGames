@@ -4,6 +4,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.games.fun.fun_games.repository.UserRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 
 import org.springframework.ui.Model;
@@ -13,6 +17,9 @@ import org.springframework.ui.Model;
  */
 @Controller
 public class HtmlController {
+
+    @Autowired
+    UserRepository userRepository;
 
     /**
      * Handles the request for the players UI page.
@@ -31,7 +38,9 @@ public class HtmlController {
      * @return the home page template
      */
     @GetMapping("/home")
-    public String home() {
+    public String home(Model model) {
+        model.addAttribute("username", getLoggedInUsername());
+        model.addAttribute("email", getLoggedInUserEmail());
         return "main-menu";
     }
 
@@ -41,7 +50,8 @@ public class HtmlController {
      * @return the name of the game menu template
      */
     @GetMapping("/game-menu")
-    public String gameMenu() {
+    public String gameMenu(Model model) {
+        model.addAttribute("username", getLoggedInUsername());
         return "game-menu";
     }
 
@@ -51,7 +61,8 @@ public class HtmlController {
      * @return the name of the leaderboards template
      */
     @GetMapping("/leaderboards")
-    public String leaderboards() {
+    public String leaderboards(Model model) {
+        model.addAttribute("username", getLoggedInUsername());
         return "leaderboards";
     }
 
@@ -89,5 +100,15 @@ public class HtmlController {
     private String getLoggedInUsername() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return auth.getName(); // Get logged in username
+    }
+
+    /**
+     * Retrieves the email of the logged-in user.
+     *
+     * @return the email of the logged-in user or null if not found.
+     */
+    private String getLoggedInUserEmail() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userRepository.findByUsername(auth.getName()).getEmail();
     }
 }
