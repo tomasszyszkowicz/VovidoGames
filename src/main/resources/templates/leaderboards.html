@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+    <title>Leaderboards</title>
+</head>
+<body>
+    <h1>Leaderboard</h1>
+    <p>Check out the top players</p>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <form id="leaderboardForm">
+                <label for="difficulty">Difficulty:</label>
+                <select id="difficulty" name="difficulty">
+                    <option value="1">Easy</option>
+                    <option value="2">Medium</option>
+                    <option value="3">Hard</option>
+                </select>
+                <button type="button" onclick="getResultsToLeaderboard(20, document.getElementById('difficulty').value)">Show Leaderboard</button>
+        </form>
+        </div>
+    </div>
+    <div class="top-right-container">
+        <p><b>Logged in as:</b></p>
+        <p><span th:text="${username}">Username</span></p>
+        <p><span th:text="${email}">email</span></p>
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="top-left-container">
+        <p><b>Fun Games</b></p>
+        <a href="/home">Home</a>
+    </div>
+    <div class="games-container">
+        <p><b>Games</b></p>
+        <a href="/pexeso-menu">Pexeso</a><br>
+        <a style="margin-top: 5px;">Placeholder</a>
+    </div>
+    <div class="leaderboards-container">
+        <p><b>Leaderboards</b></p>
+        <a href="/leaderboards">Leaderboards</a>
+    </div>
+    <div class="forum-container">
+        <p><b>Forum</b></p>
+        <a>Placeholder</a>
+    </div>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <h2>Leaderboard</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                    <!-- Leaderboard data will be populated here -->
+                </tbody>
+            </table>
+    </div>
+
+    <script>
+        function getResultsToLeaderboard(top, difficulty) {
+            var url = '/results';
+            if (top) {
+                url += '?top=' + top;
+            }
+            if (difficulty) {
+                url += '&difficulty=' + difficulty;
+            }
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const leaderboardBody = document.getElementById("leaderboardBody");
+                    leaderboardBody.innerHTML = ""; // Clear existing rows
+                    data.forEach((result, index) => {
+                        const row = document.createElement("tr");
+                        const rankCell = document.createElement("td");
+                        rankCell.textContent = (index + 1);
+                        const playerCell = document.createElement("td");
+                        playerCell.textContent = result.user.username;
+                        const scoreCell = document.createElement("td");
+                        scoreCell.textContent = result.score;
+                        row.appendChild(rankCell);
+                        row.appendChild(playerCell);
+                        row.appendChild(scoreCell);
+                        leaderboardBody.appendChild(row);
+                    });
+                });
+        }
+
+        window.onload = getResultsToLeaderboard(20, 1);
+    </script>
+</body>
+</html>

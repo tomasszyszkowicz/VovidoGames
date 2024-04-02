@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+    <title>Login</title>
+</head>
+<body>
+    <div class="login-container">
+        <div th:if="${successMessage}" th:text="${successMessage}" style="color: green;"></div>
+        <h2>Login</h2>
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required autofocus>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Log in</button>
+            </div>
+        </form>
+        <div th:if="${session.errorMessage}" class="error-message" th:text="${session.errorMessage}" style="color: red; margin-top: 10px;"></div>
+    </div>
+
+    <script>
+        /**
+         * Attaches a one-time click event listener to the document body after the DOM
+         * is fully loaded. On click, it hides all elements with the 'error-message' class
+         * by setting their display to 'none'. Designed to dismiss error messages with a
+         * single page interaction.
+         */
+        document.addEventListener("DOMContentLoaded", function() {
+            document.body.addEventListener("click", function() {
+                var messageElements = document.querySelectorAll(".error-message");
+                messageElements.forEach(function(element) {
+                    element.style.display = 'none';
+                });
+            }, { once: true });
+        });
+    </script>
+        
+</body>
+</html>

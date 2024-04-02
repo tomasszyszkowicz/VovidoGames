@@ -3,80 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Pexeso Board</title>
-    <link rel="stylesheet" href="/styles.css" th:href="@{/styles.css}">
-    <style>
-        .board {
-            display: grid;
-            grid-gap: 10px;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .board.easy {
-            grid-template-columns: repeat(4, 120px);
-        }
-
-        .board.medium {
-            grid-template-columns: repeat(6, 80px);
-        }
-
-        .board.hard {
-            grid-template-columns: repeat(8, 65px);
-        }
-
-        .card {
-            background-color: lightgray;
-            border-radius: 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            cursor: pointer;
-            color: lightgray;
-        }
-
-        .card.flipped {
-            color: black;
-        }
-
-        .card.matched {
-            background-color: lightgreen;
-        }
-        
-        .board.easy .card {
-            width: 120px;
-            height: 120px;
-        }
-
-        .board.medium .card {
-            width: 80px;
-            height: 80px;
-        }
-
-        .board.hard .card {
-            width: 65px;
-            height: 65px;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
 </head>
 <body>
+    <div id="modal" class="modal">
+        <div class="modal-content" id="game-details"></div>
+    </div>
     <div class="top-right-container">
         <p><b>Logged in as:</b></p>
-        <p>Placeholder</p>
-        <p>Placeholder</p>
+        <p><span id="username" th:text="${username}">Username</span></p>
+        <p><span th:text="${email}">email</span></p>
         <a href="{% url 'logout' %}">Logout</a>
     </div>
     <div class="top-left-container">
         <p><b>Fun Games</b></p>
-        <a>Home</a>
+        <a href="/home">Home</a>
+    </div>
+    <div class="games-container">
+        <p><b>Games</b></p>
+        <a href="/pexeso-menu">Pexeso</a><br>
+        <a style="margin-top: 5px;">Placeholder</a>
+    </div>
+    <div class="leaderboards-container">
+        <p><b>Leaderboards</b></p>
+        <a href="/leaderboards">Leaderboards</a>
+    </div>
+    <div class="forum-container">
+        <p><b>Forum</b></p>
+        <a>Placeholder</a>
     </div>
     <div class="middle-right-container">
         <p><b>Leaderboard</b></p>
-        <p>Placeholder</p>
-        <p>Placeholder</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboardBody">
+                <!-- Leaderboard data will be populated here -->
+            </tbody>
+        </table>
+        <a href="/leaderboards" style="margin-top: 10px;">Full Leadeboards</a>
     </div>
-    <h1>You selected level: <span th:text="${difficulty}"></span></h1>
+    <h1>Pexeso</h1>
     <div class="sub-container-wrapper">
         <div class="sub-container">
             <div class="board" th:classappend="${difficulty}">
@@ -100,132 +75,15 @@
             </div>
         </div>
     </div>
+    <script src="/js/dataOperations.js" th:src="@{/js/dataOperations.js}"></script>
+    <script src="/js/pexeso.js" th:src="@{/js/pexeso.js}"></script>
 
     <script>
-
-        var numberOfClicks = 0;
-        var numberOfMatches = 0;
-
-        var values = [];
-
-        var firstFlippedCard = null;
-        
-        /**
-         * Assigns shuffled values to cards on the board.
-         */
-        function assignCardValues() {
-            var cards = document.querySelectorAll('.card');
-            var randomIndexes = generateRandomIndexes(cards.length);
-    
-            for (var i = 0; i < cards.length; i++) {
-                cards[i].textContent = values[randomIndexes[i]];
-            }
-        }
-
-        /**
-         * Generates a shuffled array of indexes to randomly assign card values.
-         * @param {number} length - The length of the values array.
-         * @returns {Array} An array of shuffled indexes.
-         */
-        function generateRandomIndexes(length) {
-            var indexes = [];
-    
-            for (var i = 0; i < length; i++) {
-                indexes.push(i);
-            }
-    
-            for (var i = indexes.length - 1; i > 0; i--) {
-                var j = Math.floor(Math.random() * (i + 1));
-                [indexes[i], indexes[j]] = [indexes[j], indexes[i]];
-            }
-    
-            return indexes;
-        }
-
-        /**
-         * Flips the card and checks for a match.
-         */
-        function flipCard() {
-            var clickedCard = this;
-            numberOfClicks++;
-            document.getElementById("clicks").textContent = numberOfClicks;
-
-            if (clickedCard.classList.contains('flipped')) {
-                clickedCard.classList.remove('flipped');
-            } else {
-                clickedCard.classList.add('flipped');
-
-                if (firstFlippedCard === null) {
-                    firstFlippedCard = clickedCard;
-                    firstFlippedCard.removeEventListener('click', flipCard);
-                } else {
-                    if (firstFlippedCard.textContent === clickedCard.textContent) {
-                        console.log("Match found!");
-                        numberOfMatches++;
-                        document.getElementById("matches").textContent = numberOfMatches;
-                        firstFlippedCard.classList.add('matched');
-                        clickedCard.classList.add('matched');
-                        firstFlippedCard.removeEventListener('click', flipCard);
-                        clickedCard.removeEventListener('click', flipCard);
-                        setTimeout(checkEndGame, 200);
-                    } else {
-
-                        var cards = document.querySelectorAll('.card');
-                        cards.forEach(card => {
-                            card.removeEventListener('click', flipCard);
-                        });
-
-                        setTimeout(function(card1, card2) {
-                            card1.classList.remove('flipped');
-                            card2.classList.remove('flipped');
-                            cards.forEach(card => {
-                                if (!card.classList.contains('flipped')) {
-                                    card.addEventListener('click', flipCard);
-                                }
-                            });
-                        }, 1000, firstFlippedCard, clickedCard);
-                    }
-                firstFlippedCard = null;
-                }
-            }
-        }
-        
-        /**
-         * Checks if the game has ended.
-         */
-        function checkEndGame() {
-            if (numberOfMatches === values.length / 2) {
-                alert("Congratulations! You have completed the game with " + numberOfClicks + " clicks.");
-            }
-        }
-
-        /**
-         * Sets up values based on the selected difficulty.
-         */
-        function setupValues(){
-            var easyValues = ["A", "A", "B", "B", "C", "C", "D", "D", "E", "E", "F", "F", "G", "G", "H", "H"];
-            var mediumValues = ["A", "A", "B", "B", "C", "C", "D", "D", "E", "E", "F", "F", "G", "G", "H", "H", "I", "I", "J", "J", "K", "K", "L", "L", "M", "M", "N", "N", "O", "O", "P", "P", "Q", "Q", "R", "R"];
-            var hardValues = ["A", "A", "B", "B", "C", "C", "D", "D", "E", "E", "F", "F", "G", "G", "H", "H", "I", "I", "J", "J", "K", "K", "L", "L", "M", "M", "N", "N", "O", "O", "P", "P", "Q", "Q", "R", "R", "S", "S", "T", "T", "U", "U", "V", "V", "W", "W", "X", "X", "Y", "Y", "Z", "Z", "1", "1", "2", "2", "3", "3", "4", "4", "5", "5", "6", "6"];
-
-            const urlParams = new URLSearchParams(window.location.search);
-            const difficulty = urlParams.get('difficulty');
-            switch (difficulty) {
-                case 'easy':
-                    values = easyValues;
-                    break;
-                case 'medium':
-                    values = mediumValues;
-                    break;
-                case 'hard':
-                    values = hardValues;
-                    break;
-            }
-        }
-        
-
         window.onload = function() {
             setupValues();
             assignCardValues();
+            getResultsToLeaderboard(5);
+
     
             var cards = document.querySelectorAll('.card');
             cards.forEach(card => card.addEventListener('click', flipCard));

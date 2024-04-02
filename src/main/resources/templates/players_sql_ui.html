@@ -3,16 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/styles.css" th:href="@{/styles.css}">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
     <title>Players SQL</title>
 </head>
 <body>
+    <div class="top-right-container">
+        <p><b>Logged in as:</b></p>
+        <p><span id="username" th:text="${username}">Username</span></p>
+        <p>Placeholder</p>
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
     <h1>Players SQL console</h1>
     <p>You can perform CRUD operations here</p>
 
     <h2>GET</h2>
     <button type="button" onclick="getAllPlayers()">Show Players</button>
     <div id="playersContainer"></div>
+
+    <h2>GET</h2>
+    <button type="button" onclick="getAllUsers()">Show Players</button>
+    <div id="usersContainer"></div>
 
     <h2>POST</h2>
     <form id="nameForm">
@@ -36,6 +48,9 @@
         <input type="text" id="deleteUserId" name="userId"><br><br>
         <button type="button" onclick="deletePlayer()">Submit</button>
     </form>
+
+    <button onclick="create20results()">Create 20 results</button>
+    <script src="/js/dataOperations.js" th:src="@{/js/dataOperations.js}"></script>
     <script>
         function getAllPlayers() {
             fetch('/players')
@@ -47,6 +62,21 @@
                         const playerDiv = document.createElement('div');
                         playerDiv.innerHTML = player.id + ' ' + player.userName;
                         playersContainer.appendChild(playerDiv);
+                    });
+                });
+        }
+
+        function getAllUsers() {
+            fetch('/users')
+                .then(response => response.json())
+                .then(data => {
+                    const usersContainer = document.getElementById('usersContainer');
+                    usersContainer.innerHTML = '';
+                    console.log(data);
+                    data.forEach(user => {
+                        const userDiv = document.createElement('div');
+                        userDiv.innerHTML = user.id + ' ' + user.username + ' ' + user.email + ' ' + user.results;
+                        usersContainer.appendChild(userDiv);
                     });
                 });
         }
@@ -95,6 +125,14 @@
                 .then(data => {
                     console.log(data);
                 });
+        }
+
+        numberOfClicks = 26;
+
+        function create20results() {
+            for (let i = 0; i < 20; i++) {
+                createResult();
+            }
         }
     </script>
 </body>
