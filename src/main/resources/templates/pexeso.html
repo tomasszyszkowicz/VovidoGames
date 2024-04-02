@@ -69,7 +69,8 @@
         window.onload = function() {
             setupValues();
             assignCardValues();
-            getResultsToLeaderboard();
+            getResultsToLeaderboard(5);
+
     
             var cards = document.querySelectorAll('.card');
             cards.forEach(card => card.addEventListener('click', flipCard));

@@ -6,7 +6,21 @@
     <title>Leaderboards</title>
 </head>
 <body>
-    <h1>Games</h1>
+    <h1>Leaderboard</h1>
+    <p>Check out the top players</p>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <form id="leaderboardForm">
+                <label for="difficulty">Difficulty:</label>
+                <select id="difficulty" name="difficulty">
+                    <option value="1">Easy</option>
+                    <option value="2">Medium</option>
+                    <option value="3">Hard</option>
+                </select>
+                <button type="button" onclick="getResultsToLeaderboard(20, document.getElementById('difficulty').value)">Show Leaderboard</button>
+        </form>
+        </div>
+    </div>
     <div class="top-right-container">
         <p><b>Logged in as:</b></p>
         <p><span th:text="${username}">Username</span></p>
@@ -35,8 +49,16 @@
     </div>
 
     <script>
-        function getResultsToLeaderboard() {
-            fetch('/results?top=20')
+        function getResultsToLeaderboard(top, difficulty) {
+            var url = '/results';
+            if (top) {
+                url += '?top=' + top;
+            }
+            if (difficulty) {
+                url += '&difficulty=' + difficulty;
+            }
+
+            fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     const leaderboardBody = document.getElementById("leaderboardBody");

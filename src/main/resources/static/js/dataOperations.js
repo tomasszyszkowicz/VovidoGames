@@ -9,8 +9,7 @@ function createResult() {
     const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
     username = document.getElementById("username").textContent;
-    const urlParams = new URLSearchParams(window.location.search);
-    var difficulty = urlParams.get('difficulty');
+    var difficulty = getQueryParamater("difficulty");
 
     if (difficulty === "easy") {
         difficulty = 1;
@@ -20,6 +19,9 @@ function createResult() {
     }
     else if (difficulty === "hard"){
         difficulty = 3;
+    }
+    else {
+        difficulty = 1;
     }
 
     // Replace the URL with the actual endpoint
@@ -58,8 +60,28 @@ function createResult() {
         });
 }
 
-function getResultsToLeaderboard() {
-    fetch('/results?top=5')
+function getResultsToLeaderboard(top) {
+
+    var difficulty = getQueryParamater("difficulty");
+
+    if (difficulty === "easy") {
+        difficulty = 1;
+    }
+    else if (difficulty === "medium") {
+        difficulty = 2;
+    }
+    else if (difficulty === "hard") {
+        difficulty = 3;
+    }
+
+    var url = 'results';
+    if (top) {
+        url += `?top=${top}`;
+    }
+    if (difficulty) {
+        url += `&difficulty=${difficulty}`;
+    }
+    fetch(url)
         .then(response => response.json())
         .then(data => {
             const leaderboardBody = document.getElementById("leaderboardBody");
@@ -78,4 +100,9 @@ function getResultsToLeaderboard() {
                 leaderboardBody.appendChild(row);
             });
         });
+}
+
+function getQueryParamater(paramater){
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(paramater);
 }
