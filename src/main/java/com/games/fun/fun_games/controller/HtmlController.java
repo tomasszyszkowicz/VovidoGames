@@ -23,7 +23,8 @@ public class HtmlController {
 
     /**
      * Handles the request for the players UI page.
-     *
+     *  
+     * @param model the model object to be populated with data
      * @return the name of the players SQL UI template
      */
     @GetMapping("/players-ui")
@@ -34,7 +35,8 @@ public class HtmlController {
 
     /**
      * Handles the request for the games UI page.
-     *
+     *  
+     * @param model the model object to be populated with data
      * @return the home page template
      */
     @GetMapping("/home")
@@ -46,23 +48,27 @@ public class HtmlController {
 
     /**
      * Handles the request for the game menu page.
-     *
+     *  
+     * @param model the model object to be populated with data
      * @return the name of the game menu template
      */
     @GetMapping("/game-menu")
     public String gameMenu(Model model) {
         model.addAttribute("username", getLoggedInUsername());
+        model.addAttribute("email", getLoggedInUserEmail());
         return "game-menu";
     }
 
     /**
      * Handles the request for the leaderboards page.
-     *
+     * 
+     * @param model the model object to be populated with data
      * @return the name of the leaderboards template
      */
     @GetMapping("/leaderboards")
     public String leaderboards(Model model) {
         model.addAttribute("username", getLoggedInUsername());
+        model.addAttribute("email", getLoggedInUserEmail());
         return "leaderboards";
     }
 
@@ -75,6 +81,7 @@ public class HtmlController {
     @GetMapping("/pexeso-menu")
     public String pexesoMenu(Model model) {
         model.addAttribute("username", getLoggedInUsername());
+        model.addAttribute("email", getLoggedInUserEmail());
         return "pexeso-menu";
     }
 
@@ -89,6 +96,7 @@ public class HtmlController {
     public String pexeso(@RequestParam(name = "difficulty", defaultValue = "easy") String difficulty, Model model) {
         model.addAttribute("difficulty", difficulty);
         model.addAttribute("username", getLoggedInUsername());
+        model.addAttribute("email", getLoggedInUserEmail());
         return "pexeso";
     }
 
