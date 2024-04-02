@@ -9,11 +9,25 @@ function createResult() {
     const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
     username = document.getElementById("username").textContent;
+    const urlParams = new URLSearchParams(window.location.search);
+    var difficulty = urlParams.get('difficulty');
+
+    if (difficulty === "easy") {
+        difficulty = 1;
+    } 
+    else if (difficulty === "medium") {
+        difficulty = 2;
+    }
+    else if (difficulty === "hard"){
+        difficulty = 3;
+    }
+
     // Replace the URL with the actual endpoint
     const url = '/results';
     const result = {
         score: numberOfClicks,
-        username: username
+        username: username,
+        difficulty: difficulty,
     };
 
     console.log(result);

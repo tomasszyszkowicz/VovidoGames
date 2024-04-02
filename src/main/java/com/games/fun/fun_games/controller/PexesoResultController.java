@@ -41,13 +41,13 @@ public class PexesoResultController {
      * @return A ResponseEntity containing a list of PexesoResult objects.
      */
     @GetMapping
-    public ResponseEntity<List<PexesoResult>> getResults(@RequestParam(name="top", defaultValue = "5") int top) {
+    public ResponseEntity<List<PexesoResult>> getResults(@RequestParam(name="top", defaultValue = "5") int top, @RequestParam(name="difficulty", defaultValue = "1") int difficulty) {
         // Create PageRequest for pagination and sorting
         PageRequest pageRequest = PageRequest.of(0, top, Sort.by(Sort.Direction.ASC, "score"));
 
-        // Fetch the first 'count' results sorted by score in ascending order
-        Page<PexesoResult> resultPage = pexesoResultRepository.findAll(pageRequest);
-        
+        // Fetch the first 'top' results sorted by score in ascending order, filtered by difficulty
+        Page<PexesoResult> resultPage = pexesoResultRepository.findByDifficulty(difficulty, pageRequest);
+            
         // Get the content of the page
         List<PexesoResult> results = resultPage.getContent();
 
@@ -64,7 +64,7 @@ public class PexesoResultController {
     public ResponseEntity<PexesoResult> createResult(@RequestBody PexesoResultDto result) {
         System.out.println(result.getUsername());
         User user = userRepository.findByUsername(result.getUsername());
-        PexesoResult newResult = pexesoResultRepository.save(new PexesoResult(user, result.getScore()));
+        PexesoResult newResult = pexesoResultRepository.save(new PexesoResult(user, result.getScore(), result.getDifficulty()));
         return new ResponseEntity<>(newResult, HttpStatus.CREATED);
     }
 }

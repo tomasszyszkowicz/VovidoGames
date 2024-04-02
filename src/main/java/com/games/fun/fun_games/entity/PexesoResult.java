@@ -20,13 +20,15 @@ public class PexesoResult {
     private User user;
 
     private int score;
+    private int difficulty;
 
     public PexesoResult() {
     }
 
-    public PexesoResult(User user, int score) {
+    public PexesoResult(User user, int score, int difficulty) {
         this.user = user;
         this.score = score;
+        this.difficulty = difficulty;
     }
 
     public Long getId() {
@@ -51,6 +53,14 @@ public class PexesoResult {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public int getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
     }
     
 }

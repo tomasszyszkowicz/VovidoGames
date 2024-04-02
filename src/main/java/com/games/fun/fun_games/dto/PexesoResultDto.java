@@ -4,6 +4,7 @@ public class PexesoResultDto {
 
     private String username;
     private int score;
+    private int difficulty;
 
     public PexesoResultDto() {
     }
@@ -27,6 +28,14 @@ public class PexesoResultDto {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public int getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
     }
     
 }
