@@ -101,7 +101,7 @@
         var isFirstLoad = true;
 
 
-        function getResultsToLeaderboard(top, difficulty) {
+        function getResultsToLeaderboard(top, bottom, difficulty) {
             const hallOfFameContainer = document.getElementById("hallOfFame");
 
             if (!isFirstLoad) {
@@ -118,6 +118,9 @@
                 var url = '/results';
                 if (top) {
                     url += '?top=' + top;
+                }
+                if (bottom) {
+                    url += '&bottom=' + bottom;
                 }
                 if (difficulty) {
                     url += '&difficulty=' + difficulty;
@@ -175,7 +178,7 @@
         }
 
         function updateLeaderboard() {
-            getResultsToLeaderboard(3, currentDifficulty);
+            getResultsToLeaderboard(2, 0, currentDifficulty);
             currentDifficulty += 1;
             if (currentDifficulty > 3) {
                 currentDifficulty = 1; // Reset difficulty after 3

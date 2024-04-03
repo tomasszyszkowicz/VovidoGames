@@ -17,7 +17,7 @@
                     <option value="2">Medium</option>
                     <option value="3">Hard</option>
                 </select>
-                <button type="button" onclick="getResultsToLeaderboard(20, document.getElementById('difficulty').value)">Show Leaderboard</button>
+                <button type="button" onclick="getResultsToLeaderboard(19, 0, document.getElementById('difficulty').value)">Show Leaderboard</button>
         </form>
         </div>
     </div>
@@ -55,15 +55,21 @@
                     <!-- Leaderboard data will be populated here -->
                 </tbody>
             </table>
-            <a style="margin: 5px; margin-top: 10px;">&lt;</a><a style="margin: 5px; margin-top: 10px;">></a>
+            <a id="turnPageDownButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageDown()">&lt;</a><a style="margin: 5px; margin-top: 10px;" onclick="turnPageUp()">></a>
         </div>
     </div>
 
     <script>
-        function getResultsToLeaderboard(top, difficulty) {
+        var global_bottom = 0;
+        var global_top = 19;
+
+        function getResultsToLeaderboard(top, bottom, difficulty) {
             var url = '/results';
             if (top) {
                 url += '?top=' + top;
+            }
+            if (bottom) {
+                url += '&bottom=' + bottom;
             }
             if (difficulty) {
                 url += '&difficulty=' + difficulty;
@@ -72,12 +78,14 @@
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
+                    updateNavigationButtonVisibility();
                     const leaderboardBody = document.getElementById("leaderboardBody");
                     leaderboardBody.innerHTML = ""; // Clear existing rows
                     data.forEach((result, index) => {
                         const row = document.createElement("tr");
                         const rankCell = document.createElement("td");
-                        rankCell.textContent = (index + 1);
+                        // Calculate rank based on global_bottom and index
+                        rankCell.textContent = global_bottom + index + 1;
                         const playerCell = document.createElement("td");
                         playerCell.textContent = result.user.username;
                         const scoreCell = document.createElement("td");
@@ -90,7 +98,31 @@
                 });
         }
 
-        window.onload = getResultsToLeaderboard(20, 1);
+        function turnPageUp() {
+            global_bottom += 20;
+            global_top += 20;
+            getResultsToLeaderboard(global_top, global_bottom, 1);
+        }
+
+        function turnPageDown() {
+            global_bottom -= 20;
+            global_top -= 20;
+            getResultsToLeaderboard(global_top, global_bottom, 1);
+        }
+
+        function updateNavigationButtonVisibility() {
+            const turnPageDownButton = document.getElementById("turnPageDownButton");
+            if (global_bottom === 0) {
+                turnPageDownButton.style.visibility = "hidden";
+            } else {
+                turnPageDownButton.style.visibility = "visible";
+            }
+        }
+
+        window.onload = function() {
+            getResultsToLeaderboard(19, 0, 1);
+            updateNavigationButtonVisibility(); // This call might be redundant if getResultsToLeaderboard already handles it
+        };
     </script>
 </body>
 </html>
