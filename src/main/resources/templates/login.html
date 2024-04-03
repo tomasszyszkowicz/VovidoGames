@@ -23,6 +23,8 @@
             </div>
         </form>
         <div th:if="${session.errorMessage}" class="error-message" th:text="${session.errorMessage}" style="color: red; margin-top: 10px;"></div>
+        <p style="margin-top: 50px;">Don't have an account?</p>
+        <button onclick="redirectToRegister()">Create account</button>
     </div>
 
     <script>
@@ -40,6 +42,13 @@
                 });
             }, { once: true });
         });
+
+        /**
+         * Redirects the user to the registration page.
+         */
+        function redirectToRegister() {
+            window.location.href = "/register";
+        }
     </script>
         
 </body>

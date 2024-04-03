@@ -30,6 +30,8 @@
             </div>
             <div th:if="${errorMessage}" th:text="${errorMessage}" class="error-message" style="color: red; margin-top: 10px;"></div>
         </form>
+        <p style="margin-top: 50px;">Already have an account?</p>
+        <button onclick="redirectToLogin()">Login</button>
     </div>
 
     <script>
@@ -47,6 +49,13 @@
                 });
             }, { once: true });
         });
+
+        /**
+         * Redirects the user to the login page.
+         */
+        function redirectToLogin() {
+            window.location.href = "/login";
+        }
     </script>
 </body>
 </html>
