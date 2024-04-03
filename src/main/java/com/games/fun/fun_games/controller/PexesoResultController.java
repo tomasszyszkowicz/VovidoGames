@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.games.fun.fun_games.dto.PexesoResultDto;
 import com.games.fun.fun_games.entity.PexesoResult;
@@ -62,6 +65,37 @@ public class PexesoResultController {
         List<PexesoResult> results = resultPage.getContent();
         
         return new ResponseEntity<>(results, HttpStatus.OK);
+    }
+
+    /**
+     * Fetches the lowest highscores for each difficulty level.
+     *
+     * @return ResponseEntity containing a map of difficulty levels and their lowest highscores, and HTTP status code OK.
+     */
+    @GetMapping("/record-holders")
+    public ResponseEntity<Map<String, PexesoResult>> getLowestHighscoresByDifficultyMapped() {
+        List<PexesoResult> results = pexesoResultRepository.findLowestHighscoresByDifficulty();
+
+        Map<String, PexesoResult> mappedResults = new HashMap<>();
+        results.forEach(result -> {
+            String key;
+            switch (result.getDifficulty()) {
+                case 1:
+                    key = "easy";
+                    break;
+                case 2:
+                    key = "medium";
+                    break;
+                case 3:
+                    key = "hard";
+                    break;
+                default:
+                    key = "unknown";
+            }
+            mappedResults.put(key, result);
+        });
+
+        return new ResponseEntity<>(mappedResults, HttpStatus.OK);
     }
 
     /**

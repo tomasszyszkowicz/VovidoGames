@@ -17,7 +17,7 @@
                     <option value="2">Medium</option>
                     <option value="3">Hard</option>
                 </select>
-                <button type="button" onclick="getResultsToLeaderboard(19, 0, document.getElementById('difficulty').value)">Show Leaderboard</button>
+                <button type="button" onclick="sumbitForm()">Show Leaderboard</button>
         </form>
         </div>
     </div>
@@ -117,6 +117,13 @@
             } else {
                 turnPageDownButton.style.visibility = "visible";
             }
+        }
+
+        function sumbitForm() {
+            global_bottom = 0;
+            global_top = 19;
+            const difficulty = document.getElementById("difficulty").value;
+            getResultsToLeaderboard(19, 0, difficulty);
         }
 
         window.onload = function() {
