@@ -56,12 +56,15 @@
                 </tbody>
             </table>
             <a id="turnPageDownButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageDown()">&lt;</a><a style="margin: 5px; margin-top: 10px;" onclick="turnPageUp()">></a>
+            <p>[<span id="globalBottom"></span> - <span id="globalTop"></span>]</p>
         </div>
     </div>
 
     <script>
         var global_bottom = 0;
         var global_top = 19;
+
+        var global_difficulty;
 
         function getResultsToLeaderboard(top, bottom, difficulty) {
             var url = '/results';
@@ -79,6 +82,8 @@
                 .then(response => response.json())
                 .then(data => {
                     updateNavigationButtonVisibility();
+                    document.getElementById("globalBottom").textContent = global_bottom + 1;
+                    document.getElementById("globalTop").textContent = global_top + 1;
                     const leaderboardBody = document.getElementById("leaderboardBody");
                     leaderboardBody.innerHTML = ""; // Clear existing rows
                     data.forEach((result, index) => {
@@ -101,13 +106,13 @@
         function turnPageUp() {
             global_bottom += 20;
             global_top += 20;
-            getResultsToLeaderboard(global_top, global_bottom, 1);
+            getResultsToLeaderboard(global_top, global_bottom, global_difficulty);
         }
 
         function turnPageDown() {
             global_bottom -= 20;
             global_top -= 20;
-            getResultsToLeaderboard(global_top, global_bottom, 1);
+            getResultsToLeaderboard(global_top, global_bottom, global_difficulty);
         }
 
         function updateNavigationButtonVisibility() {
@@ -123,13 +128,14 @@
             global_bottom = 0;
             global_top = 19;
             const difficulty = document.getElementById("difficulty").value;
-            getResultsToLeaderboard(19, 0, difficulty);
+            global_difficulty = difficulty;
+            getResultsToLeaderboard(19, 0, global_difficulty);
         }
 
         window.onload = function() {
             getResultsToLeaderboard(19, 0, 1);
             updateNavigationButtonVisibility(); // This call might be redundant if getResultsToLeaderboard already handles it
-        };
+         };
     </script>
 </body>
 </html>
