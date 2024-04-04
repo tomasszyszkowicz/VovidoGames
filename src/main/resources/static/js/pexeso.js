@@ -111,6 +111,7 @@ function checkEndGame() {
 }
 
 function showStartModal() {
+    
     const modal = document.getElementById('modal');
     const gameDetails = document.getElementById('game-details');
     gameDetails.innerHTML = `
@@ -160,7 +161,6 @@ function setupValues(){
 function startPexeso() {
     setupValues();
     assignCardValues();
-    getResultsToLeaderboard(4,0);
 
     var cards = document.querySelectorAll('.card');
     cards.forEach(card => card.addEventListener('click', flipCard));
