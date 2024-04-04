@@ -42,7 +42,7 @@
     </div>
     <div class="sub-container-wrapper">
         <div class="sub-container">
-            <h2>Leaderboard</h2>
+            <h2><span id="difficultyText">Easy pexeso</span> leaderboard</h2>
             <table>
                 <thead>
                     <tr>
@@ -128,6 +128,13 @@
             global_bottom = 0;
             global_top = 19;
             const difficulty = document.getElementById("difficulty").value;
+            if(difficulty === "1") {
+                document.getElementById("difficultyText").textContent = "Easy pexeso ";
+            } else if(difficulty === "2") {
+                document.getElementById("difficultyText").textContent = "Medium pexeso ";
+            } else if(difficulty === "3") {
+                document.getElementById("difficultyText").textContent = "Hard pexeso ";
+            }
             global_difficulty = difficulty;
             getResultsToLeaderboard(19, 0, global_difficulty);
         }
