@@ -96,7 +96,7 @@ function checkEndGame() {
         gameDetails.innerHTML = `
         <h1>You have solved the pexeso!</h1>
         <p>Clicks: ${numberOfClicks}</p>
-        <a onclick="location.reload()">Play again</a>
+        <a onclick="closeModalandRestart()">Play again</a>
         <a href="/pexeso-menu">Choose a different pexeso</a>
         <a href="/home">Back to main menu</a>
         <a href="/leaderboards">Leaderboards</a>
@@ -164,4 +164,12 @@ function startPexeso() {
 
     var cards = document.querySelectorAll('.card');
     cards.forEach(card => card.addEventListener('click', flipCard));
+}
+
+function closeModalandRestart() {
+    closeModal();
+    setTimeout(() => {
+        location.reload();
+    }, 500);
+    
 }
