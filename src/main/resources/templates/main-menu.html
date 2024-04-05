@@ -4,9 +4,30 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
     <title>Pexeso Menu</title>
+    <style>
+        .fade-out {
+            animation: fadeOut 0.5s;
+            opacity: 0;
+        }
+    
+        .fade-in {
+            animation: fadeIn 0.5s;
+            opacity: 1;
+        }
+    
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+    
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
 </head>
 <body>
-    <h1>Main Menu</h1>
+    <h1>Welcome to Fun Games</h1>
     <div class="top-right-container">
         <p><b>Logged in as:</b></p>
         <p><span th:text="${username}">Username</span></p>
@@ -19,30 +40,157 @@
     </div>
     <div class="games-container">
         <p><b>Games</b></p>
-        <a href="/pexeso-menu">Pexeso</a><br>
-        <a style="margin-top: 5px;">Placeholder</a>
-    </div>
-    <div class="leaderboards-container">
+        <a class="nav-link" href="/pexeso-menu">Pexeso</a>
+        <a class="nav-link">Placeholder</a>
         <p><b>Leaderboards</b></p>
-        <a href="/leaderboards">Leaderboards</a>
-    </div>
-    <div class="forum-container">
+        <a class="nav-link" href="/leaderboards">Leaderboards</a>
         <p><b>Forum</b></p>
-        <a>Placeholder</a>
+        <a class="nav-link">Forum</a>
     </div>
 
     <div class="sub-container-wrapper">
         <div class="left-wrapper">
             <div class="sub-container">
-                <a href="/game-menu">Pexeso</a>
-                <a href="/leaderboards">Leaderboards</a>
+                <h2>Games</h2>
+                <p>Let's see what's in you!</p>
+                <a href="/game-menu">Games menu</a>
             </div>
         </div>
         <div class="right-wrapper">
             <div class="sub-container">
-                <a href="/pexeso-menu">Pexeso</a>
-                <a href="/leaderboards">Forum</a>
+                <h2>Leaderboards</h2>
+                <p>Compare yourself with others</p>
+                <a href="/leaderboards">Leaderboards</a>
             </div>
+        </div>
     </div>
+    <div id="hallOfFame" class="sub-container-wrapper">
+        <div class="sub-container">
+            <h2><span id="game">Easy pexeso</span></h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                    <!-- Leaderboard data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="sub-container-wrapper">
+        <div class="left-wrapper">
+            <div class="sub-container">
+                <h2>Forum</h2>
+                <p>Discuss with others</p>
+            </div>
+        </div>
+        <div class="right-wrapper">
+            <div class="sub-container">
+                <h2>Placeholder</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        var currentDifficulty = 1;
+        var isFirstLoad = true;
+
+
+        function getResultsToLeaderboard(top, bottom, difficulty) {
+            const hallOfFameContainer = document.getElementById("hallOfFame");
+
+            if (!isFirstLoad) {
+                hallOfFameContainer.classList.add('fade-out');
+                hallOfFameContainer.classList.remove('fade-in');
+            }
+
+            const updateDelay = isFirstLoad ? 0 : 500;
+
+            setTimeout(() => {
+                // Update the difficulty text when the container is fully invisible
+                updateDifficultyLabel(difficulty);
+
+                var url = '/results';
+                if (top) {
+                    url += '?top=' + top;
+                }
+                if (bottom) {
+                    url += '&bottom=' + bottom;
+                }
+                if (difficulty) {
+                    url += '&difficulty=' + difficulty;
+                }
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        const leaderboardBody = document.getElementById("leaderboardBody");
+                        leaderboardBody.innerHTML = ""; // Clear existing rows within the body
+                        data.forEach((result, index) => {
+                            const row = document.createElement("tr");
+                            const rankCell = document.createElement("td");
+                            rankCell.textContent = (index + 1);
+                            const playerCell = document.createElement("td");
+                            playerCell.textContent = result.user.username;
+                            const scoreCell = document.createElement("td");
+                            scoreCell.textContent = result.score;
+                            row.appendChild(rankCell);
+                            row.appendChild(playerCell);
+                            row.appendChild(scoreCell);
+                            leaderboardBody.appendChild(row);
+                        });
+
+                        if (!isFirstLoad) {
+                            // Wait a bit before starting the fade-in to ensure changes have been made
+                            setTimeout(() => {
+                                // Fade-in the updated container after data is loaded and difficulty label is updated
+                                hallOfFameContainer.classList.remove('fade-out');
+                                hallOfFameContainer.classList.add('fade-in');
+                            }, 100); // A short delay before fading in ensures any DOM updates are rendered
+                        } else {
+                            // Immediately show the content without fade-in animation for the first load
+                            isFirstLoad = false; // Update the flag after the first load completes
+                        }
+                    });
+            }, updateDelay); // Match this delay to the duration of the fade-out animation
+        }
+
+        function updateDifficultyLabel(difficulty) {
+            const difficultySpan = document.getElementById("game");
+            switch(difficulty) {
+                case 1:
+                    difficultySpan.textContent = "Easy pexeso";
+                    break;
+                case 2:
+                    difficultySpan.textContent = "Medium pexeso";
+                    break;
+                case 3:
+                    difficultySpan.textContent = "Hard pexeso";
+                    break;
+                default:
+                    difficultySpan.textContent = "Difficulty";
+            }
+        }
+
+        function updateLeaderboard() {
+            getResultsToLeaderboard(2, 0, currentDifficulty);
+            currentDifficulty += 1;
+            if (currentDifficulty > 3) {
+                currentDifficulty = 1; // Reset difficulty after 3
+            }
+        }
+
+        window.onload = function() {
+            updateLeaderboard(); // Initial call to display the leaderboard
+            setInterval(updateLeaderboard, 6000); // Adjusted to account for animation time plus a little buffer
+        };
+
+    </script>
+       
 </body>
 </html>

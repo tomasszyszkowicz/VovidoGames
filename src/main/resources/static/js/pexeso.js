@@ -90,17 +90,50 @@ function flipCard() {
 */
 function checkEndGame() {
     if (numberOfMatches === values.length / 2) {
-        alert("Congratulations! You have completed the game with " + numberOfClicks + " clicks.");
         const modal = document.getElementById('modal');
         const gameDetails = document.getElementById('game-details');
+        const difficulty = getQueryParamater("difficulty");
         gameDetails.innerHTML = `
-            <h1>You have solved the pexeso!</h1>
-            <p>Clicks: </p>
+        <h1>You have solved the pexeso!</h1>
+        <p>Clicks: ${numberOfClicks}</p>
+        <a onclick="closeModalandRestart()">Play again</a>
+        <a href="/pexeso-menu">Choose a different pexeso</a>
+        <a href="/home">Back to main menu</a>
+        <a href="/leaderboards">Leaderboards</a>
+        <a onclick="closeModal()">Close</a>
         `;
         modal.style.display = 'block';
+        setTimeout(() => {
+            modal.style.top = '0'; // This will trigger the transition
+        }, 10); // A slight delay to ensure 'display: block' is applied first
         createResult();
     }
 }
+
+function showStartModal() {
+    
+    const modal = document.getElementById('modal');
+    const gameDetails = document.getElementById('game-details');
+    gameDetails.innerHTML = `
+    <h1>Welcome to pexeso!</h1>
+    <p>Click on a card to flip it. Find all matching pairs to win!</p>
+    <a onclick="closeModal()">Start</a>
+    `;
+
+    modal.style.display = 'block';
+    setTimeout(() => {
+        modal.style.top = '0'; // This will trigger the transition
+    }, 10); // A slight delay to ensure 'display: block' is applied first
+
+}
+
+function closeModal() {
+    startPexeso();
+    const modal = document.getElementById('modal');
+    modal.style.top = '-100%'; // Move the modal back off-screen
+    setTimeout(() => modal.style.display = 'none', 500); // Hide after transition
+}
+
 
 /**
 * Sets up values based on the selected difficulty.
@@ -123,4 +156,20 @@ function setupValues(){
             values = hardValues;
             break;
     }
+}
+
+function startPexeso() {
+    setupValues();
+    assignCardValues();
+
+    var cards = document.querySelectorAll('.card');
+    cards.forEach(card => card.addEventListener('click', flipCard));
+}
+
+function closeModalandRestart() {
+    closeModal();
+    setTimeout(() => {
+        location.reload();
+    }, 500);
+    
 }

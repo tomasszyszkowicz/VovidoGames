@@ -19,16 +19,64 @@
     </div>
     <div class="games-container">
         <p><b>Games</b></p>
-        <a href="/pexeso-menu">Pexeso</a><br>
-        <a style="margin-top: 5px;">Placeholder</a>
-    </div>
-    <div class="leaderboards-container">
+        <a class="nav-link" href="/pexeso-menu">Pexeso</a>
+        <a class="nav-link">Placeholder</a>
         <p><b>Leaderboards</b></p>
-        <a href="/leaderboards">Leaderboards</a>
-    </div>
-    <div class="forum-container">
+        <a class="nav-link" href="/leaderboards">Leaderboards</a>
         <p><b>Forum</b></p>
-        <a>Placeholder</a>
+        <a class="nav-link">Forum</a>
     </div>
+    <div class="sub-container-wrapper">
+        <div class="left-wrapper">
+            <div class="sub-container">
+                <h2>Pexeso</h2>
+                <p>Find all the pairs</p>
+                <p><b>Record Holders:</b></p>
+                <p>Easy pexeso: <b><span id="easyPexesoRecordHolder"></span></b></p>
+                <p>Score: <b><span id="easyPexesoRecord"></span></b></p>
+                <p>Medium pexeso: <b><span id="mediumPexesoRecordHolder"></span></b></p>
+                <p>Score: <b><span id="mediumPexesoRecord"></span></b></p>
+                <p>Hard pexeso: <b><span id="hardPexesoRecordHolder"></span></b></p>
+                <p>Score: <b><spand id="hardPexesoRecord"></spand></b></p>
+                <a href="/pexeso-menu">Play Pexeso</a>
+            </div>
+        </div>
+        <div class="right-wrapper">
+            <div class="sub-container">
+                <h2>Jump jump</h2>
+                <p>Jump over the obstacles</p>
+                <p><b>Record holder: <span id="jumpRecordHolder"></span></b></p>
+                <a href="/jump-jump">Play Jump Jump</a>
+            </div>
+            <div class="sub-container">
+                <h2>Snake</h2>
+                <p>Collect the food</p>
+                <p><b>Record holder: <span id="snakeRecordHolder"></span></b></p>
+                <a href="/snake">Play Snake</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function getRecordHolders(){
+            fetch('/results/record-holders')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('easyPexesoRecordHolder').innerText = data["easy"].user.username;
+                    document.getElementById('easyPexesoRecord').innerText = data["easy"].score;
+                    document.getElementById('mediumPexesoRecordHolder').innerText = data["medium"].user.username;
+                    document.getElementById('mediumPexesoRecord').innerText = data["medium"].score;
+                    document.getElementById('hardPexesoRecordHolder').innerText =  data["hard"].user.username;
+                    document.getElementById('hardPexesoRecord').innerText = data["hard"].score;
+                });
+
+        }
+
+        window.onload = function() {
+            getRecordHolders();
+        }
+
+    </script>
 </body>
 </html>

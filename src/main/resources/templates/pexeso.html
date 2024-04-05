@@ -16,7 +16,7 @@
         <p><b>Logged in as:</b></p>
         <p><span id="username" th:text="${username}">Username</span></p>
         <p><span th:text="${email}">email</span></p>
-        <a href="{% url 'logout' %}">Logout</a>
+        <a href="/logout">Logout</a>
     </div>
     <div class="top-left-container">
         <p><b>Fun Games</b></p>
@@ -24,16 +24,12 @@
     </div>
     <div class="games-container">
         <p><b>Games</b></p>
-        <a href="/pexeso-menu">Pexeso</a><br>
-        <a style="margin-top: 5px;">Placeholder</a>
-    </div>
-    <div class="leaderboards-container">
+        <a class="nav-link" href="/pexeso-menu">Pexeso</a>
+        <a class="nav-link">Placeholder</a>
         <p><b>Leaderboards</b></p>
-        <a href="/leaderboards">Leaderboards</a>
-    </div>
-    <div class="forum-container">
+        <a class="nav-link" href="/leaderboards">Leaderboards</a>
         <p><b>Forum</b></p>
-        <a>Placeholder</a>
+        <a class="nav-link">Forum</a>
     </div>
     <div class="middle-right-container">
         <p><b>Leaderboard</b></p>
@@ -80,13 +76,8 @@
 
     <script>
         window.onload = function() {
-            setupValues();
-            assignCardValues();
-            getResultsToLeaderboard(5);
-
-    
-            var cards = document.querySelectorAll('.card');
-            cards.forEach(card => card.addEventListener('click', flipCard));
+            getResultsToLeaderboard(4,0);
+            showStartModal();
         };
     </script>
 </body>

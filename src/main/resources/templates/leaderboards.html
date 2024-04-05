@@ -17,7 +17,7 @@
                     <option value="2">Medium</option>
                     <option value="3">Hard</option>
                 </select>
-                <button type="button" onclick="getResultsToLeaderboard(20, document.getElementById('difficulty').value)">Show Leaderboard</button>
+                <button type="button" onclick="sumbitForm()">Show Leaderboard</button>
         </form>
         </div>
     </div>
@@ -33,20 +33,16 @@
     </div>
     <div class="games-container">
         <p><b>Games</b></p>
-        <a href="/pexeso-menu">Pexeso</a><br>
-        <a style="margin-top: 5px;">Placeholder</a>
-    </div>
-    <div class="leaderboards-container">
+        <a class="nav-link" href="/pexeso-menu">Pexeso</a>
+        <a class="nav-link">Placeholder</a>
         <p><b>Leaderboards</b></p>
-        <a href="/leaderboards">Leaderboards</a>
-    </div>
-    <div class="forum-container">
+        <a class="nav-link" href="/leaderboards">Leaderboards</a>
         <p><b>Forum</b></p>
-        <a>Placeholder</a>
+        <a class="nav-link">Forum</a>
     </div>
     <div class="sub-container-wrapper">
         <div class="sub-container">
-            <h2>Leaderboard</h2>
+            <h2><span id="difficultyText">Easy pexeso</span> leaderboard</h2>
             <table>
                 <thead>
                     <tr>
@@ -59,13 +55,24 @@
                     <!-- Leaderboard data will be populated here -->
                 </tbody>
             </table>
+            <a id="turnPageDownButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageDown()">&lt;</a><a style="margin: 5px; margin-top: 10px;" onclick="turnPageUp()">></a>
+            <p>[<span id="globalBottom"></span> - <span id="globalTop"></span>]</p>
+        </div>
     </div>
 
     <script>
-        function getResultsToLeaderboard(top, difficulty) {
+        var global_bottom = 0;
+        var global_top = 19;
+
+        var global_difficulty = 1;
+
+        function getResultsToLeaderboard(top, bottom, difficulty) {
             var url = '/results';
             if (top) {
                 url += '?top=' + top;
+            }
+            if (bottom) {
+                url += '&bottom=' + bottom;
             }
             if (difficulty) {
                 url += '&difficulty=' + difficulty;
@@ -74,12 +81,16 @@
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
+                    updateNavigationButtonVisibility();
+                    document.getElementById("globalBottom").textContent = global_bottom + 1;
+                    document.getElementById("globalTop").textContent = global_top + 1;
                     const leaderboardBody = document.getElementById("leaderboardBody");
                     leaderboardBody.innerHTML = ""; // Clear existing rows
                     data.forEach((result, index) => {
                         const row = document.createElement("tr");
                         const rankCell = document.createElement("td");
-                        rankCell.textContent = (index + 1);
+                        // Calculate rank based on global_bottom and index
+                        rankCell.textContent = global_bottom + index + 1;
                         const playerCell = document.createElement("td");
                         playerCell.textContent = result.user.username;
                         const scoreCell = document.createElement("td");
@@ -92,7 +103,46 @@
                 });
         }
 
-        window.onload = getResultsToLeaderboard(20, 1);
+        function turnPageUp() {
+            global_bottom += 20;
+            global_top += 20;
+            getResultsToLeaderboard(global_top, global_bottom, global_difficulty);
+        }
+
+        function turnPageDown() {
+            global_bottom -= 20;
+            global_top -= 20;
+            getResultsToLeaderboard(global_top, global_bottom, global_difficulty);
+        }
+
+        function updateNavigationButtonVisibility() {
+            const turnPageDownButton = document.getElementById("turnPageDownButton");
+            if (global_bottom === 0) {
+                turnPageDownButton.style.visibility = "hidden";
+            } else {
+                turnPageDownButton.style.visibility = "visible";
+            }
+        }
+
+        function sumbitForm() {
+            global_bottom = 0;
+            global_top = 19;
+            const difficulty = document.getElementById("difficulty").value;
+            if(difficulty === "1") {
+                document.getElementById("difficultyText").textContent = "Easy pexeso ";
+            } else if(difficulty === "2") {
+                document.getElementById("difficultyText").textContent = "Medium pexeso ";
+            } else if(difficulty === "3") {
+                document.getElementById("difficultyText").textContent = "Hard pexeso ";
+            }
+            global_difficulty = difficulty;
+            getResultsToLeaderboard(19, 0, global_difficulty);
+        }
+
+        window.onload = function() {
+            getResultsToLeaderboard(19, 0, 1);
+            updateNavigationButtonVisibility(); // This call might be redundant if getResultsToLeaderboard already handles it
+         };
     </script>
 </body>
 </html>

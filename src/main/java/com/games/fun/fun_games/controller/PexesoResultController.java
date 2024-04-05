@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.games.fun.fun_games.dto.PexesoResultDto;
 import com.games.fun.fun_games.entity.PexesoResult;
@@ -35,23 +38,64 @@ public class PexesoResultController {
     private UserRepository userRepository;
 
     /**
-     * Retrieves a list of Pexeso results.
+     * Fetches a list of results within the specified range and difficulty.
      *
-     * @param count The number of results to retrieve. Defaults to 5 if not specified.
-     * @return A ResponseEntity containing a list of PexesoResult objects.
+     * @param top The top index of the range.
+     * @param bottom The bottom index of the range.
+     * @param difficulty The difficulty of the results.
+     * @return ResponseEntity containing the list of results and HTTP status code OK.
      */
     @GetMapping
-    public ResponseEntity<List<PexesoResult>> getResults(@RequestParam(name="top", defaultValue = "5") int top, @RequestParam(name="difficulty", defaultValue = "1") int difficulty) {
-        // Create PageRequest for pagination and sorting
-        PageRequest pageRequest = PageRequest.of(0, top, Sort.by(Sort.Direction.ASC, "score"));
-
-        // Fetch the first 'top' results sorted by score in ascending order, filtered by difficulty
+    public ResponseEntity<List<PexesoResult>> getResults(
+            @RequestParam(name = "top", defaultValue = "20") int top,
+            @RequestParam(name = "bottom", defaultValue = "0") int bottom,
+            @RequestParam(name = "difficulty", defaultValue = "1") int difficulty) {
+        
+        // Calculate the number of results to fetch (size) and the page number
+        int size = top - bottom + 1; // This ensures we get the range from bottom to top
+        int pageNumber = bottom / size; // Calculate the page number starting from 0
+        
+        // Create PageRequest for pagination and sorting, using calculated page number and size
+        PageRequest pageRequest = PageRequest.of(pageNumber, size, Sort.by(Sort.Direction.ASC, "score"));
+        
+        // Fetch the results filtered by difficulty, within the specified range
         Page<PexesoResult> resultPage = pexesoResultRepository.findByDifficulty(difficulty, pageRequest);
-            
+        
         // Get the content of the page
         List<PexesoResult> results = resultPage.getContent();
-
+        
         return new ResponseEntity<>(results, HttpStatus.OK);
+    }
+
+    /**
+     * Fetches the lowest highscores for each difficulty level.
+     *
+     * @return ResponseEntity containing a map of difficulty levels and their lowest highscores, and HTTP status code OK.
+     */
+    @GetMapping("/record-holders")
+    public ResponseEntity<Map<String, PexesoResult>> getLowestHighscoresByDifficultyMapped() {
+        List<PexesoResult> results = pexesoResultRepository.findLowestHighscoresByDifficulty();
+
+        Map<String, PexesoResult> mappedResults = new HashMap<>();
+        results.forEach(result -> {
+            String key;
+            switch (result.getDifficulty()) {
+                case 1:
+                    key = "easy";
+                    break;
+                case 2:
+                    key = "medium";
+                    break;
+                case 3:
+                    key = "hard";
+                    break;
+                default:
+                    key = "unknown";
+            }
+            mappedResults.put(key, result);
+        });
+
+        return new ResponseEntity<>(mappedResults, HttpStatus.OK);
     }
 
     /**
