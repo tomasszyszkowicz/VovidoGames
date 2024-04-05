@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>Snake</title>
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="/css/snakeStyles.css" th:href="@{/css/snakeStyles.css}">
+</head>
+<body>
+    <div id="modal" class="modal">
+        <div class="modal-content" id="game-details"></div>
+    </div>
+    <div class="top-right-container">
+        <p><b>Logged in as:</b></p>
+        <p><span id="username" th:text="${username}">Username</span></p>
+        <p><span th:text="${email}">email</span></p>
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="top-left-container">
+        <p><b>Fun Games</b></p>
+        <a href="/home">Home</a>
+    </div>
+    <div class="games-container">
+        <p><b>Games</b></p>
+        <a class="nav-link" href="/pexeso-menu">Pexeso</a>
+        <a class="nav-link">Placeholder</a>
+        <p><b>Leaderboards</b></p>
+        <a class="nav-link" href="/leaderboards">Leaderboards</a>
+        <p><b>Forum</b></p>
+        <a class="nav-link">Forum</a>
+    </div>
+    <div class="middle-right-container">
+        <p><b>Leaderboard</b></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboardBody">
+                <!-- Leaderboard data will be populated here -->
+            </tbody>
+        </table>
+        <a href="/leaderboards" style="margin-top: 10px;">Full Leadeboards</a>
+    </div>
+    <h1>Pexeso</h1>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <div id="gameArea"></div>
+        </div>
+    </div>
+    <div class="sub-container-wrapper">
+        <div class="left-wrapper">
+            <div class="sub-container">
+                <p>Clicks: <span id="clicks">0</span></p>
+                <p>Matches: <span id="matches">0</span></p>
+            </div>
+        </div>
+        <div class="right-wrapper">
+            <div class="sub-container">
+                <a href="/pexeso-menu">Back to Menu</a>
+                <a th:href="@{/pexeso-game(difficulty=${difficulty})}">Restart Game</a>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/snake.js" th:src="@{/js/snake.js}"></script>
+</body>
+</html>

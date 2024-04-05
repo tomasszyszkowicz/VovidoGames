@@ -101,6 +101,19 @@ public class HtmlController {
     }
 
     /**
+     * Handles the request for the snake game page.
+     *
+     * @param model the model object to be populated with data
+     * @return the name of the snake template
+     */
+    @GetMapping("/snake-game")
+    public String snake(Model model) {
+        model.addAttribute("username", getLoggedInUsername());
+        model.addAttribute("email", getLoggedInUserEmail());
+        return "snake";
+    }
+
+    /**
      * Retrieves the logged in username.
      *
      * @return the logged in username
