@@ -57,8 +57,8 @@
     <div class="sub-container-wrapper">
         <div class="left-wrapper">
             <div class="sub-container">
-                <p>Clicks: <span id="clicks">0</span></p>
-                <p>Matches: <span id="matches">0</span></p>
+                <p>Score: <span id="score">0</span></p>
+                <p>World Record: <span id="matches">0</span></p>
             </div>
         </div>
         <div class="right-wrapper">
@@ -71,5 +71,11 @@
     </div>
 
     <script src="/js/snake.js" th:src="@{/js/snake.js}"></script>
+
+    <script>
+        window.onload = function() {
+            showStartModal();
+        }
+    </script>
 </body>
 </html>
