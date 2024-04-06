@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,7 +39,7 @@ public class SnakeResultController {
     }
 
     @PostMapping
-    public ResponseEntity<SnakeResult> createResult(SnakeResultDto result) {
+    public ResponseEntity<SnakeResult> createResult(@RequestBody SnakeResultDto result) {
         System.out.println(result.getUsername());
         User user = userRepository.findByUsername(result.getUsername());
         SnakeResult newResult = snakeResultRepository.save(new SnakeResult(user, result.getScore()));

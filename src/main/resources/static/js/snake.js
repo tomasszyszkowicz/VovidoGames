@@ -179,6 +179,7 @@ function closeModal() {
  * Shows the end modal with the final score and options to play again or return to the main menu.
  */
 function showEndModal() {
+    createSnakeResult();
     const modal = document.getElementById('modal');
     const gameDetails = document.getElementById('game-details');
     gameDetails.innerHTML = `
@@ -203,4 +204,42 @@ function closeModalAndRefresh() {
         modal.style.display = 'none';
         location.reload();
     }, 500);
+}
+
+function createSnakeResult() {
+
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    username = document.getElementById("username").textContent;
+
+    const url = '/snake';
+    const result = {
+        score: score,
+        username: username
+    };
+    console.log(result);
+    
+    const requestOptions = {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            [csrfHeader]: csrfToken
+        },
+        body: JSON.stringify(result)
+    };
+
+    fetch(url, requestOptions)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Network response was not ok.');
+        })
+        .then(data => {
+            console.log('Result created:', data);
+        })
+        .catch(error => {
+            console.error('There was a problem with your fetch operation:', error);
+        });
 }
