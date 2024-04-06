@@ -70,10 +70,12 @@
         </div>
     </div>
 
+    <script src="/js/dataOperations.js" th:src="@{/js/dataOperations.js}"></script>
     <script src="/js/snake.js" th:src="@{/js/snake.js}"></script>
 
     <script>
         window.onload = function() {
+            getSnakeResultsToLeaderboard(4,0);
             showStartModal();
         }
     </script>
