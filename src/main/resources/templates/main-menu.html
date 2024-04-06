@@ -41,7 +41,7 @@
     <div class="games-container">
         <p><b>Games</b></p>
         <a class="nav-link" href="/pexeso-menu">Pexeso</a>
-        <a class="nav-link">Placeholder</a>
+        <a class="nav-link" href="/snake-game">Snake</a>
         <p><b>Leaderboards</b></p>
         <a class="nav-link" href="/leaderboards">Leaderboards</a>
         <p><b>Forum</b></p>
@@ -95,13 +95,13 @@
         </div>
 
     </div>
-
+    <script src="/js/dataOperations.js"></script>
     <script>
         var currentDifficulty = 1;
         var isFirstLoad = true;
 
 
-        function getResultsToLeaderboard(top, bottom, difficulty) {
+        function getResultsToLeaderboard(baseUrl, top, bottom, difficulty) {
             const hallOfFameContainer = document.getElementById("hallOfFame");
 
             if (!isFirstLoad) {
@@ -115,14 +115,14 @@
                 // Update the difficulty text when the container is fully invisible
                 updateDifficultyLabel(difficulty);
 
-                var url = '/results';
+                var url = baseUrl;
                 if (top) {
                     url += '?top=' + top;
                 }
                 if (bottom) {
                     url += '&bottom=' + bottom;
                 }
-                if (difficulty) {
+                if (difficulty<4) {
                     url += '&difficulty=' + difficulty;
                 }
 
@@ -172,16 +172,21 @@
                 case 3:
                     difficultySpan.textContent = "Hard pexeso";
                     break;
-                default:
-                    difficultySpan.textContent = "Difficulty";
+                case 4:
+                    difficultySpan.textContent = "Snake";
+                    break;
             }
         }
 
         function updateLeaderboard() {
-            getResultsToLeaderboard(2, 0, currentDifficulty);
+            if (currentDifficulty === 4) {
+                getResultsToLeaderboard("/snake/results", 2, 0, currentDifficulty);
+            } else {
+                getResultsToLeaderboard("/results", 2, 0, currentDifficulty);
+            }
             currentDifficulty += 1;
-            if (currentDifficulty > 3) {
-                currentDifficulty = 1; // Reset difficulty after 3
+            if (currentDifficulty > 4) {
+                currentDifficulty = 1; // Reset difficulty after 4
             }
         }
 

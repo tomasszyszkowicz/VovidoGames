@@ -102,6 +102,36 @@ function getResultsToLeaderboard(top) {
         });
 }
 
+function getSnakeResultsToLeaderboard(top, bottom) {
+    var url = '/snake/results';
+    if (top) {
+        url += `?top=${top}`;
+    }
+    if (bottom) {
+        url += `&bottom=${bottom}`;
+    }
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const leaderboardBody = document.getElementById("leaderboardBody");
+            leaderboardBody.innerHTML = ""; // Clear existing rows
+            data.forEach((result, index) => {
+                const row = document.createElement("tr");
+                const rankCell = document.createElement("td");
+                rankCell.textContent = (index + 1);
+                const playerCell = document.createElement("td");
+                playerCell.textContent = result.user.username;
+                const scoreCell = document.createElement("td");
+                scoreCell.textContent = result.score;
+                row.appendChild(rankCell);
+                row.appendChild(playerCell);
+                row.appendChild(scoreCell);
+                leaderboardBody.appendChild(row);
+            });
+        });
+
+}
+
 function getQueryParamater(paramater){
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(paramater);

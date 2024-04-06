@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <title>Pexeso Board</title>
+    <title>Snake</title>
     <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="/css/snakeStyles.css" th:href="@{/css/snakeStyles.css}">
 </head>
 <body>
     <div id="modal" class="modal">
@@ -50,17 +51,14 @@
     <h1>Pexeso</h1>
     <div class="sub-container-wrapper">
         <div class="sub-container">
-            <div class="board" th:classappend="${difficulty}">
-                <div th:each="cardNumber : ${#numbers.sequence(1, difficulty == 'easy' ? 16 : difficulty == 'medium' ? 36 : 64)}" class="card">
-                </div>
-            </div>
+            <div id="gameArea"></div>
         </div>
     </div>
     <div class="sub-container-wrapper">
         <div class="left-wrapper">
             <div class="sub-container">
-                <p>Clicks: <span id="clicks">0</span></p>
-                <p>Matches: <span id="matches">0</span></p>
+                <p>Score: <span id="score">0</span></p>
+                <p>World Record: <span id="matches">0</span></p>
             </div>
         </div>
         <div class="right-wrapper">
@@ -71,14 +69,15 @@
             </div>
         </div>
     </div>
+
     <script src="/js/dataOperations.js" th:src="@{/js/dataOperations.js}"></script>
-    <script src="/js/pexeso.js" th:src="@{/js/pexeso.js}"></script>
+    <script src="/js/snake.js" th:src="@{/js/snake.js}"></script>
 
     <script>
         window.onload = function() {
-            getResultsToLeaderboard(4,0);
+            getSnakeResultsToLeaderboard(4,0);
             showStartModal();
-        };
+        }
     </script>
 </body>
 </html>

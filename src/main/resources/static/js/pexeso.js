@@ -93,6 +93,7 @@ function checkEndGame() {
         const modal = document.getElementById('modal');
         const gameDetails = document.getElementById('game-details');
         const difficulty = getQueryParamater("difficulty");
+        createResult();
         gameDetails.innerHTML = `
         <h1>You have solved the pexeso!</h1>
         <p>Clicks: ${numberOfClicks}</p>
@@ -106,7 +107,6 @@ function checkEndGame() {
         setTimeout(() => {
             modal.style.top = '0'; // This will trigger the transition
         }, 10); // A slight delay to ensure 'display: block' is applied first
-        createResult();
     }
 }
 
