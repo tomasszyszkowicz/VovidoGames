@@ -72,6 +72,13 @@ public class HtmlController {
         return "leaderboards";
     }
 
+    @GetMapping("/forum")
+    public String forum(Model model) {
+        model.addAttribute("username", getLoggedInUsername());
+        model.addAttribute("email", getLoggedInUserEmail());
+        return "forum";
+    }
+
     /**
      * Handles the request for the pexeso menu page.
      *
