@@ -6,6 +6,7 @@
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="/css/forum.css" th:href="@{/css/forum.css}">
     <title>Forum</title>
 </head>
 <body>
@@ -36,6 +37,32 @@
         <div class="sub-container">
             <a onclick="showPostModal()">Create Post</a>
         </div>
+    </div>
+
+    <div class="sub-container-wrapper">
+        <div class="post-container">
+            <div class="post-header">
+                <span class="post-title">Title of the Post</span>
+                <span class="post-user">Posted by: User123</span>
+            </div>
+            <div class="post-content">
+                <p>Tak jste kokoti hosi protoze ja to nechapu fakt tyvole</p>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="sub-container-wrapper">
+        <div class="post-container">
+            <div class="post-header">
+                <span class="post-title">Title of the Post</span>
+                <span class="post-user">Posted by: User123</span>
+            </div>
+            <div class="post-content">
+                <p>Tak jste kokoti hosfsfafafuia fiuagfgiouy afgafyio agfyifgoauyadfioguafdiguoafidguigufdafiadugadfiguaidofguadfigoui protoze ja to nechapu fakt tyvole</p>
+            </div>
+        </div>
+        
     </div>
 
     <script>
