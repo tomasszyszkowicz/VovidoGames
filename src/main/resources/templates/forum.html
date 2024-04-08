@@ -49,11 +49,11 @@
             postCreationDetails.innerHTML = `
                 <h2>Create Post</h2>
                 <form id="postCreationForm">
-                    <label for="title">Title:</label>
-                    <input type="text" id="title" name="title">
-                    <label for="content">Content:</label>
-                    <textarea id="content" name="content"></textarea>
-                    <button type="button" onclick="submitPost()">Create Post</button>
+                    <p>Title:</p>
+                    <input type="text" id="title" name="title" required><br>
+                    <p>Content:</p>
+                    <textarea id="content" name="content" required></textarea><br>
+                    <a onclick="submitPost()">Create Post</a>
                 </form>
             `;
 
@@ -72,6 +72,11 @@
             const content = document.getElementById("content").value;
             const dateCreated = new Date().toISOString();
             const username = document.getElementById("username").innerText;
+
+            if (!title || !content) {
+                alert('Please fill in all fields');
+                return;
+            }
 
             const post = {
                 username: username,
@@ -109,6 +114,18 @@
                 .catch(error => {
                     console.error('There was a problem with your fetch operation:', error);
                 });
+
+            closePostModal();
+
+        
+            function closePostModal() {
+                var modal = document.getElementById("modal");
+                modal.style.top = '-100%'; // This will trigger the transition
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    window.location.reload();
+                }, 500);
+            }
 
         }
     </script>
