@@ -39,45 +39,8 @@
         </div>
     </div>
     <div class="sub-container-wrapper">
-        <div style="padding-bottom: 10px;" class="sub-container">
+        <div style="padding-bottom: 10px;" class="sub-container" id="postContainer">
             <h2>Posts</h2>
-            <div class="post-container">
-                <div class="post-header">
-                    <span class="post-title">Novej rekord ve snaku vy magori!!!!!</span>
-                    <span class="post-user">User123</span>
-                </div>
-                <div class="post-content">
-                    <p>Tak jste kokoti hosi protoze ja to nechapu fakt tyvole</p>
-                </div>
-                <div class="additional-header">
-                    
-                    <a class="view-post">Comment</a>
-                    <span class="date-created">2022-12-12</span>
-                    
-                </div>
-            </div>
-        <div class="post-container">
-            <div class="post-header">
-                <span class="post-title">Novej rekord ve snaku vy magori!!!!!</span>
-                <span class="post-user">User123</span>
-            </div>
-            <div class="post-content">
-                <p>Tak jste kokoti hosi protoze ja tofayggfa
-                    gafgafyio
-                    fglagoaf
-                    oaityguifoad
-                    oatgfiugyfagoiadf
-                    adgouigfauhg
-                    goafiugougliafgfya8uglfa
-                    aguyoffaguyyguiaogayugftf nechapu fakt tyvole</p>
-            </div>
-            <div class="additional-header">
-                
-                <a class="view-post">Comment</a>
-                <span class="date-created">2022-12-12</span>
-                
-            </div>
-        </div>
         </div>
     </div>
 
@@ -171,6 +134,60 @@
             }
 
         }
+
+        function fetchPosts() {
+                console.log('Fetching posts...');
+                fetch('/posts')
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                        throw new Error('Network response was not ok.');
+                    })
+                    .then(data => {
+                        console.log('Posts:', data);
+                        data.forEach(post => {
+                            createPostContainer(post);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('There was a problem with your fetch operation:', error);
+                    });
+            }
+
+            function createPostContainer(post) {
+                const subContainer = document.getElementById('postContainer');
+                const postContainer = document.createElement('div');
+                postContainer.classList.add('post-container');
+
+                const postHeader = document.createElement('div');
+                postHeader.classList.add('post-header');
+                postHeader.innerHTML = `
+                    <span class="post-title">${post.title}</span>
+                    <span class="post-user">${post.user.username}</span>
+                `;
+
+                const postContent = document.createElement('div');
+                postContent.classList.add('post-content');
+                postContent.innerHTML = `<p>${post.content}</p>`;
+
+                const additionalHeader = document.createElement('div');
+                additionalHeader.classList.add('additional-header');
+                additionalHeader.innerHTML = `
+                    <a class="view-post">Comment</a>
+                    <span class="date-created">${post.dateCreated}</span>
+                `;
+
+                postContainer.appendChild(postHeader);
+                postContainer.appendChild(postContent);
+                postContainer.appendChild(additionalHeader);
+
+                subContainer.appendChild(postContainer);
+            }
+
+            window.onload = function() {
+                fetchPosts();
+            }
     </script>
 </body>
 </html>
