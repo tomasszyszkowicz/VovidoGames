@@ -59,7 +59,6 @@ public class PostController {
         System.out.println(post.getUsername());
         User user = userRepository.findByUsername(post.getUsername());
         LocalDateTime dateCreated = LocalDateTime.now();
-        System.out.println(dateCreated);
         Post newPost = postRepository.save(new Post(user, dateCreated, post.getTitle(), post.getContent()));
         return new ResponseEntity<>(newPost, HttpStatus.CREATED);
     }
