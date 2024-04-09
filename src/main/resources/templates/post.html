@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="/css/forum.css" th:href="@{/css/forum.css}">
+    <title>Forum</title>
+</head>
+<body>
+    <div id="modal" class="modal">
+        <div class="modal-content" id="postCreationDetails"></div>
+    </div>
+    <div class="top-right-container">
+        <p><b>Logged in as:</b></p>
+        <p><span id="username" th:text="${username}">Username</span></p>
+        <p><span th:text="${email}">email</span></p>
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="top-left-container">
+        <p><b>Fun Games</b></p>
+        <a href="/home">Home</a>
+    </div>
+    <div class="games-container">
+        <p><b>Games</b></p>
+        <a class="nav-link" href="/pexeso-menu">Pexeso</a>
+        <a class="nav-link" href="/snake-game">Snake</a>
+        <p><b>Leaderboards</b></p>
+        <a class="nav-link" href="/leaderboards">Leaderboards</a>
+        <p><b>Forum</b></p>
+        <a class="nav-link">Forum</a>
+    </div>
+    <h1 id="title-header">hihihih</h1>
+    <div class="sub-container-wrapper">
+        <div style="padding: 0px" class="sub-container">
+            <div class="postContainer" id="postContainer">
+                <div class="post-header">
+                    <span class="post-title" id="postTitle">Title</span>
+                    <span class="post-user" id="postAuthor">Author</span>
+                </div>
+                <div class="post-content" id="postContent">
+                    <p>fiaugfiuagfiuoagf ughaofiga uafgoiagf</p>
+                </div>
+                <div class="additional-header">
+                    <span style="margin-left: 10px; margin-top: 5px; margin-bottom: 5px;" class="date-created" id="dateCreated">2022-32-32</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <a>Add comment</a>
+        </div>
+    </div>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <a id="turnPageDownButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageDown()">&lt;</a><a style="margin: 5px; margin-top: 10px;" onclick="turnPageUp()">></a>
+            <p>[<span id="globalBottom"></span> - <span id="globalTop"></span>]</p>
+        </div>
+    </div>
+</body>
+</html>
