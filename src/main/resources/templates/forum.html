@@ -176,7 +176,7 @@
                 additionalHeader.classList.add('additional-header');
                 let formattedDate = post.dateCreated.substring(0,16).replace("T", ", ");
                 additionalHeader.innerHTML = `
-                    <a class="view-post">Comment</a>
+                    <a class="view-post" onclick="redirectToPost(${post.id})">View Post</a>
                     <span class="date-created">${formattedDate}</span>
                 `;
 
@@ -238,6 +238,10 @@
             function getQueryParamater(paramater){
                 const urlParams = new URLSearchParams(window.location.search);
                 return urlParams.get(paramater);
+            }
+
+            function redirectToPost(postId) {
+                window.location.href = '/post/' + postId;
             }
 
             window.onload = function() {
