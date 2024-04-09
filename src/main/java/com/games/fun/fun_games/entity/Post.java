@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 
 @Entity
 public class Post {
@@ -19,14 +20,14 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String dateCreated;
+    private LocalDateTime dateCreated;
     private String title;
     private String content;
 
     public Post() {
     }
 
-    public Post(User user, String dateCreated, String title, String content) {
+    public Post(User user, LocalDateTime dateCreated, String title, String content) {
         this.user = user;
         this.dateCreated = dateCreated;
         this.title = title;
@@ -49,11 +50,11 @@ public class Post {
         this.user = user;
     }
 
-    public String getDateCreated() {
+    public LocalDateTime getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(String dateCreated) {
+    public void setDateCreated(LocalDateTime dateCreated) {
         this.dateCreated = dateCreated;
     }
 

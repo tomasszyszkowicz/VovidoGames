@@ -76,17 +76,6 @@
 
             const title = document.getElementById("title").value;
             const content = document.getElementById("content").value;
-            const pragueTimeOptions = {
-                timeZone: 'Europe/Prague',
-                hour12: false, // Ensure 24-hour format
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit'
-            };
-
-            const dateCreated = new Date().toLocaleString('en-US', pragueTimeOptions);
             
             const username = document.getElementById("username").innerText;
 
@@ -97,7 +86,6 @@
 
             const post = {
                 username: username,
-                dateCreated: dateCreated,
                 title: title,
                 content: content
             };
@@ -110,12 +98,7 @@
                     'Content-Type': 'application/json',
                     [csrfHeader]: csrfToken
                 },
-                body: JSON.stringify({
-                    username: username,
-                    dateCreated: dateCreated,
-                    title: title,
-                    content: content
-                })
+                body: JSON.stringify(post)
             };
 
             fetch('/posts', requestOptions)
@@ -184,9 +167,10 @@
 
                 const additionalHeader = document.createElement('div');
                 additionalHeader.classList.add('additional-header');
+                let formattedDate = post.dateCreated.substring(0,16).replace("T", ", ");
                 additionalHeader.innerHTML = `
                     <a class="view-post">Comment</a>
-                    <span class="date-created">${post.dateCreated}</span>
+                    <span class="date-created">${formattedDate}</span>
                 `;
 
                 postContainer.appendChild(postHeader);

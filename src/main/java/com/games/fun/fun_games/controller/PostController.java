@@ -15,6 +15,7 @@ import com.games.fun.fun_games.entity.Post;
 import com.games.fun.fun_games.entity.User;
 import com.games.fun.fun_games.dto.PostDto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -37,7 +38,9 @@ public class PostController {
     public ResponseEntity<Post> createPost(@RequestBody PostDto post) {
         System.out.println(post.getUsername());
         User user = userRepository.findByUsername(post.getUsername());
-        Post newPost = postRepository.save(new Post(user, post.getDateCreated(), post.getTitle(), post.getContent()));
+        LocalDateTime dateCreated = LocalDateTime.now();
+        System.out.println(dateCreated);
+        Post newPost = postRepository.save(new Post(user, dateCreated, post.getTitle(), post.getContent()));
         return new ResponseEntity<>(newPost, HttpStatus.CREATED);
     }
 }
