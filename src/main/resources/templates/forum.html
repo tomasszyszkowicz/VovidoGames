@@ -76,7 +76,18 @@
 
             const title = document.getElementById("title").value;
             const content = document.getElementById("content").value;
-            const dateCreated = new Date().toISOString();
+            const pragueTimeOptions = {
+                timeZone: 'Europe/Prague',
+                hour12: false, // Ensure 24-hour format
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+
+            const dateCreated = new Date().toLocaleString('en-US', pragueTimeOptions);
+            
             const username = document.getElementById("username").innerText;
 
             if (!title || !content) {
