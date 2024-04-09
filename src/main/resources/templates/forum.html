@@ -43,10 +43,16 @@
             <h2>Posts</h2>
         </div>
     </div>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <a id="turnPageDownButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageDown()">&lt;</a><a style="margin: 5px; margin-top: 10px;" onclick="turnPageUp()">></a>
+            <p>[<span id="globalBottom"></span> - <span id="globalTop"></span>]</p>
+        </div>
+    </div>
 
     <script>
-        global_bottom = 0;
-        global_top = 19;
+        var globalBottom;
+        var globalTop;
 
         function showPostModal() {
             var modal = document.getElementById("modal");
@@ -131,7 +137,8 @@
 
         function fetchPosts() {
                 console.log('Fetching posts...');
-                fetch('/posts')
+                const url = '/posts?top=' + globalTop + '&bottom=' + globalBottom;
+                fetch(url)
                     .then(response => {
                         if (response.ok) {
                             return response.json();
@@ -180,7 +187,61 @@
                 subContainer.appendChild(postContainer);
             }
 
+            function setTopAndBottom() {
+                var bottom = parseInt(getQueryParamater('bottom'));
+                var top = parseInt(getQueryParamater('top'));
+
+                if (bottom) {
+                    globalBottom = bottom;
+                }
+                else {
+                    globalBottom = 0;
+                }
+
+                if (top) {
+                    globalTop = top;
+                }
+                else {
+                    globalTop = 9;
+                }
+
+                console.log('Bottom:', globalBottom);
+                console.log('Top:', globalTop);
+
+                updateNavigationBar();
+            }
+
+            function updateNavigationBar() {
+                const turnPageDownButton = document.getElementById("turnPageDownButton");
+                if (globalBottom === 0) {
+                    turnPageDownButton.style.visibility = "hidden";
+                } else {
+                    turnPageDownButton.style.visibility = "visible";
+                }
+
+                document.getElementById("globalBottom").textContent = globalBottom + 1;
+                document.getElementById("globalTop").textContent = globalTop + 1;
+            }
+
+            function turnPageUp() {
+                globalTop += 10;
+                globalBottom += 10;
+                window.location.href = '/forum?top=' + globalTop + '&bottom=' + globalBottom;
+            }
+
+            function turnPageDown() {
+                globalTop -= 10;
+                globalBottom -= 10;
+                window.location.href = '/forum?top=' + globalTop + '&bottom=' + globalBottom;
+            }
+
+            function getQueryParamater(paramater){
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(paramater);
+            }
+
             window.onload = function() {
+                setTopAndBottom();
                 fetchPosts();
             }
     </script>
