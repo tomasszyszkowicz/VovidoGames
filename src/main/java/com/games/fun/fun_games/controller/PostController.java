@@ -14,6 +14,7 @@ import com.games.fun.fun_games.repository.UserRepository;
 import com.games.fun.fun_games.entity.Post;
 import com.games.fun.fun_games.entity.User;
 import com.games.fun.fun_games.dto.PostDto;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,7 +31,7 @@ public class PostController {
 
     @GetMapping
     public ResponseEntity<List<Post>> getPosts() {
-        List<Post> posts = postRepository.findAll();
+        List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "dateCreated"));
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
