@@ -4,10 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.games.fun.fun_games.repository.CommentRepository;
 import com.games.fun.fun_games.entity.Comment;
@@ -34,13 +35,18 @@ public class CommentController {
     private PostRepository postRepository;
 
     @GetMapping
-    public ResponseEntity<List<Comment>> getComments() {
-        List<Comment> comments = commentRepository.findAll();
+    public ResponseEntity<List<Comment>> getComments(@RequestParam(name = "postId", required = false) Long postId) {
+        List<Comment> comments;
+        if (postId != null) {
+            comments = commentRepository.findByPostId(postId);
+        } else {
+            comments = commentRepository.findAll();
+        }
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Comment> createComment(@RequestParam CommentDto comment) {
+    public ResponseEntity<Comment> createComment(@RequestBody CommentDto comment) {
         User user = userRepository.findByUsername(comment.getUsername());
         Post post = postRepository.findById(comment.getPostId()).orElse(null);
         if (user == null || post == null) {
@@ -50,5 +56,4 @@ public class CommentController {
         Comment newComment = commentRepository.save(new Comment(user, post, dateCreated, comment.getContent()));
         return new ResponseEntity<>(newComment, HttpStatus.CREATED);
     }
-    
 }

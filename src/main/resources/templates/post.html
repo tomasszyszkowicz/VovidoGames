@@ -12,7 +12,7 @@
 <body>
     <div id="data" th:attr="data-attribute=${postId}"></div>
     <div id="modal" class="modal">
-        <div class="modal-content" id="postCreationDetails"></div>
+        <div class="modal-content" id="commentCreationDetails"></div>
     </div>
     <div class="top-right-container">
         <p><b>Logged in as:</b></p>
@@ -52,7 +52,7 @@
     </div>
     <div class="sub-container-wrapper">
         <div class="sub-container">
-            <a>Add comment</a>
+            <a onclick="showCommentModal()">Add comment</a>
         </div>
     </div>
     <div class="sub-container-wrapper">
@@ -78,6 +78,65 @@
                     document.getElementById('postContent').innerText = data.content;
                     let formattedDate = data.dateCreated.substring(0,16).replace("T", ", ");
                     document.getElementById('dateCreated').innerText = formattedDate;
+                });
+        }
+
+        function showCommentModal() {
+            var modal = document.getElementById("modal");
+
+            const commentCreationDetails = document.getElementById("commentCreationDetails");
+            commentCreationDetails.innerHTML = `
+                <h2>Create Post</h2>
+                <form id="postCreationForm">
+                    <p>Comment:</p>
+                    <textarea id="content" name="content" required></textarea><br>
+                    <a onclick="submitComment()">Create Post</a>
+                </form>
+            `;
+
+            modal.style.display = 'block';
+            setTimeout(() => {
+                modal.style.top = '0'; // This will trigger the transition
+            }, 10);
+
+        }
+
+        function submitComment() {
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            const content = document.getElementById("content").value;
+
+            const username = document.getElementById("username").innerText;
+
+            const postId = document.getElementById('data').getAttribute('data-attribute');
+
+            if (!content) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const comment = {
+                username: username,
+                postId: postId,
+                content: content
+            }
+
+            fetch('/comments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken
+                },
+                body: JSON.stringify(comment)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Comment created');
+                        window.location.reload();
+                    } else {
+                        alert('Error creating comment');
+                    }
                 });
         }
 
