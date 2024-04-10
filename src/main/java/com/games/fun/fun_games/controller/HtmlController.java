@@ -3,6 +3,7 @@ package com.games.fun.fun_games.controller;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.games.fun.fun_games.repository.UserRepository;
@@ -89,10 +90,11 @@ public class HtmlController {
         return "forum";
     }
 
-    @GetMapping("/post")
-    public String post(Model model) {
+    @GetMapping("/post/{id}")
+    public String post(Model model, @PathVariable Long id) {
         model.addAttribute("username", getLoggedInUsername());
         model.addAttribute("email", getLoggedInUserEmail());
+        model.addAttribute("postId", id);
         return "post";
     }
 

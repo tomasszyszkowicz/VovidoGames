@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.data.domain.PageRequest;
 
 import com.games.fun.fun_games.repository.PostRepository;
@@ -52,6 +53,15 @@ public class PostController {
 
         // Return the list of posts
         return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Post> getPost(@PathVariable Long id) {
+        Post post = postRepository.findById(id).orElse(null);
+        if (post == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(post);
     }
 
     @PostMapping

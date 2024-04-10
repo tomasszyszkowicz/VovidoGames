@@ -19,8 +19,6 @@ import com.games.fun.fun_games.entity.Post;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-
 
 @RestController
 @RequestMapping("/comments")
@@ -44,8 +42,7 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<Comment> createComment(@RequestParam CommentDto comment) {
         User user = userRepository.findByUsername(comment.getUsername());
-        Optional<Post> optionalPost = postRepository.findById(comment.getPostId());
-        Post post = optionalPost.orElse(null);
+        Post post = postRepository.findById(comment.getPostId()).orElse(null);
         if (user == null || post == null) {
             return ResponseEntity.badRequest().build();
         }

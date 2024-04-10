@@ -10,6 +10,7 @@
     <title>Forum</title>
 </head>
 <body>
+    <div id="data" th:attr="data-attribute=${postId}"></div>
     <div id="modal" class="modal">
         <div class="modal-content" id="postCreationDetails"></div>
     </div>
@@ -32,19 +33,19 @@
         <p><b>Forum</b></p>
         <a class="nav-link">Forum</a>
     </div>
-    <h1 id="title-header">hihihih</h1>
+    <h1 id="titleHeader"></h1>
     <div class="sub-container-wrapper">
         <div style="padding: 0px" class="sub-container">
             <div class="postContainer" id="postContainer">
                 <div class="post-header">
-                    <span class="post-title" id="postTitle">Title</span>
-                    <span class="post-user" id="postAuthor">Author</span>
+                    <span class="post-title" id="postTitle"></span>
+                    <span class="post-user" id="postAuthor"></span>
                 </div>
-                <div class="post-content" id="postContent">
-                    <p>fiaugfiuagfiuoagf ughaofiga uafgoiagf</p>
+                <div class="post-content">
+                    <p id="postContent"></p>
                 </div>
                 <div class="additional-header">
-                    <span style="margin-left: 10px; margin-top: 5px; margin-bottom: 5px;" class="date-created" id="dateCreated">2022-32-32</span>
+                    <span style="margin-left: 10px; margin-top: 5px; margin-bottom: 5px;" class="date-created" id="dateCreated"></span>
                 </div>
             </div>
         </div>
@@ -56,9 +57,33 @@
     </div>
     <div class="sub-container-wrapper">
         <div class="sub-container">
+            <h2>Comments</h2>
+        </div>
+    </div>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
             <a id="turnPageDownButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageDown()">&lt;</a><a style="margin: 5px; margin-top: 10px;" onclick="turnPageUp()">></a>
             <p>[<span id="globalBottom"></span> - <span id="globalTop"></span>]</p>
         </div>
     </div>
+    <script>
+        function fetchPost() {
+            const postId = document.getElementById('data').getAttribute('data-attribute');
+            fetch('/posts/' + postId)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('titleHeader').innerText = data.title;
+                    document.getElementById('postTitle').innerText = data.title;
+                    document.getElementById('postAuthor').innerText = data.user.username;
+                    document.getElementById('postContent').innerText = data.content;
+                    let formattedDate = data.dateCreated.substring(0,16).replace("T", ", ");
+                    document.getElementById('dateCreated').innerText = formattedDate;
+                });
+        }
+
+        window.onload  = function() {
+            fetchPost();
+        }
+    </script>
 </body>
 </html>
