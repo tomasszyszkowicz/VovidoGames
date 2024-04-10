@@ -56,7 +56,7 @@
         </div>
     </div>
     <div class="sub-container-wrapper">
-        <div class="sub-container">
+        <div class="sub-container" id="commentContainer">
             <h2>Comments</h2>
         </div>
     </div>
@@ -79,6 +79,30 @@
                     let formattedDate = data.dateCreated.substring(0,16).replace("T", ", ");
                     document.getElementById('dateCreated').innerText = formattedDate;
                 });
+        }
+
+        function fetchComments() {
+            const postId = document.getElementById('data').getAttribute('data-attribute');
+            const url = '/comments?postId=' + postId;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const commentContainer = document.getElementById('commentContainer');
+                    data.forEach(comment => {
+                        let formattedDate = comment.dateCreated.substring(0,16).replace("T", ", ");
+                        const commentDiv = document.createElement('div');
+                        commentDiv.className = 'comment-container';
+                        commentDiv.innerHTML = `
+                            <div class="comment-header">
+                                <span class="comment-user">${comment.user.username}</span>
+                                <span class="comment-date">${formattedDate}</span>
+                            </div>
+                            <div class="comment-content">
+                                <p>${comment.content}</p>
+                            </div>`;
+                        commentContainer.appendChild(commentDiv);
+                    });
+                });  
         }
 
         function showCommentModal() {
@@ -142,6 +166,7 @@
 
         window.onload  = function() {
             fetchPost();
+            fetchComments();
         }
     </script>
 </body>

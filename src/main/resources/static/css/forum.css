@@ -66,4 +66,49 @@
     margin-right: 10px;
 }
 
+.comment-container {
+    flex: 1; 
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    padding: 0px;
+    margin-bottom: 20px;
+    position: relative; /* Allows absolute positioning within */
+}
+
+.comment-content {
+    border: 1px solid black; /* Set border color */
+    border-top: none; /* Remove top border */
+    border-radius: 0 0 8px 8px; /* Round the bottom corners */
+    padding: 5px;
+    height: auto;
+    max-height: 300px;
+    overflow-y: auto;
+    resize: none;
+    background-color: #ffffff; /* Light background color */
+    color: #333;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.comment-header {
+    padding: 10px; /* Add padding to the header */
+    border: 1px solid black; /* Add a border at the bottom */
+    border-radius: 8px 8px 0 0; /* Round the top corners */
+    background-color: #7eb8f1; /* Light background color */
+    color: #007bff; /* Text color */
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Align children to the start and end of the container */
+    align-items: center; /* Center items vertically */
+}
+
+.comment-user {
+    font-style: italic;
+    color: white;
+}
+
+.comment-date {
+    font-style: italic;
+    color: #333;
+}
 
