@@ -67,6 +67,10 @@
         </div>
     </div>
     <script>
+        var globalBottom;
+        var globalTop;
+        const postId = document.getElementById('data').getAttribute('data-attribute');
+
         function fetchPost() {
             const postId = document.getElementById('data').getAttribute('data-attribute');
             fetch('/posts/' + postId)
@@ -83,7 +87,7 @@
 
         function fetchComments() {
             const postId = document.getElementById('data').getAttribute('data-attribute');
-            const url = '/comments?postId=' + postId;
+            const url = '/comments?postId=' + postId + '&top=' + globalTop + '&bottom=' + globalBottom;
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
@@ -164,7 +168,61 @@
                 });
         }
 
+        function setTopAndBottom() {
+                var bottom = parseInt(getQueryParamater('bottom'));
+                var top = parseInt(getQueryParamater('top'));
+
+                if (bottom) {
+                    globalBottom = bottom;
+                }
+                else {
+                    globalBottom = 0;
+                }
+
+                if (top) {
+                    globalTop = top;
+                }
+                else {
+                    globalTop = 9;
+                }
+
+                console.log('Bottom:', globalBottom);
+                console.log('Top:', globalTop);
+
+                updateNavigationBar();
+            }
+
+        function updateNavigationBar() {
+            const turnPageDownButton = document.getElementById("turnPageDownButton");
+            if (globalBottom === 0) {
+                turnPageDownButton.style.visibility = "hidden";
+            } else {
+                turnPageDownButton.style.visibility = "visible";
+            }
+
+            document.getElementById("globalBottom").textContent = globalBottom + 1;
+            document.getElementById("globalTop").textContent = globalTop + 1;
+        }
+
+        function turnPageUp() {
+            globalTop += 10;
+            globalBottom += 10;
+            window.location.href = '/post/' + postId + '?top=' + globalTop + '&bottom=' + globalBottom;
+        }
+
+        function turnPageDown() {
+            globalTop -= 10;
+            globalBottom -= 10;
+            window.location.href = '/post/' + postId + '?top=' + globalTop + '&bottom=' + globalBottom;
+        }
+
+        function getQueryParamater(paramater){
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(paramater);
+        }
+
         window.onload  = function() {
+            setTopAndBottom();
             fetchPost();
             fetchComments();
         }

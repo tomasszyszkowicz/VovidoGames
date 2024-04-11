@@ -91,7 +91,10 @@ public class HtmlController {
     }
 
     @GetMapping("/post/{id}")
-    public String post(Model model, @PathVariable Long id) {
+    public String post(Model model, 
+                        @PathVariable Long id,
+                        @RequestParam(defaultValue = "0") int bottom,
+                        @RequestParam(defaultValue = "9") int top) {
         model.addAttribute("username", getLoggedInUsername());
         model.addAttribute("email", getLoggedInUserEmail());
         model.addAttribute("postId", id);

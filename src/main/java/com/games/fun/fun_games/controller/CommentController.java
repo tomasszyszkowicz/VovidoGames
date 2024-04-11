@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import com.games.fun.fun_games.repository.CommentRepository;
 import com.games.fun.fun_games.entity.Comment;
@@ -35,13 +38,33 @@ public class CommentController {
     private PostRepository postRepository;
 
     @GetMapping
-    public ResponseEntity<List<Comment>> getComments(@RequestParam(name = "postId", required = false) Long postId) {
-        List<Comment> comments;
-        if (postId != null) {
-            comments = commentRepository.findByPostId(postId);
-        } else {
-            comments = commentRepository.findAll();
+    public ResponseEntity<List<Comment>> getComments(
+        @RequestParam(name = "postId", required = false) Long postId,
+        @RequestParam(defaultValue = "0") int bottom,
+        @RequestParam(defaultValue = "9") int top
+    ) {
+        // Validate input parameters
+        if (bottom < 0 || top <= 0 || top < bottom) {
+            return ResponseEntity.badRequest().build();
         }
+
+        // Calculate the number of results to fetch (size) and the page number
+        int size = top - bottom + 1; // This ensures we get the range from bottom to top
+        int pageNumber = bottom / size; // Calculate the page number starting from 0
+
+        // Create Pageable object for pagination and sorting
+        Pageable pageable = PageRequest.of(pageNumber, size, Sort.by(Sort.Direction.DESC, "dateCreated"));
+
+        List<Comment> comments;
+
+        // Retrieve comments based on postId if provided, otherwise retrieve all comments
+        if (postId != null) {
+            comments = commentRepository.findByPostId(postId, pageable);
+        } else {
+            comments = commentRepository.findAll(pageable).getContent();
+        }
+
+        // Return the list of comments
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
