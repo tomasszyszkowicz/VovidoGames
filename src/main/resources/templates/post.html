@@ -98,8 +98,8 @@
                         commentDiv.className = 'comment-container';
                         commentDiv.innerHTML = `
                             <div class="comment-header">
-                                <span class="comment-user">${comment.user.username}</span>
                                 <span class="comment-date">${formattedDate}</span>
+                                <span class="comment-user">${comment.user.username}</span>
                             </div>
                             <div class="comment-content">
                                 <p>${comment.content}</p>
@@ -114,11 +114,11 @@
 
             const commentCreationDetails = document.getElementById("commentCreationDetails");
             commentCreationDetails.innerHTML = `
-                <h2>Create Post</h2>
+                <h2>Create Comment</h2>
                 <form id="postCreationForm">
                     <p>Comment:</p>
                     <textarea id="content" name="content" required></textarea><br>
-                    <a onclick="submitComment()">Create Post</a>
+                    <a onclick="submitComment()">Create Comment</a>
                 </form>
             `;
 
@@ -160,12 +160,20 @@
             })
                 .then(response => {
                     if (response.ok) {
-                        alert('Comment created');
-                        window.location.reload();
+                        closeModalAndReload();
                     } else {
                         alert('Error creating comment');
                     }
                 });
+        }
+
+        function closeModalAndReload() {
+            var modal = document.getElementById("modal");
+            modal.style.top = '-100%'; // This will trigger the transition
+            setTimeout(() => {
+                modal.style.display = 'none';
+                window.location.reload();
+            }, 500);
         }
 
         function setTopAndBottom() {

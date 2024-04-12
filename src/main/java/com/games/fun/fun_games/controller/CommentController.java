@@ -53,7 +53,7 @@ public class CommentController {
         int pageNumber = bottom / size; // Calculate the page number starting from 0
 
         // Create Pageable object for pagination and sorting
-        Pageable pageable = PageRequest.of(pageNumber, size, Sort.by(Sort.Direction.DESC, "dateCreated"));
+        Pageable pageable = PageRequest.of(pageNumber, size, Sort.by(Sort.Direction.ASC, "dateCreated"));
 
         List<Comment> comments;
 
