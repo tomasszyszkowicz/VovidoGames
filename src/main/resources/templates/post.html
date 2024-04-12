@@ -51,17 +51,9 @@
         </div>
     </div>
     <div class="sub-container-wrapper">
-        <div class="sub-container">
-            <a onclick="showCommentModal()">Add comment</a>
-        </div>
-    </div>
-    <div class="sub-container-wrapper">
         <div class="sub-container" id="commentContainer">
-            <h2>Comments</h2>
-        </div>
-    </div>
-    <div class="sub-container-wrapper">
-        <div class="sub-container">
+            <h2><span id="commentsHeader">Comments</span></h2>
+            <a onclick="showCommentModal()">Add comment</a><br>
             <a id="turnPageDownButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageDown()">&lt;</a><a style="margin: 5px; margin-top: 10px;" onclick="turnPageUp()">></a>
             <p>[<span id="globalBottom"></span> - <span id="globalTop"></span>]</p>
         </div>
@@ -104,7 +96,8 @@
                             <div class="comment-content">
                                 <p>${comment.content}</p>
                             </div>`;
-                        commentContainer.appendChild(commentDiv);
+                        const navigationButton = document.getElementById('turnPageDownButton');
+                        commentContainer.insertBefore(commentDiv, navigationButton);
                     });
                 });  
         }

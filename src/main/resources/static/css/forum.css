@@ -74,6 +74,7 @@
     padding: 0px;
     margin-bottom: 20px;
     position: relative; /* Allows absolute positioning within */
+    margin-top: 20px;
 }
 
 .comment-content {
