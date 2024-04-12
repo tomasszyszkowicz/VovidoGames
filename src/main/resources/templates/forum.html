@@ -40,11 +40,7 @@
     </div>
     <div class="sub-container-wrapper">
         <div style="padding-bottom: 10px;" class="sub-container" id="postContainer">
-            <h2>Posts</h2>
-        </div>
-    </div>
-    <div class="sub-container-wrapper">
-        <div class="sub-container">
+            <h2 id="postsHeader">Posts</h2>
             <a id="turnPageDownButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageDown()">&lt;</a><a style="margin: 5px; margin-top: 10px;" onclick="turnPageUp()">></a>
             <p>[<span id="globalBottom"></span> - <span id="globalTop"></span>]</p>
         </div>
@@ -146,7 +142,10 @@
                         throw new Error('Network response was not ok.');
                     })
                     .then(data => {
-                        console.log('Posts:', data);
+                        if (data.length === 0) {
+                            document.getElementById('postsHeader').textContent = 'No more posts to show.';
+                            return;
+                        }
                         data.forEach(post => {
                             createPostContainer(post);
                         });
@@ -184,7 +183,8 @@
                 postContainer.appendChild(postContent);
                 postContainer.appendChild(additionalHeader);
 
-                subContainer.appendChild(postContainer);
+                const navButton = document.getElementById("turnPageDownButton");
+                subContainer.insertBefore(postContainer, navButton);
             }
 
             function setTopAndBottom() {
