@@ -54,8 +54,8 @@
         <div class="sub-container" id="commentContainer">
             <h2><span id="commentsHeader">Comments</span></h2>
             <a onclick="showCommentModal()">Add comment</a><br>
-            <a id="turnPageDownButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageDown()">&lt;</a><a style="margin: 5px; margin-top: 10px;" onclick="turnPageUp()">></a>
-            <p>[<span id="globalBottom"></span> - <span id="globalTop"></span>]</p>
+            <a id="turnPageDownButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageDown()">&lt;</a><a id="turnPageUpButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageUp()">></a>
+            <p id="pages">[<span id="globalBottom"></span> - <span id="globalTop"></span>]</p>
         </div>
     </div>
     <script>
@@ -83,6 +83,14 @@
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
+                    if (data.length === 0) {
+                        if (globalBottom === 0) {
+                            document.getElementById('commentsHeader').innerText = 'No comments';
+                            hideNavigation();
+                        } else {
+                            document.getElementById('commentsHeader').innerText = 'No more comments';   
+                        }
+                    }
                     const commentContainer = document.getElementById('commentContainer');
                     data.forEach(comment => {
                         let formattedDate = comment.dateCreated.substring(0,16).replace("T", ", ");
@@ -203,6 +211,15 @@
 
             document.getElementById("globalBottom").textContent = globalBottom + 1;
             document.getElementById("globalTop").textContent = globalTop + 1;
+        }
+
+        function hideNavigation() {
+            
+            const turnPageDownButton = document.getElementById("turnPageDownButton");
+            turnPageDownButton.style.display = "none";            
+            const turnPageUpButton = document.getElementById("turnPageUpButton");
+            turnPageUpButton.style.display = "none";
+            document.getElementById("pages").style.display = "none";
         }
 
         function turnPageUp() {
