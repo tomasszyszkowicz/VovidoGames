@@ -61,6 +61,7 @@
     <script>
         var globalBottom;
         var globalTop;
+        var noMoreComments = false;
         const postId = document.getElementById('data').getAttribute('data-attribute');
 
         function fetchPost() {
@@ -89,6 +90,8 @@
                             hideNavigation();
                         } else {
                             document.getElementById('commentsHeader').innerText = 'No more comments';   
+                            noMoreComments = true;
+                            updateNavigationBar();
                         }
                     }
                     const commentContainer = document.getElementById('commentContainer');
@@ -207,6 +210,13 @@
                 turnPageDownButton.style.visibility = "hidden";
             } else {
                 turnPageDownButton.style.visibility = "visible";
+            }
+
+            const turnPageUpButton = document.getElementById("turnPageUpButton");
+            if (noMoreComments) {
+                turnPageUpButton.style.visibility = "hidden";
+            } else {
+                turnPageUpButton.style.visibility = "visible";
             }
 
             document.getElementById("globalBottom").textContent = globalBottom + 1;

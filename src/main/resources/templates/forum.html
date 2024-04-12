@@ -41,7 +41,7 @@
     <div class="sub-container-wrapper">
         <div style="padding-bottom: 10px;" class="sub-container" id="postContainer">
             <h2 id="postsHeader">Posts</h2>
-            <a id="turnPageDownButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageDown()">&lt;</a><a style="margin: 5px; margin-top: 10px;" onclick="turnPageUp()">></a>
+            <a id="turnPageDownButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageDown()">&lt;</a><a id="turnPageUpButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageUp()">></a>
             <p>[<span id="globalBottom"></span> - <span id="globalTop"></span>]</p>
         </div>
     </div>
@@ -49,6 +49,7 @@
     <script>
         var globalBottom;
         var globalTop;
+        var noMorePosts = false;
 
         function showPostModal() {
             var modal = document.getElementById("modal");
@@ -144,6 +145,8 @@
                     .then(data => {
                         if (data.length === 0) {
                             document.getElementById('postsHeader').textContent = 'No more posts to show.';
+                            noMorePosts = true;
+                            updateNavigationBar();
                             return;
                         }
                         data.forEach(post => {
@@ -217,6 +220,13 @@
                     turnPageDownButton.style.visibility = "hidden";
                 } else {
                     turnPageDownButton.style.visibility = "visible";
+                }
+
+                const turnPageUpButton = document.getElementById("turnPageUpButton");
+                if (noMorePosts) {
+                    turnPageUpButton.style.visibility = "hidden";
+                } else {
+                    turnPageUpButton.style.visibility = "visible";
                 }
 
                 document.getElementById("globalBottom").textContent = globalBottom + 1;

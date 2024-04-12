@@ -58,6 +58,11 @@
 
 .view-post {
     margin-right: auto; /* Pushes the View Post button all the way to the right */
+    background-color:#7eb8f1;
+}
+
+.view-post :hover {
+    background-color: #007bff;
 }
 
 .date-created {
