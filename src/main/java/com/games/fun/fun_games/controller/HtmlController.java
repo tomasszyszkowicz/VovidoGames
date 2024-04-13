@@ -3,6 +3,7 @@ package com.games.fun.fun_games.controller;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.games.fun.fun_games.repository.UserRepository;
@@ -70,6 +71,34 @@ public class HtmlController {
         model.addAttribute("username", getLoggedInUsername());
         model.addAttribute("email", getLoggedInUserEmail());
         return "leaderboards";
+    }
+
+    /**
+     * Handles the request for the forum page.
+     * 
+     * @param model the model object to be populated with data
+     * @param bottom the bottom index of the posts to be displayed
+     * @param top the top index of the posts to be displayed
+     * @return the name of the forum template
+     */
+    @GetMapping("/forum")
+    public String forum(Model model,
+                        @RequestParam(defaultValue = "0") int bottom,
+                        @RequestParam(defaultValue = "9") int top) {
+        model.addAttribute("username", getLoggedInUsername());
+        model.addAttribute("email", getLoggedInUserEmail());
+        return "forum";
+    }
+
+    @GetMapping("/post/{id}")
+    public String post(Model model, 
+                        @PathVariable Long id,
+                        @RequestParam(defaultValue = "0") int bottom,
+                        @RequestParam(defaultValue = "9") int top) {
+        model.addAttribute("username", getLoggedInUsername());
+        model.addAttribute("email", getLoggedInUserEmail());
+        model.addAttribute("postId", id);
+        return "post";
     }
 
     /**

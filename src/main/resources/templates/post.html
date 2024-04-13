@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="/css/forum.css" th:href="@{/css/forum.css}">
+    <title>Forum</title>
+</head>
+<body>
+    <div id="data" th:attr="data-attribute=${postId}"></div>
+    <div id="modal" class="modal">
+        <div class="modal-content" id="commentCreationDetails"></div>
+    </div>
+    <div class="top-right-container">
+        <p><b>Logged in as:</b></p>
+        <p><span id="username" th:text="${username}">Username</span></p>
+        <p><span th:text="${email}">email</span></p>
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="top-left-container">
+        <p><b>Fun Games</b></p>
+        <a href="/home">Home</a>
+    </div>
+    <div class="games-container">
+        <p><b>Games</b></p>
+        <a class="nav-link" href="/pexeso-menu">Pexeso</a>
+        <a class="nav-link" href="/snake-game">Snake</a>
+        <p><b>Leaderboards</b></p>
+        <a class="nav-link" href="/leaderboards">Leaderboards</a>
+        <p><b>Forum</b></p>
+        <a class="nav-link" href="/forum">Forum</a>
+    </div>
+    <h1 id="titleHeader"></h1>
+    <div class="sub-container-wrapper">
+        <div style="padding: 0px" class="sub-container">
+            <div class="postContainer" id="postContainer">
+                <div class="post-header">
+                    <span class="post-title" id="postTitle"></span>
+                    <span class="post-user" id="postAuthor"></span>
+                </div>
+                <div class="post-content">
+                    <p id="postContent"></p>
+                </div>
+                <div class="additional-header">
+                    <span style="margin-left: 10px; margin-top: 5px; margin-bottom: 5px;" class="date-created" id="dateCreated"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <a onclick="showCommentModal()">Add comment</a><br>
+        </div>
+    </div>
+    <div class="sub-container-wrapper">
+        <div class="sub-container" id="commentContainer">
+            <h2><span id="commentsHeader">Comments</span></h2>
+            <a id="turnPageDownButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageDown()">&lt;</a><a id="turnPageUpButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageUp()">></a>
+            <p id="pages">[<span id="globalBottom"></span> - <span id="globalTop"></span>]</p>
+        </div>
+    </div>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <a href="/forum">Back to Forum</a>
+    </div>
+    <script>
+        var globalBottom;
+        var globalTop;
+        var noMoreComments = false;
+        const postId = document.getElementById('data').getAttribute('data-attribute');
+
+        function fetchPost() {
+            const postId = document.getElementById('data').getAttribute('data-attribute');
+            fetch('/posts/' + postId)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('titleHeader').innerText = data.title;
+                    document.getElementById('postTitle').innerText = data.title;
+                    document.getElementById('postAuthor').innerText = data.user.username;
+                    document.getElementById('postContent').innerText = data.content;
+                    let formattedDate = data.dateCreated.substring(0,16).replace("T", ", ");
+                    document.getElementById('dateCreated').innerText = formattedDate;
+                });
+        }
+
+        function fetchComments() {
+            const postId = document.getElementById('data').getAttribute('data-attribute');
+            const url = '/comments?postId=' + postId + '&top=' + globalTop + '&bottom=' + globalBottom;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length === 0) {
+                        if (globalBottom === 0) {
+                            document.getElementById('commentsHeader').innerText = 'No comments';
+                            hideNavigation();
+                        } else {
+                            document.getElementById('commentsHeader').innerText = 'No more comments';   
+                            noMoreComments = true;
+                            updateNavigationBar();
+                        }
+                    }
+                    const commentContainer = document.getElementById('commentContainer');
+                    data.forEach(comment => {
+                        let formattedDate = comment.dateCreated.substring(0,16).replace("T", ", ");
+                        const commentDiv = document.createElement('div');
+                        commentDiv.className = 'comment-container';
+                        commentDiv.innerHTML = `
+                            <div class="comment-header">
+                                <span class="comment-date">${formattedDate}</span>
+                                <span class="comment-user">${comment.user.username}</span>
+                            </div>
+                            <div class="comment-content">
+                                <p>${comment.content}</p>
+                            </div>`;
+                        const navigationButton = document.getElementById('turnPageDownButton');
+                        commentContainer.insertBefore(commentDiv, navigationButton);
+                    });
+                });  
+        }
+
+        function showCommentModal() {
+            var modal = document.getElementById("modal");
+
+            const commentCreationDetails = document.getElementById("commentCreationDetails");
+            commentCreationDetails.innerHTML = `
+                <h2>Create Comment</h2>
+                <form id="postCreationForm">
+                    <p>Comment:</p>
+                    <textarea id="content" name="content" required></textarea><br>
+                    <a onclick="submitComment()">Create Comment</a>
+                </form>
+            `;
+
+            modal.style.display = 'block';
+            setTimeout(() => {
+                modal.style.top = '0'; // This will trigger the transition
+            }, 10);
+
+        }
+
+        function submitComment() {
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            const content = document.getElementById("content").value;
+
+            const username = document.getElementById("username").innerText;
+
+            const postId = document.getElementById('data').getAttribute('data-attribute');
+
+            if (!content) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const comment = {
+                username: username,
+                postId: postId,
+                content: content
+            }
+
+            fetch('/comments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken
+                },
+                body: JSON.stringify(comment)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        closeModalAndReload();
+                    } else {
+                        alert('Error creating comment');
+                    }
+                });
+        }
+
+        function closeModalAndReload() {
+            var modal = document.getElementById("modal");
+            modal.style.top = '-100%'; // This will trigger the transition
+            setTimeout(() => {
+                modal.style.display = 'none';
+                window.location.reload();
+            }, 500);
+        }
+
+        function setTopAndBottom() {
+                var bottom = parseInt(getQueryParamater('bottom'));
+                var top = parseInt(getQueryParamater('top'));
+
+                if (bottom) {
+                    globalBottom = bottom;
+                }
+                else {
+                    globalBottom = 0;
+                }
+
+                if (top) {
+                    globalTop = top;
+                }
+                else {
+                    globalTop = 9;
+                }
+
+                console.log('Bottom:', globalBottom);
+                console.log('Top:', globalTop);
+
+                updateNavigationBar();
+            }
+
+        function updateNavigationBar() {
+            const turnPageDownButton = document.getElementById("turnPageDownButton");
+            if (globalBottom === 0) {
+                turnPageDownButton.style.visibility = "hidden";
+            } else {
+                turnPageDownButton.style.visibility = "visible";
+            }
+
+            const turnPageUpButton = document.getElementById("turnPageUpButton");
+            if (noMoreComments) {
+                turnPageUpButton.style.visibility = "hidden";
+            } else {
+                turnPageUpButton.style.visibility = "visible";
+            }
+
+            document.getElementById("globalBottom").textContent = globalBottom + 1;
+            document.getElementById("globalTop").textContent = globalTop + 1;
+        }
+
+        function hideNavigation() {
+            
+            const turnPageDownButton = document.getElementById("turnPageDownButton");
+            turnPageDownButton.style.display = "none";            
+            const turnPageUpButton = document.getElementById("turnPageUpButton");
+            turnPageUpButton.style.display = "none";
+            document.getElementById("pages").style.display = "none";
+        }
+
+        function turnPageUp() {
+            globalTop += 10;
+            globalBottom += 10;
+            window.location.href = '/post/' + postId + '?top=' + globalTop + '&bottom=' + globalBottom;
+        }
+
+        function turnPageDown() {
+            globalTop -= 10;
+            globalBottom -= 10;
+            window.location.href = '/post/' + postId + '?top=' + globalTop + '&bottom=' + globalBottom;
+        }
+
+        function getQueryParamater(paramater){
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(paramater);
+        }
+
+        window.onload  = function() {
+            setTopAndBottom();
+            fetchPost();
+            fetchComments();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="/css/forum.css" th:href="@{/css/forum.css}">
+    <title>Forum</title>
+</head>
+<body>
+    <div id="modal" class="modal">
+        <div class="modal-content" id="postCreationDetails"></div>
+    </div>
+    <div class="top-right-container">
+        <p><b>Logged in as:</b></p>
+        <p><span id="username" th:text="${username}">Username</span></p>
+        <p><span th:text="${email}">email</span></p>
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="top-left-container">
+        <p><b>Fun Games</b></p>
+        <a href="/home">Home</a>
+    </div>
+    <div class="games-container">
+        <p><b>Games</b></p>
+        <a class="nav-link" href="/pexeso-menu">Pexeso</a>
+        <a class="nav-link" href="/snake-game">Snake</a>
+        <p><b>Leaderboards</b></p>
+        <a class="nav-link" href="/leaderboards">Leaderboards</a>
+        <p><b>Forum</b></p>
+        <a class="nav-link" href="/forum">Forum</a>
+    </div>
+    <h1>Forum</h1>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <a onclick="showPostModal()">Create Post</a>
+        </div>
+    </div>
+    <div class="sub-container-wrapper">
+        <div style="padding-bottom: 10px;" class="sub-container" id="postContainer">
+            <h2 id="postsHeader">Posts</h2>
+            <a id="turnPageDownButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageDown()">&lt;</a><a id="turnPageUpButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageUp()">></a>
+            <p>[<span id="globalBottom"></span> - <span id="globalTop"></span>]</p>
+        </div>
+    </div>
+
+    <script src="/js/forum.js" th:src="@{/js/forum.js}"></script>
+    <script>
+        window.onload = function() {
+            setTopAndBottom();
+            fetchPosts();
+        }
+    </script>
+</body>
+</html>
