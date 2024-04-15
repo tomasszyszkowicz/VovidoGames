@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="/css/forum.css" th:href="@{/css/forum.css}">
+    <title>Forum</title>
+</head>
+<body>
+    <div id="modal" class="modal">
+        <div class="modal-content" id="postCreationDetails"></div>
+    </div>
+    <div class="top-right-container">
+        <p><b>Logged in as:</b></p>
+        <p><span id="username" th:text="${username}">Username</span></p>
+        <p><span th:text="${email}">email</span></p>
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="top-left-container">
+        <p><b>Fun Games</b></p>
+        <a href="/home">Home</a>
+    </div>
+    <div class="games-container">
+        <p><b>Games</b></p>
+        <a class="nav-link" href="/pexeso-menu">Pexeso</a>
+        <a class="nav-link" href="/snake-game">Snake</a>
+        <p><b>Leaderboards</b></p>
+        <a class="nav-link" href="/leaderboards">Leaderboards</a>
+        <p><b>Forum</b></p>
+        <a class="nav-link" href="/forum">Forum</a>
+    </div>
+    <h1><span id="profileUsername" th:text="${profileUsername}"></span></h1>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <h2>Profile</h2>
+            <p>Here you can see your profile details.</p>
+            <div style="text-align: left;">
+                <p>Username: <b><span id="detailsUsername"></span></b></p>
+                <p>Email: <b><span id="detailsEmail"></span></b></p>
+            </div>
+            <h3>Records</h3>
+        </div>
+    </div>
+
+    <script>
+
+        function fetchUser() {
+            const username = document.getElementById('profileUsername').innerText;
+            const url = '/users/' + username;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('detailsUsername').innerText = data.username;
+                    document.getElementById('detailsEmail').innerText = data.email;
+                });
+        }
+
+        window.onload = function() {
+            fetchUser();
+        }
+    </script>
+</body>
+</html>

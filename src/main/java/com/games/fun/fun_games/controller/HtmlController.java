@@ -101,6 +101,14 @@ public class HtmlController {
         return "post";
     }
 
+    @GetMapping("profile/{username}")
+    public String profile(Model model, @PathVariable String username) {
+        model.addAttribute("username", getLoggedInUsername());
+        model.addAttribute("email", getLoggedInUserEmail());
+        model.addAttribute("profileUsername", username);
+        return "profile";
+    }
+
     /**
      * Handles the request for the pexeso menu page.
      *

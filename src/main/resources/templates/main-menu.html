@@ -30,7 +30,7 @@
     <h1>Welcome to Fun Games</h1>
     <div class="top-right-container">
         <p><b>Logged in as:</b></p>
-        <p><span th:text="${username}">Username</span></p>
+        <p><span id="username" th:text="${username}">Username</span></p>
         <p><span th:text="${email}">email</span></p>
         <a href="/logout">Logout</a>
     </div>
@@ -91,7 +91,9 @@
         </div>
         <div class="right-wrapper">
             <div class="sub-container">
-                <h2>Placeholder</h2>
+                <h2>Your profile</h2>
+                <p>Check your profile</p>
+                <a onclick="redirectToUserProfile()">Your profile</a>
             </div>
         </div>
 
@@ -195,6 +197,11 @@
             updateLeaderboard(); // Initial call to display the leaderboard
             setInterval(updateLeaderboard, 6000); // Adjusted to account for animation time plus a little buffer
         };
+
+        function redirectToUserProfile() {
+            username = document.getElementById("username").textContent;
+            window.location.href = "/profile/" + username;
+        }
 
     </script>
        
