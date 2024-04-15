@@ -2,6 +2,7 @@ package com.games.fun.fun_games.service;
 
 import com.games.fun.fun_games.entity.SnakeResult;
 import com.games.fun.fun_games.entity.User;
+import com.games.fun.fun_games.dto.SnakeResultDto;
 import com.games.fun.fun_games.repository.SnakeResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -14,10 +15,12 @@ import java.util.List;
 public class SnakeResultService {
 
     private final SnakeResultRepository snakeResultRepository;
+    private final UserService userService;
 
     @Autowired
-    public SnakeResultService(SnakeResultRepository snakeResultRepository) {
+    public SnakeResultService(SnakeResultRepository snakeResultRepository, UserService userService) {
         this.snakeResultRepository = snakeResultRepository;
+        this.userService = userService;
     }
 
     public List<SnakeResult> getResults(int bottom, int top) {
@@ -28,7 +31,11 @@ public class SnakeResultService {
         return snakeResultRepository.findAll(pageRequest).getContent();
     }
 
-    public SnakeResult createResult(User user, int score) {
-        return snakeResultRepository.save(new SnakeResult(user, score));
+    public SnakeResult createResult(SnakeResultDto resultDto) {
+        User user = userService.getUserByUsername(resultDto.getUsername());
+        if (user == null) {
+            return null;
+        }
+        return snakeResultRepository.save(new SnakeResult(user, resultDto.getScore()));
     }
 }

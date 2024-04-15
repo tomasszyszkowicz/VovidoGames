@@ -2,9 +2,7 @@ package com.games.fun.fun_games.controller;
 
 import com.games.fun.fun_games.dto.SnakeResultDto;
 import com.games.fun.fun_games.entity.SnakeResult;
-import com.games.fun.fun_games.entity.User;
 import com.games.fun.fun_games.service.SnakeResultService;
-import com.games.fun.fun_games.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +15,10 @@ import java.util.List;
 public class SnakeResultController {
 
     private final SnakeResultService snakeResultService;
-    private final UserService userService;
 
     @Autowired
-    public SnakeResultController(SnakeResultService snakeResultService, UserService userService) {
+    public SnakeResultController(SnakeResultService snakeResultService) {
         this.snakeResultService = snakeResultService;
-        this.userService = userService;
     }
 
     @GetMapping("/results")
@@ -35,11 +31,10 @@ public class SnakeResultController {
 
     @PostMapping
     public ResponseEntity<SnakeResult> createResult(@RequestBody SnakeResultDto resultDto) {
-        User user = userService.getUserByUsername(resultDto.getUsername());
-        if (user == null) {
+        SnakeResult newResult = snakeResultService.createResult(resultDto);
+        if (newResult == null) {
             return ResponseEntity.notFound().build();
         }
-        SnakeResult newResult = snakeResultService.createResult(user, resultDto.getScore());
         return new ResponseEntity<>(newResult, HttpStatus.CREATED);
     }
 }

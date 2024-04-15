@@ -16,10 +16,12 @@ import java.util.Map;
 public class PexesoResultService {
 
     private final PexesoResultRepository pexesoResultRepository;
+    private final UserService userService;
 
     @Autowired
-    public PexesoResultService(PexesoResultRepository pexesoResultRepository) {
+    public PexesoResultService(PexesoResultRepository pexesoResultRepository, UserService userService) {
         this.pexesoResultRepository = pexesoResultRepository;
+        this.userService = userService;
     }
 
     public List<PexesoResult> getResults(int bottom, int top, int difficulty) {
@@ -53,8 +55,11 @@ public class PexesoResultService {
         return mappedResults;
     }
 
-    public PexesoResult createResult(User user, int score, int difficulty) {
+    public PexesoResult createResult(String username, int score, int difficulty) {
+        User user = userService.getUserByUsername(username);
+        if (user == null) {
+            return null; // Or handle error appropriately
+        }
         return pexesoResultRepository.save(new PexesoResult(user, score, difficulty));
     }
 }
-

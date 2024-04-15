@@ -2,9 +2,7 @@ package com.games.fun.fun_games.controller;
 
 import com.games.fun.fun_games.dto.PexesoResultDto;
 import com.games.fun.fun_games.entity.PexesoResult;
-import com.games.fun.fun_games.entity.User;
 import com.games.fun.fun_games.service.PexesoResultService;
-import com.games.fun.fun_games.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +16,10 @@ import java.util.Map;
 public class PexesoResultController {
 
     private final PexesoResultService pexesoResultService;
-    private final UserService userService;
 
     @Autowired
-    public PexesoResultController(PexesoResultService pexesoResultService, UserService userService) {
+    public PexesoResultController(PexesoResultService pexesoResultService) {
         this.pexesoResultService = pexesoResultService;
-        this.userService = userService;
     }
 
     @GetMapping
@@ -44,11 +40,10 @@ public class PexesoResultController {
 
     @PostMapping
     public ResponseEntity<PexesoResult> createResult(@RequestBody PexesoResultDto resultDto) {
-        User user = userService.getUserByUsername(resultDto.getUsername());
-        if (user == null) {
+        PexesoResult newResult = pexesoResultService.createResult(resultDto.getUsername(), resultDto.getScore(), resultDto.getDifficulty());
+        if (newResult == null) {
             return ResponseEntity.notFound().build();
         }
-        PexesoResult newResult = pexesoResultService.createResult(user, resultDto.getScore(), resultDto.getDifficulty());
         return new ResponseEntity<>(newResult, HttpStatus.CREATED);
     }
 }

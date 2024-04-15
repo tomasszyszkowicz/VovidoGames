@@ -16,10 +16,14 @@ import java.util.List;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final UserService userService;
+    private final PostService postService;
 
     @Autowired
-    public CommentService(CommentRepository commentRepository) {
+    public CommentService(CommentRepository commentRepository, UserService userService, PostService postService) {
         this.commentRepository = commentRepository;
+        this.userService = userService;
+        this.postService = postService;
     }
 
     public List<Comment> getAllComments(int bottom, int top) {
@@ -34,7 +38,15 @@ public class CommentService {
         return commentRepository.findByPostId(postId, PageRequest.of(pageNumber, size, Sort.by(Sort.Direction.ASC, "dateCreated")));
     }
 
-    public Comment createComment(User user, Post post, LocalDateTime dateCreated, String content) {
+    public Comment createComment(String username, Long postId, String content) {
+        User user = userService.getUserByUsername(username);
+        Post post = postService.getPost(postId);
+
+        if (user == null || post == null) {
+            return null; // Or handle error appropriately
+        }
+
+        LocalDateTime dateCreated = LocalDateTime.now();
         return commentRepository.save(new Comment(user, post, dateCreated, content));
     }
 }
