@@ -1,114 +1,54 @@
 package com.games.fun.fun_games.controller;
 
+import com.games.fun.fun_games.dto.PexesoResultDto;
+import com.games.fun.fun_games.entity.PexesoResult;
+import com.games.fun.fun_games.entity.User;
+import com.games.fun.fun_games.service.PexesoResultService;
+import com.games.fun.fun_games.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.games.fun.fun_games.dto.PexesoResultDto;
-import com.games.fun.fun_games.entity.PexesoResult;
-import com.games.fun.fun_games.repository.PexesoResultRepository;
-import com.games.fun.fun_games.entity.User;
-import com.games.fun.fun_games.repository.UserRepository;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
-
-/**
- * The UserController class handles HTTP requests related to users.
- */
 @RestController
 @RequestMapping("/results")
 public class PexesoResultController {
 
-    @Autowired
-    private PexesoResultRepository pexesoResultRepository;
+    private final PexesoResultService pexesoResultService;
+    private final UserService userService;
 
     @Autowired
-    private UserRepository userRepository;
+    public PexesoResultController(PexesoResultService pexesoResultService, UserService userService) {
+        this.pexesoResultService = pexesoResultService;
+        this.userService = userService;
+    }
 
-    /**
-     * Fetches a list of results within the specified range and difficulty.
-     *
-     * @param top The top index of the range.
-     * @param bottom The bottom index of the range.
-     * @param difficulty The difficulty of the results.
-     * @return ResponseEntity containing the list of results and HTTP status code OK.
-     */
     @GetMapping
     public ResponseEntity<List<PexesoResult>> getResults(
             @RequestParam(name = "top", defaultValue = "20") int top,
             @RequestParam(name = "bottom", defaultValue = "0") int bottom,
             @RequestParam(name = "difficulty", defaultValue = "1") int difficulty) {
-        
-        // Calculate the number of results to fetch (size) and the page number
-        int size = top - bottom + 1; // This ensures we get the range from bottom to top
-        int pageNumber = bottom / size; // Calculate the page number starting from 0
-        
-        // Create PageRequest for pagination and sorting, using calculated page number and size
-        PageRequest pageRequest = PageRequest.of(pageNumber, size, Sort.by(Sort.Direction.ASC, "score"));
-        
-        // Fetch the results filtered by difficulty, within the specified range
-        Page<PexesoResult> resultPage = pexesoResultRepository.findByDifficulty(difficulty, pageRequest);
-        
-        // Get the content of the page
-        List<PexesoResult> results = resultPage.getContent();
-        
+
+        List<PexesoResult> results = pexesoResultService.getResults(bottom, top, difficulty);
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
-    /**
-     * Fetches the lowest highscores for each difficulty level.
-     *
-     * @return ResponseEntity containing a map of difficulty levels and their lowest highscores, and HTTP status code OK.
-     */
     @GetMapping("/record-holders")
     public ResponseEntity<Map<String, PexesoResult>> getLowestHighscoresByDifficultyMapped() {
-        List<PexesoResult> results = pexesoResultRepository.findLowestHighscoresByDifficulty();
-
-        Map<String, PexesoResult> mappedResults = new HashMap<>();
-        results.forEach(result -> {
-            String key;
-            switch (result.getDifficulty()) {
-                case 1:
-                    key = "easy";
-                    break;
-                case 2:
-                    key = "medium";
-                    break;
-                case 3:
-                    key = "hard";
-                    break;
-                default:
-                    key = "unknown";
-            }
-            mappedResults.put(key, result);
-        });
-
+        Map<String, PexesoResult> mappedResults = pexesoResultService.getLowestHighscoresByDifficultyMapped();
         return new ResponseEntity<>(mappedResults, HttpStatus.OK);
     }
 
-    /**
-     * Creates a new result.
-     *
-     * @param result The result object to be created.
-     * @return ResponseEntity containing the created result and HTTP status code CREATED.
-     */
     @PostMapping
-    public ResponseEntity<PexesoResult> createResult(@RequestBody PexesoResultDto result) {
-        System.out.println(result.getUsername());
-        User user = userRepository.findByUsername(result.getUsername());
-        PexesoResult newResult = pexesoResultRepository.save(new PexesoResult(user, result.getScore(), result.getDifficulty()));
+    public ResponseEntity<PexesoResult> createResult(@RequestBody PexesoResultDto resultDto) {
+        User user = userService.getUserByUsername(resultDto.getUsername());
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        PexesoResult newResult = pexesoResultService.createResult(user, resultDto.getScore(), resultDto.getDifficulty());
         return new ResponseEntity<>(newResult, HttpStatus.CREATED);
     }
 }
