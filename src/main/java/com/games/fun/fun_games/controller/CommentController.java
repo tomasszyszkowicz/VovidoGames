@@ -27,7 +27,7 @@ public class CommentController {
             @RequestParam(defaultValue = "0") int bottom,
             @RequestParam(defaultValue = "9") int top
     ) {
-        if (bottom < 0 || top <= 0 || top < bottom) {
+        if (bottom < 0 || top < 0) {
             return ResponseEntity.badRequest().build();
         }
 

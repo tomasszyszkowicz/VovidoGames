@@ -25,7 +25,7 @@ public class PostController {
     public ResponseEntity<List<Post>> getPosts(@RequestParam(defaultValue = "0") int bottom,
                                                @RequestParam(defaultValue = "9") int top) {
         // Validate input parameters
-        if (bottom < 0 || top <= 0 || top < bottom) {
+        if (bottom < 0 || top < 0) {
             return ResponseEntity.badRequest().build();
         }
 

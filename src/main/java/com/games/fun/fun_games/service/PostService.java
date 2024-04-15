@@ -27,9 +27,10 @@ public class PostService {
     public List<Post> getPosts(int bottom, int top) {
         int size = top - bottom + 1;
         int pageNumber = bottom / size;
-        PageRequest pageRequest = PageRequest.of(pageNumber, size, Sort.by(Sort.Direction.DESC, "dateCreated"));
+        Sort sort = Sort.by(Sort.Direction.DESC, "dateCreated");
+        PageRequest pageRequest = PageRequest.of(pageNumber, size, sort);
         return postRepository.findAll(pageRequest).getContent();
-    }
+    }    
 
     public Post getPost(Long id) {
         return postRepository.findById(id).orElse(null);
