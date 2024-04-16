@@ -477,3 +477,13 @@ tbody tr:nth-child(2) {
 tbody tr:nth-child(3) {
     background-color: #cd7f32; /* Bronze for 3rd place */
 }
+
+.search-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}

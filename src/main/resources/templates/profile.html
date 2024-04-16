@@ -36,12 +36,24 @@
     <div class="sub-container-wrapper">
         <div class="sub-container">
             <h2>Profile</h2>
-            <p>Here you can see your profile details.</p>
             <div style="text-align: left;">
                 <p>Username: <b><span id="detailsUsername"></span></b></p>
                 <p>Email: <b><span id="detailsEmail"></span></b></p>
             </div>
             <h3>Records</h3>
+            <div style="text-align: left;">
+                <p>Snake: <b><span id="snakeRecord"></span></b></p>
+                <p>Easy Pexeso: <b><span id="easyPexesoRecord"></span></b></p>
+                <p>Medium Pexeso: <b><span id="mediumPexesoRecord"></span></b></p>
+                <p>Hard Pexeso: <b><span id="hardPexesoRecord"></span></b></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <h2>Search for other players</h2>
+            <input type="text" id="searchInput" placeholder="Username" class="search-input">
         </div>
     </div>
 
@@ -59,8 +71,24 @@
                 });
         }
 
+        function fetchUserRecords() {
+            const username = document.getElementById('profileUsername').innerText;
+            const url = '/records/' + username;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('snakeRecord').innerText = data.snakeHighScore;
+                    document.getElementById('easyPexesoRecord').innerText = data.pexesoHighScore_easy;
+                    document.getElementById('mediumPexesoRecord').innerText = data.pexesoHighScore_medium;
+                    document.getElementById('hardPexesoRecord').innerText = data.pexesoHighScore_hard;
+                });
+
+        } 
+
         window.onload = function() {
             fetchUser();
+            fetchUserRecords();
         }
     </script>
 </body>
