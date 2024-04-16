@@ -3,6 +3,7 @@ package com.games.fun.fun_games.service;
 import com.games.fun.fun_games.entity.PexesoResult;
 import com.games.fun.fun_games.entity.User;
 import com.games.fun.fun_games.repository.PexesoResultRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -32,34 +33,31 @@ public class PexesoResultService {
         return pexesoResultRepository.findByDifficulty(difficulty, pageRequest).getContent();
     }
 
-    public Map<String, PexesoResult> getLowestHighscoresByDifficultyMapped() {
-        List<PexesoResult> results = pexesoResultRepository.findLowestHighscoresByDifficulty();
-        Map<String, PexesoResult> mappedResults = new HashMap<>();
-        results.forEach(result -> {
-            String key;
-            switch (result.getDifficulty()) {
-                case 1:
-                    key = "easy";
-                    break;
-                case 2:
-                    key = "medium";
-                    break;
-                case 3:
-                    key = "hard";
-                    break;
-                default:
-                    key = "unknown";
-            }
-            mappedResults.put(key, result);
-        });
-        return mappedResults;
-    }
-
     public PexesoResult createResult(String username, int score, int difficulty) {
         User user = userService.getUserByUsername(username);
         if (user == null) {
             return null; // Or handle error appropriately
         }
         return pexesoResultRepository.save(new PexesoResult(user, score, difficulty));
+    }
+
+    public Map<String, PexesoResult> getBestResultsByUser(User user) {
+        Map<String, PexesoResult> bestResults = new HashMap<>();
+        int[] difficulties = {1, 2, 3}; // Assuming difficulties are 1 (easy), 2 (medium), 3 (hard)
+        PageRequest pageRequest = PageRequest.of(0, 1, Sort.by(Sort.Direction.ASC, "score"));
+
+        for (int difficulty : difficulties) {
+            PexesoResult result = pexesoResultRepository.findTopResultByUserAndDifficulty(user, difficulty, pageRequest)
+                                                       .stream().findFirst().orElse(null);
+            String key = switch (difficulty) {
+                case 1 -> "easy";
+                case 2 -> "medium";
+                case 3 -> "hard";
+                default -> "unknown";
+            };
+            bestResults.put(key, result);
+        }
+
+        return bestResults;
     }
 }

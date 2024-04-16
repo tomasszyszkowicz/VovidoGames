@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/results")
@@ -30,12 +29,6 @@ public class PexesoResultController {
 
         List<PexesoResult> results = pexesoResultService.getResults(bottom, top, difficulty);
         return new ResponseEntity<>(results, HttpStatus.OK);
-    }
-
-    @GetMapping("/record-holders")
-    public ResponseEntity<Map<String, PexesoResult>> getLowestHighscoresByDifficultyMapped() {
-        Map<String, PexesoResult> mappedResults = pexesoResultService.getLowestHighscoresByDifficultyMapped();
-        return new ResponseEntity<>(mappedResults, HttpStatus.OK);
     }
 
     @PostMapping

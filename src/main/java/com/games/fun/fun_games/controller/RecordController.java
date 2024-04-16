@@ -3,6 +3,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.games.fun.fun_games.service.RecordService;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/records")
 public class RecordController {
@@ -15,12 +17,8 @@ public class RecordController {
     }
 
     @GetMapping("/{username}")
-    public String getRecordsByUsername(@PathVariable String username) {
+    public Map<String, Object> getRecordsByUsername(@PathVariable String username) {
         return recordService.getRecordsByUsername(username);
-    }
-
-
-
-    
+    } 
 }
 
