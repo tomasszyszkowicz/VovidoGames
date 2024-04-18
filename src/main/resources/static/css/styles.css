@@ -487,3 +487,32 @@ tbody tr:nth-child(3) {
     font-size: 14px;
     box-sizing: border-box;
 }
+
+.dropdown-content {
+    display: none; /* Hidden initially, displayed on input */
+    position: relative;
+    width: calc(100% - 2px); /* Match width to the search input minus border */
+    background-color: #ffffff; /* Consistent with other elements */
+    border: 1px solid #ccc; /* Matching border to input */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Softer shadow for a subtler look */
+    z-index: 100; /* Ensure it appears on top */
+    border-radius: 5px; /* Consistent rounded corners */
+}
+
+.dropdown-item {
+    color: black; /* Standard text color */
+    padding: 12px 16px; /* Comfortable padding */
+    text-decoration: none; /* No underline */
+    display: block; /* Each item is a block element */
+    background-color: #ffffff; /* Background matches dropdown */
+    transition: background-color 0.3s; /* Smooth transition for interaction */
+}
+
+.dropdown-item:hover {
+    background-color: #f1f1f1; /* Light grey on hover for better visibility */
+}
+
+.search-input:focus + .dropdown-content,
+.search-input + .dropdown-content:hover { /* Show dropdown on input focus or hover over dropdown */
+    display: block;
+}

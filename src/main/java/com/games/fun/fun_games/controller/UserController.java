@@ -21,8 +21,13 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<User>> getUsers(@RequestParam(name = "query", required = false) String query) {
+        List<User> users;
+        if (query != null && !query.isEmpty()) {
+            users = userService.searchUsers(query);
+        } else {
+            users = userService.getAllUsers();
+        }
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 

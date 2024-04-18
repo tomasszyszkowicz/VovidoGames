@@ -51,14 +51,14 @@
     </div>
 
     <div class="sub-container-wrapper">
-        <div class="sub-container">
-            <h2>Search for other players</h2>
+        <div class="sub-container" id="search-container">
+            <h2>Search for other players</h2> 
             <input type="text" id="searchInput" placeholder="Username" class="search-input">
+            <div id="searchResults" class="dropdown-content"></div>
         </div>
     </div>
 
     <script>
-
         function fetchUser() {
             const username = document.getElementById('profileUsername').innerText;
             const url = '/users/' + username;
@@ -83,12 +83,54 @@
                     document.getElementById('mediumPexesoRecord').innerText = data.pexesoHighScore_medium;
                     document.getElementById('hardPexesoRecord').innerText = data.pexesoHighScore_hard;
                 });
-
         } 
+
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const query = this.value;
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = ''; // Clear previous results
+
+            if (query.length > 0) {
+                const url = '/users?query=' + encodeURIComponent(query);
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            const list = data.map(user => `<a href="/profile/${user.id}" class="dropdown-item">${user.username}</a>`).join('');
+                            resultsContainer.innerHTML = list;
+                            resultsContainer.style.display = 'block'; // Show the dropdown
+                        } else {
+                            resultsContainer.style.display = 'none'; // Hide the dropdown if no results
+                        }
+                    });
+            } else {
+                resultsContainer.style.display = 'none'; // Hide the dropdown if input is cleared
+            }
+        });
 
         window.onload = function() {
             fetchUser();
             fetchUserRecords();
+
+            setTimeout(() => { // Adding a delay to ensure everything loads
+                const setFixedHeight = () => {
+                    const container = document.getElementById('search-container');
+                    if (!container) {
+                        console.error('Container not found!');
+                        return;
+                    }
+                    console.log('Container offsetHeight before setting:', container.offsetHeight);
+                    const currentHeight = container.offsetHeight - 40; // Get the current height in pixels
+                    if (currentHeight > 0) { // Ensure the container has a height before setting it
+                        container.style.height = currentHeight + 'px'; // Set the fixed height
+                        console.log('Fixed height set to:', currentHeight);
+                    } else {
+                        console.log('Container height not set or container is not visible.');
+                    }
+                };
+
+                setFixedHeight();
+            }, 1000);
         }
     </script>
 </body>
