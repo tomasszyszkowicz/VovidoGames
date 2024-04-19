@@ -35,7 +35,6 @@
     <h1><span id="profileUsername" th:text="${profileUsername}"></span></h1>
     <div class="sub-container-wrapper">
         <div class="sub-container">
-            <h2>Profile</h2>
             <div style="text-align: left;">
                 <p>Username: <b><span id="detailsUsername"></span></b></p>
                 <p>Email: <b><span id="detailsEmail"></span></b></p>
@@ -52,8 +51,11 @@
 
     <div class="sub-container-wrapper">
         <div class="sub-container" id="search-container">
-            <h2>Search for other players</h2> 
-            <input type="text" id="searchInput" placeholder="Username" class="search-input">
+            <h2>Search for other players</h2>
+            <div class="input-group">
+                <input type="text" id="searchInput" placeholder="Username" class="search-input">
+                <a id="viewButton" class="a-unavailable" style="margin-top: -10px;" onclick="redirectToProfile()">View</a>
+            </div>
             <div id="searchResults" class="dropdown-content"></div>
         </div>
     </div>
@@ -85,8 +87,15 @@
                 });
         } 
 
+        function redirectToProfile() {
+            const username = document.getElementById('searchInput').value;
+            window.location.href = '/profile/' + username;
+        }
+
         document.getElementById('searchInput').addEventListener('input', function() {
             const query = this.value;
+            const viewButton = document.getElementById('viewButton');
+            viewButton.classList.add('a-unavailable'); // Make the button unavailable
             const resultsContainer = document.getElementById('searchResults');
             resultsContainer.innerHTML = ''; // Clear previous results
 
@@ -96,9 +105,13 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.length > 0) {
-                            const list = data.map(user => `<a href="/profile/${user.id}" class="dropdown-item">${user.username}</a>`).join('');
+                            let list = '';
+                            for (let i = 0; i < data.length; i++) {
+                                list += `<div class="dropdown-item" data-username="${data[i].username}"><p style="margin: 0px;">${data[i].username} | ${data[i].email}</p></div>`;
+                            }
                             resultsContainer.innerHTML = list;
                             resultsContainer.style.display = 'block'; // Show the dropdown
+                            setupDropdownItemListeners(); // Setup listeners for each dropdown item
                         } else {
                             resultsContainer.style.display = 'none'; // Hide the dropdown if no results
                         }
@@ -108,29 +121,46 @@
             }
         });
 
+        function setupDropdownItemListeners() {
+            const items = document.querySelectorAll('.dropdown-item');
+            const resultsContainer = document.getElementById('searchResults');
+            items.forEach(item => {
+                item.addEventListener('click', function() {
+                    const username = this.getAttribute('data-username');
+                    const searchInput = document.getElementById('searchInput');
+                    searchInput.value = username; // Set input value to username from data attribute
+
+                    const viewButton = document.querySelector('.a-unavailable');
+                    viewButton.classList.remove('a-unavailable'); // Make the button available
+                    resultsContainer.style.display = 'none'; // Hide the dropdown
+                });
+            });
+        }
+
+
         window.onload = function() {
             fetchUser();
             fetchUserRecords();
 
-            setTimeout(() => { // Adding a delay to ensure everything loads
-                const setFixedHeight = () => {
-                    const container = document.getElementById('search-container');
-                    if (!container) {
-                        console.error('Container not found!');
-                        return;
-                    }
-                    console.log('Container offsetHeight before setting:', container.offsetHeight);
-                    const currentHeight = container.offsetHeight - 40; // Get the current height in pixels
-                    if (currentHeight > 0) { // Ensure the container has a height before setting it
-                        container.style.height = currentHeight + 'px'; // Set the fixed height
-                        console.log('Fixed height set to:', currentHeight);
-                    } else {
-                        console.log('Container height not set or container is not visible.');
-                    }
-                };
+            
+            const setFixedHeight = () => {
+                const container = document.getElementById('search-container');
+                if (!container) {
+                    console.error('Container not found!');
+                    return;
+                }
+                console.log('Container offsetHeight before setting:', container.offsetHeight);
+                const currentHeight = container.offsetHeight - 40; // Get the current height in pixels
+                if (currentHeight > 0) { // Ensure the container has a height before setting it
+                    container.style.height = currentHeight + 'px'; // Set the fixed height
+                    console.log('Fixed height set to:', currentHeight);
+                } else {
+                    console.log('Container height not set or container is not visible.');
+                }
+            };
 
-                setFixedHeight();
-            }, 1000);
+            setFixedHeight();
+            
         }
     </script>
 </body>

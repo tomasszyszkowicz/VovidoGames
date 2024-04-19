@@ -25,6 +25,19 @@ a {
     transition: background-color 0.3s;
 }
 
+.a-unavailable {
+    display: inline-block;
+    padding: 10px 10px;
+    background-color: #6c757d; /* A grayish color indicating unavailability */
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    cursor: not-allowed; /* Changes the cursor to indicate that the item is not available */
+    opacity: 0.5; /* Makes the button look faded */
+    pointer-events: none; /* Prevents the link from being clickable */
+}
+
 a:hover {
     background-color: #0056b3;
 }
@@ -482,6 +495,7 @@ tbody tr:nth-child(3) {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
+    margin-right: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
@@ -494,9 +508,7 @@ tbody tr:nth-child(3) {
     width: calc(100% - 2px); /* Match width to the search input minus border */
     background-color: #ffffff; /* Consistent with other elements */
     border: 1px solid #ccc; /* Matching border to input */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Softer shadow for a subtler look */
     z-index: 100; /* Ensure it appears on top */
-    border-radius: 5px; /* Consistent rounded corners */
 }
 
 .dropdown-item {
@@ -515,4 +527,9 @@ tbody tr:nth-child(3) {
 .search-input:focus + .dropdown-content,
 .search-input + .dropdown-content:hover { /* Show dropdown on input focus or hover over dropdown */
     display: block;
+}
+
+.input-group {
+    display: flex; /* Enables Flexbox */
+    align-items: center; /* Centers the items vertically */
 }
