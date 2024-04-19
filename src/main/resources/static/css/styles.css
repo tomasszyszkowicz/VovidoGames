@@ -551,3 +551,25 @@ tbody tr:nth-child(3) {
 .record-table td {
     background-color: #ffffff; /* Sets background color of cells */
 }
+
+.profile-container {
+    display: flex;       /* Enables flexbox layout */
+    align-items: center; /* Vertically centers the items in the container */
+    justify-content: space-between; /* Space between the child elements */
+}
+
+.profile-details {
+    flex: 1; /* Allows the details div to grow and fill space */
+    margin-right: 20px; /* Optional spacing between the text and image */
+    padding-top: 15px;
+}
+
+.profile-pfp {
+    width: 100px; /* Sets the width of the profile picture */
+    height: 100px; /* Sets the height of the profile picture */
+    border-style: solid; /* Adds a border around the profile picture */
+    border-width: 2px; /* Sets the width of the border */
+    border-color: black; /* Sets the color of the border */
+    display: inline-block; /* Makes the profile picture a block element */
+}
+
