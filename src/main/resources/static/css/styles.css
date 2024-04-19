@@ -533,3 +533,21 @@ tbody tr:nth-child(3) {
     display: flex; /* Enables Flexbox */
     align-items: center; /* Centers the items vertically */
 }
+
+.record-table {
+    width: 50%; /* Adjusts the width of the table to half of the window */
+    margin: 10px auto; /* Centers the table horizontally and adds spacing */
+    border-collapse: collapse; /* Removes space between borders */
+    border: 2px solid #333; /* Adds border around the table */
+}
+.record-table th, .record-table td {
+    border: 1px solid #999; /* Adds border to each cell */
+    padding: 8px; /* Adds padding inside each cell */
+    text-align: left; /* Aligns text to the left */
+}
+.record-table th {
+    background-color: #f2f2f2; /* Sets background color of header */
+}
+.record-table td {
+    background-color: #ffffff; /* Sets background color of cells */
+}
