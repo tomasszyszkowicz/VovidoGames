@@ -49,6 +49,7 @@ public class RegistrationController {
         newUser.setUsername(userDto.getUsername());
         newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
         newUser.setEmail(userDto.getEmail());
+        newUser.setProfilePictureURL("https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg");
         userService.registerUser(newUser);
 
         redirectAttributes.addFlashAttribute("successMessage", "Registration successful. Please login.");

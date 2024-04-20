@@ -561,7 +561,8 @@ tbody tr:nth-child(3) {
 .profile-details {
     flex: 1; /* Allows the details div to grow and fill space */
     margin-right: 20px; /* Optional spacing between the text and image */
-    padding-top: 15px;
+    padding-top: 10px;
+    
 }
 
 .profile-pfp {
@@ -571,5 +572,6 @@ tbody tr:nth-child(3) {
     border-width: 2px; /* Sets the width of the border */
     border-color: black; /* Sets the color of the border */
     display: inline-block; /* Makes the profile picture a block element */
+    margin-right: 3px;
 }
 
