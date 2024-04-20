@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.games.fun.fun_games.dto.PasswordDto;
 
 import java.util.List;
 
@@ -15,10 +17,12 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
@@ -49,18 +53,43 @@ public class UserController {
     }
 
     @PutMapping("/{username}/pfp")
-    public ResponseEntity<String> updateProfilePicture(@PathVariable String username, @RequestParam("pfpURL") String pfpURL) {
+    public ResponseEntity<?> updateProfilePicture(@PathVariable String username, @RequestParam("pfpURL") String pfpURL) {
         try {
             User user = userService.getUserByUsername(username);
             if (user == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
             }
             user.setProfilePictureURL(pfpURL);
             userService.saveUser(user);
             return ResponseEntity.ok("Profile picture updated successfully");
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not update profile picture", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not update profile picture");
         }
     }
+
+    @PatchMapping("/{username}/password")
+    public ResponseEntity<?> updatePassword(@PathVariable String username, @RequestBody PasswordDto passwordDto) {
+        try {
+            User user = userService.getUserByUsername(username);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            }
+            if (!passwordEncoder.matches(passwordDto.getOldPassword(), user.getPassword())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Incorrect password");
+            }
+            if (passwordDto.getNewPassword().length() <= 6) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("New password too short. Must be at least 6 characters.");
+            }
+            if (!passwordDto.getNewPassword().equals(passwordDto.getConfirmPassword())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords do not match");
+            }
+            user.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
+            userService.saveUser(user);
+            return ResponseEntity.ok("Password updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not update password");
+        }
+    }
+
 }
 

@@ -11,7 +11,7 @@
 </head>
 <body>
     <div id="modal" class="modal">
-        <div class="modal-content" id="postCreationDetails"></div>
+        <div class="modal-content" id="profileEditDetails"></div>
     </div>
     <div class="top-right-container">
         <p><b>Logged in as:</b></p>
@@ -89,6 +89,13 @@
             <h1>Upload Profile Picture</h1>
             <input type="text" id="pfpURL" placeholder="Image URL" class="search-input">
             <button onclick="uploadPfp()">Upload</button>
+        </div>
+    </div>
+    <div class="sub-container-wrapper" style="display: none;" id="editContainer">
+        <div class="sub-container">
+            <h2>Edit your profile</h2>
+            <a onclick="showChangePasswordModal()">Change password</a>
+            <a onclick="showEditProfileModal()">Edit profile</a>
         </div>
     </div>
 
@@ -170,8 +177,85 @@
             });
         }
 
+        function setupEditContainer() {
+            const username = document.getElementById('profileUsername').innerText;
+            const loggedInUsername = document.getElementById('username').innerText;
+            if (username === loggedInUsername) {
+                document.getElementById('editContainer').style.display = 'block';
+            }
+        }
+
+        function showChangePasswordModal() {
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('profileEditDetails');
+            modalContent.innerHTML = `
+                <div class="password-container">
+                    <p>Old password:</p>
+                    <input type="password" id="oldPassword">
+                    <p>New password:</p>
+                    <input type="password" id="newPassword">
+                    <p>Confirm new password:</p>
+                    <input type="password" id="confirmPassword"></br>
+                    <a onclick="updatePassword()" style="margin-top: 10px">Save</a>
+                    <div class="error-message" id="errorMessage" style="color: red; margin: 10px;"></div>
+                </div>
+            `;
+            modal.style.display = "block";
+            setTimeout(() => {
+                modal.style.top = "0"; // This will trigger the transition
+            }, 10);
+
+        }
+
+        function updatePassword() {
+            const username = document.getElementById('username').innerText;
+            const url = `/users/${username}/password`;
+
+            const csrfToken = document
+                .querySelector('meta[name="_csrf"]')
+                .getAttribute("content");
+            const csrfHeader = document
+                .querySelector('meta[name="_csrf_header"]')
+                .getAttribute("content");
+
+            const oldPassword = document.getElementById('oldPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            // Setup the request options
+            const requestOptions = {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken
+                },
+                body: JSON.stringify({
+                    oldPassword: oldPassword,
+                    newPassword: newPassword,
+                    confirmPassword: confirmPassword
+                })
+            };
+
+            // Make the fetch request
+            fetch(url, requestOptions)
+                .then(response => {
+                    if (!response.ok) {
+                        // Convert non-2xx HTTP responses into errors
+                        return response.text().then(text => { throw new Error(text || 'Server error'); });
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    console.log('Password successfully updated:', data);
+                    alert('Password successfully updated!');
+                })
+                .catch(error => {
+                    document.getElementById('errorMessage').innerText = error.message;
+                });
+        }
+
 
         window.onload = function() {
+            setupEditContainer();
             fetchUser();
             fetchUserRecords();
 
@@ -193,7 +277,6 @@
             };
 
             setFixedHeight();
-            
         };
 
         function uploadPfp() {
