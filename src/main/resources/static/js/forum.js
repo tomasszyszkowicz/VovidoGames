@@ -151,8 +151,11 @@ function createPostContainer(post) {
 	const postHeader = document.createElement("div");
 	postHeader.classList.add("post-header");
 	postHeader.innerHTML = `
-                    <span class="post-title">${post.title}</span>
-                    <span class="post-user">${post.user.username}</span>
+						<span class="post-title">${post.title}</span>
+						<div class="post-user-info">
+							<span onclick="redirectToProfile('${post.user.username}')" class="post-user">${post.user.username}</span>
+							<img class="post-pfp" src="${post.user.profilePictureURL}" onclick="redirectToProfile('${post.user.username}')">
+						</div>
                 `;
 
 	const postContent = document.createElement("div");
@@ -267,4 +270,13 @@ function getQueryParamater(paramater) {
  */
 function redirectToPost(postId) {
 	window.location.href = "/post/" + postId;
+}
+
+/**
+ * Redirects to the profile page.
+ * @param {string} username - The username to redirect to.
+ * @returns {void}
+ */
+function redirectToProfile(username) {
+	window.location.href = "/profile/" + username;
 }

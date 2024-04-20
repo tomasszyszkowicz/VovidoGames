@@ -16,8 +16,14 @@ function fetchPost() {
 		.then((data) => {
 			document.getElementById("titleHeader").innerText = data.title;
 			document.getElementById("postTitle").innerText = data.title;
-			document.getElementById("postAuthor").innerText =
-				data.user.username;
+			document.getElementById("postAuthor").innerText = data.user.username;
+			document.getElementById("postAuthor").onclick = function () {
+				redirectToProfile(data.user.username);
+			}
+			document.getElementById("pfp").src = data.user.profilePictureURL;
+			document.getElementById("pfp").onclick = function () {
+				redirectToProfile(data.user.username);
+			}
 			document.getElementById("postContent").innerText = data.content;
 			let formattedDate = data.dateCreated
 				.substring(0, 16)
@@ -67,7 +73,10 @@ function fetchComments() {
 				commentDiv.innerHTML = `
                     <div class="comment-header">
                         <span class="comment-date">${formattedDate}</span>
-                        <span class="comment-user">${comment.user.username}</span>
+						<div class="post-user-info">
+							<span onclick="redirectToProfile('${comment.user.username}')" class="comment-user">${comment.user.username}</span>
+							<img class="comment-pfp" src="${comment.user.profilePictureURL}" onclick="redirectToProfile('${comment.user.username}')">
+						</div>
                     </div>
                     <div class="comment-content">
                         <p>${comment.content}</p>
@@ -261,4 +270,13 @@ function turnPageDown() {
 function getQueryParamater(paramater) {
 	const urlParams = new URLSearchParams(window.location.search);
 	return urlParams.get(paramater);
+}
+
+/**
+ * Redirects to the profile page.
+ * @param {string} username - The username to redirect to.
+ * @returns {void}
+ */
+function redirectToProfile(username) {
+	window.location.href = "/profile/" + username;
 }
