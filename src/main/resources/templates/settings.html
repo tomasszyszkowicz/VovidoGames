@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="/css/forum.css" th:href="@{/css/forum.css}">
+    <title>Forum</title>
+</head>
+<body>
+    <div id="modal" class="modal">
+        <div class="modal-content" id="profileEditDetails"></div>
+    </div>
+    <div class="top-right-container">
+        <p><b>Logged in as:</b></p>
+        <p><span id="username" th:text="${username}">Username</span></p>
+        <p><span th:text="${email}">email</span></p>
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="top-left-container">
+        <p><b>Fun Games</b></p>
+        <a href="/home">Home</a>
+    </div>
+    <div class="games-container">
+        <p><b>Games</b></p>
+        <a class="nav-link" href="/pexeso-menu">Pexeso</a>
+        <a class="nav-link" href="/snake-game">Snake</a>
+        <p><b>Leaderboards</b></p>
+        <a class="nav-link" href="/leaderboards">Leaderboards</a>
+        <p><b>Forum</b></p>
+        <a class="nav-link" href="/forum">Forum</a>
+    </div>
+    <h1>Settings</h1>
+    <div class="sub-container-wrapper" id="editContainer">
+        <div class="left-wrapper">
+            <div class="sub-container">
+                <div class="profile-details">
+                    <p><span id="detailsUsername"></span></p>
+                    <a onclick="showChangeUsernameModal()">Edit username</a>
+                </div>
+            </div>
+            <div class="sub-container">
+                <div class="profile-details">
+                    <p><span id="detailsEmail"></span></p>
+                    <a onclick="showChangeEmailModal()">Edit email</a>
+                </div>
+            </div>
+        </div>
+        <div class="right-wrapper">
+            <div class="sub-container">
+                <img class="profile-pfp" id="pfp" src="https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"><br>
+                <a style="margin-top: 10px;" onclick="showChangeAvatarModal()">Edit avatar</a>
+            </div>
+            <div class="sub-container" style="padding: 28px">
+                <a onclick="showChangePasswordModal()">Edit Password</a>
+            </div>
+        </div>
+    </div>
+    <script src="/js/settings.js" th:src="@{/js/settings.js}"></script>
+    <script>
+        window.onload = function() {
+            fetchUser();
+        };
+    </script>
+</body>
+</html>

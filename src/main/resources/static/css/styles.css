@@ -336,14 +336,20 @@ h1, .sub-heading {
 }
 
 .close {
-    color: #aaa;
+    color: white;
     float: right;
-    font-size: 28px;
+    font-size: 25px;
     font-weight: bold;
+    background-color: red;
+    height: 40px;
+    width: 40px;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 40px;
 }
 .close:hover,
 .close:focus {
-    color: black;
+    background-color: darkred;
     text-decoration: none;
     cursor: pointer;
 }

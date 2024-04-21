@@ -90,6 +90,15 @@ public class HtmlController {
         return "forum";
     }
 
+    /**
+     * Handles the request for the post page.
+     * 
+     * @param model the model object to be populated with data
+     * @param id the id of the post to be displayed
+     * @param bottom the bottom index of the comments to be displayed
+     * @param top the top index of the comments to be displayed
+     * @return the name of the post template
+     */
     @GetMapping("/post/{id}")
     public String post(Model model, 
                         @PathVariable Long id,
@@ -101,12 +110,32 @@ public class HtmlController {
         return "post";
     }
 
+    /**
+     * Handles the request for the profile page.
+     * 
+     * @param model the model object to be populated with data
+     * @param username the username of the profile to be displayed
+     * @return the name of the profile template
+     */
     @GetMapping("profile/{username}")
     public String profile(Model model, @PathVariable String username) {
         model.addAttribute("username", getLoggedInUsername());
         model.addAttribute("email", getLoggedInUserEmail());
         model.addAttribute("profileUsername", username);
         return "profile";
+    }
+
+    /**
+     * Handles the request for the settings page.
+     * 
+     * @param model the model object to be populated with data
+     * @return the name of the settings template
+     */
+    @GetMapping("settings")
+    public String settings(Model model) {
+        model.addAttribute("username", getLoggedInUsername());
+        model.addAttribute("email", getLoggedInUserEmail());
+        return "settings";
     }
 
     /**
