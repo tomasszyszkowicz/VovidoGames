@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.games.fun.fun_games.dto.PasswordDto;
+import com.games.fun.fun_games.dto.EmailDto;
+import com.games.fun.fun_games.dto.UsernameDto;
+import com.games.fun.fun_games.dto.ProfilePictureDto;
 
 import java.util.List;
 
@@ -52,21 +55,6 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{username}/pfp")
-    public ResponseEntity<?> updateProfilePicture(@PathVariable String username, @RequestParam("pfpURL") String pfpURL) {
-        try {
-            User user = userService.getUserByUsername(username);
-            if (user == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-            }
-            user.setProfilePictureURL(pfpURL);
-            userService.saveUser(user);
-            return ResponseEntity.ok("Profile picture updated successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not update profile picture");
-        }
-    }
-
     @PatchMapping("/{username}/password")
     public ResponseEntity<?> updatePassword(@PathVariable String username, @RequestBody PasswordDto passwordDto) {
         try {
@@ -88,6 +76,60 @@ public class UserController {
             return ResponseEntity.ok("Password updated successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not update password");
+        }
+    }
+
+    @PatchMapping("/{username}/email")
+    public ResponseEntity<?> updateEmail(@PathVariable String username, @RequestBody EmailDto emailDto) {
+        try {
+            User user = userService.getUserByUsername(username);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            }
+            if (!passwordEncoder.matches(emailDto.getPassword(), user.getPassword())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Incorrect password");
+            }
+            user.setEmail(emailDto.getEmail());
+            userService.saveUser(user);
+            return ResponseEntity.ok("Email updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not update email");
+        }
+    }
+
+    @PatchMapping("/{username}/username")
+    public ResponseEntity<?> updateUsername(@PathVariable String username, @RequestBody UsernameDto usernameDto) {
+        try {
+            User user = userService.getUserByUsername(username);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            }
+            if (!passwordEncoder.matches(usernameDto.getPassword(), user.getPassword())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Incorrect password");
+            }
+            user.setUsername(usernameDto.getUsername());
+            userService.saveUser(user);
+            return ResponseEntity.ok("Username updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not update username");
+        }
+    }
+
+    @PatchMapping("/{username}/pfp")
+    public ResponseEntity<?> updateProfilePicture(@PathVariable String username, @RequestBody ProfilePictureDto profilePictureDto) {
+        try {
+            User user = userService.getUserByUsername(username);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            }
+            if (!passwordEncoder.matches(profilePictureDto.getPassword(), user.getPassword())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Incorrect password");
+            }
+            user.setProfilePictureURL(profilePictureDto.getProfilePictureURL());
+            userService.saveUser(user);
+            return ResponseEntity.ok("Profile picture updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not update profile picture");
         }
     }
 
