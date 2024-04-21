@@ -15,6 +15,7 @@ function showChangePasswordModal() {
     const modal = document.getElementById('modal');
     const modalContent = document.getElementById('profileEditDetails');
     modalContent.innerHTML = `
+        <div class="close">✖</div><br>
         <div class="password-container">
             <p>Old password:</p>
             <input type="password" id="oldPassword">
@@ -23,7 +24,7 @@ function showChangePasswordModal() {
             <p>Confirm new password:</p>
             <input type="password" id="confirmPassword"></br>
             <a onclick="updatePassword()" style="margin-top: 10px">Save</a>
-            <div class="error-message" id="errorMessage" style="color: red; margin: 10px;"></div>
+            <div class="modal-error-message" id="errorMessage"></div>
         </div>
     `;
     modal.style.display = "block";
@@ -90,7 +91,7 @@ function showChangeEmailModal() {
             <p>Password:</p>
             <input type="password" id="emailPassword"></br>
             <a onclick="updateEmail()" style="margin-top: 10px">Save</a>
-            <div class="error-message" id="errorMessage" style="color: red; margin: 10px;"></div>
+            <div class="modal-error-message" id="errorMessage"></div>
         </div>
     `;
     modal.style.display = "block";
@@ -146,6 +147,7 @@ function showChangeUsernameModal() {
     const modal = document.getElementById('modal');
     const modalContent = document.getElementById('profileEditDetails');
     modalContent.innerHTML = `
+        <div class="close">✖</div>
         <div class="password-container">
             <p>New username:</p>
             <input type="text" id="newUsername"></br>
@@ -207,6 +209,7 @@ function showChangeAvatarModal() {
     const modal = document.getElementById('modal');
     const modalContent = document.getElementById('profileEditDetails');
     modalContent.innerHTML = `
+        <div class="close">✖</div>
         <div class="password-container">
             <p>Avatar URL:</p>
             <input type="text" id="avatarURL" placeholder="Image URL"></br>

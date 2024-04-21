@@ -319,9 +319,13 @@ h1, .sub-heading {
     border: 1px solid #888;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    width: 50%;
-    height: 50%;
+    width: 40%; /* Responsive width */
+    height: auto; /* Flexible height based on content */
+    min-width: 300px; /* Minimum width */
+    max-height: 80%; /* Maximum height to avoid touching the viewport's top and bottom */
+    overflow: auto; /* Allows scrolling within the modal if content is too large */
 }
+
 
 .modal-content textarea {
     width: 80%;
@@ -333,6 +337,12 @@ h1, .sub-heading {
     font-size: 14px;
     box-sizing: border-box;
     resize: none;
+}
+
+.modal-error-message {
+    height: 20px;
+    color: red;
+    margin: 10px 0; /* Maintain consistent spacing above and below */
 }
 
 .close {
