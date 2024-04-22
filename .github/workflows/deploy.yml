@@ -23,6 +23,6 @@ jobs:
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: |
-        heroku login -a
+        heroku login -i
         git remote add heroku https://git.heroku.com/vovido-games.git
         git push heroku HEAD:master
