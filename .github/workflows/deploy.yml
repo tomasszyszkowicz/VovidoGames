@@ -34,6 +34,10 @@ jobs:
         git config --global http.extraheader "Authorization: Bearer ${HEROKU_API_KEY}"
 
     - name: Push to Heroku
-      run: git push heroku HEAD:master
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      run: |
+        git push https://apikey:${HEROKU_API_KEY}@git.heroku.com/vovido-games.git HEAD:master
+
 
 
