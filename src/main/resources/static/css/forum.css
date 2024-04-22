@@ -9,14 +9,14 @@
 }
 
 .post-header {
-    padding: 10px; /* Add padding to the header */
-    border: 1px solid black; /* Add a border at the bottom */
-    border-radius: 8px 8px 0 0; /* Round the top corners */
-    background-color: #4b9beb; /* Light background color */
-    color: #007bff; /* Text color */
-    display: flex; /* Use flexbox for layout */
-    justify-content: space-between; /* Align children to the start and end of the container */
-    align-items: center; /* Center items vertically */
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 8px 8px 0 0;
+    background-color: #4b9beb;
+    color: #007bff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .post-title {
@@ -24,9 +24,34 @@
     color: white;
 }
 
+.post-user-info { /* Additional container for user info and profile picture */
+    display: flex;
+    align-items: center; /* This will vertically center the text with the image */
+}
+
 .post-user {
     font-style: italic;
     color: white;
+    margin-bottom: 0; /* Remove margin-bottom to ensure vertical centering */
+}
+
+.post-user:hover {
+    color: black;
+    cursor: pointer;
+}
+
+.post-pfp {
+    width: 30px;
+    height: 30px;
+    border-style: solid;
+    border-width: 0.5px;
+    border-color: white;
+    margin-left: 10px;
+}
+
+.post-pfp:hover {
+    border-color: black;
+    cursor: pointer;
 }
 
 .post-content {
@@ -98,7 +123,7 @@
 }
 
 .comment-header {
-    padding: 10px; /* Add padding to the header */
+    padding: 7px; /* Add padding to the header */
     border: 1px solid black; /* Add a border at the bottom */
     border-radius: 8px 8px 0 0; /* Round the top corners */
     background-color: #7eb8f1; /* Light background color */
@@ -113,8 +138,26 @@
     color: white;
 }
 
+.comment-user:hover {
+    color: black;
+    cursor: pointer;
+}
+
 .comment-date {
     font-style: italic;
     color: #333;
 }
 
+.comment-pfp {
+    width: 21px;
+    height: 21px;
+    border-style: solid;
+    border-width: 0.5px;
+    border-color: white;
+    margin-left: 10px;
+}
+
+.comment-pfp:hover {
+    border-color: black;
+    cursor: pointer;
+}

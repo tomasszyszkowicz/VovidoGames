@@ -11,7 +11,7 @@
 </head>
 <body>
     <div id="modal" class="modal">
-        <div class="modal-content" id="postCreationDetails"></div>
+        <div class="modal-content" id="profileEditDetails"></div>
     </div>
     <div class="top-right-container">
         <p><b>Logged in as:</b></p>
@@ -35,28 +35,41 @@
         <a class="nav-link" onclick="redirectToUserProfile()">Your Profile</a>
         <a class="nav-link" href="/settings">Settings</a>
     </div>
-    <h1>Forum</h1>
-    <div class="sub-container-wrapper">
-        <div class="sub-container">
-            <a onclick="showPostModal()">Create Post</a>
+    <h1>Settings</h1>
+    <div class="sub-container-wrapper" id="editContainer">
+        <div class="left-wrapper">
+            <div class="sub-container">
+                <div class="profile-details">
+                    <p>Username: <b><span id="detailsUsername"></span></b></p>
+                    <a onclick="showChangeUsernameModal()">Edit username</a>
+                </div>
+            </div>
+            <div class="sub-container">
+                <div class="profile-details">
+                    <p>Email:</p>
+                    <p><b><span id="detailsEmail"></span></b></p>
+                    <a onclick="showChangeEmailModal()">Edit email</a>
+                </div>
+            </div>
+        </div>
+        <div class="right-wrapper">
+            <div class="sub-container">
+                <p>Avatar:</p>
+                <img class="profile-pfp" id="pfp" src="https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"><br>
+                <a style="margin-top: 10px;" onclick="showChangeAvatarModal()">Edit avatar</a>
+            </div>
+            <div class="sub-container" style="padding: 19px;">
+                <a onclick="showChangePasswordModal()">Change Password</a>
+            </div>
         </div>
     </div>
-    <div class="sub-container-wrapper">
-        <div style="padding-bottom: 10px;" class="sub-container" id="postContainer">
-            <h2 id="postsHeader">Posts</h2>
-            <a id="turnPageDownButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageDown()">&lt;</a><a id="turnPageUpButton" style="margin: 5px; margin-top: 10px;" onclick="turnPageUp()">></a>
-            <p>[<span id="globalBottom"></span> - <span id="globalTop"></span>]</p>
-        </div>
-    </div>
-
-    <script src="/js/forum.js" th:src="@{/js/forum.js}"></script>
+    <script src="/js/settings.js" th:src="@{/js/settings.js}"></script>
     <script src="/js/profile.js" th:src="@{/js/profile.js}"></script> 
 
     <script>
         window.onload = function() {
-            setTopAndBottom();
-            fetchPosts();
-        }
+            fetchUser();
+        };
     </script>
 </body>
 </html>

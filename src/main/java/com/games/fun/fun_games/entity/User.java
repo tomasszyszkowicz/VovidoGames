@@ -23,6 +23,7 @@ public class User {
     
     private String password;
     private String email;
+    private String profilePictureURL;
 
     /**
      * Retrieves the ID of the user.
@@ -94,5 +95,23 @@ public class User {
      */
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    /**
+     * Retrieves the profile picture URL of the user.
+     * 
+     * @return The profile picture URL of the user.
+     */
+    public String getProfilePictureURL() {
+        return profilePictureURL;
+    }
+
+    /**
+     * Sets the profile picture URL of the user.
+     * 
+     * @param profilePictureURL The profile picture URL of the user.
+     */
+    public void setProfilePictureURL(String profilePictureURL) {
+        this.profilePictureURL = profilePictureURL;
     }
 }

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="/css/forum.css" th:href="@{/css/forum.css}">
+    <title>Forum</title>
+</head>
+<body>
+    <div id="modal" class="modal">
+        <div class="modal-content" id="profileEditDetails"></div>
+    </div>
+    <div class="top-right-container">
+        <p><b>Logged in as:</b></p>
+        <p><span id="username" th:text="${username}">Username</span></p>
+        <p><span th:text="${email}">email</span></p>
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="top-left-container">
+        <p><b>Fun Games</b></p>
+        <a href="/home">Home</a>
+    </div>
+    <div class="games-container">
+        <p><b>Games</b></p>
+        <a class="nav-link" href="/pexeso-menu">Pexeso</a>
+        <a class="nav-link" href="/snake-game">Snake</a>
+        <p><b>Leaderboards</b></p>
+        <a class="nav-link" href="/leaderboards">Leaderboards</a>
+        <p><b>Forum</b></p>
+        <a class="nav-link" href="/forum">Forum</a>
+        <p><b>Profiles</b></p>
+        <a class="nav-link" onclick="redirectToUserProfile()">Your Profile</a>
+        <a class="nav-link" href="/settings">Settings</a>
+    </div>
+    <h1><span id="profileUsername" th:text="${profileUsername}"></span></h1>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <div style="text-align: left;">
+                <div class="profile-container">
+                    <div class="profile-details">
+                        <p>Username: <b><span id="detailsUsername"></span></b></p>
+                        <p>Email: <b><span id="detailsEmail"></span></b></p>
+                    </div>
+                    <img class="profile-pfp" id="pfp" src="https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg">
+                </div>                
+            </div>
+            <h3>Records</h3>
+            <div style="text-align: left;">
+                <table class="record-table">
+                    <tr>
+                      <th>Game</th>
+                      <th>Record</th>
+                    </tr>
+                    <tr>
+                      <td>Snake</td>
+                      <td><b><span id="snakeRecord"></span></b></td>
+                    </tr>
+                    <tr>
+                      <td>Easy Pexeso</td>
+                      <td><b><span id="easyPexesoRecord"></span></b></td>
+                    </tr>
+                    <tr>
+                      <td>Medium Pexeso</td>
+                      <td><b><span id="mediumPexesoRecord"></span></b></td>
+                    </tr>
+                    <tr>
+                      <td>Hard Pexeso</td>
+                      <td><b><span id="hardPexesoRecord"></span></b></td>
+                    </tr>
+                  </table>
+                  
+            </div>
+        </div>
+    </div>
+
+    <div class="sub-container-wrapper">
+        <div class="sub-container" id="search-container">
+            <h2>Search for other players</h2>
+            <div class="input-group">
+                <input type="text" id="searchInput" placeholder="Username" class="search-input">
+                <a id="viewButton" class="a-unavailable" style="margin-top: -10px;" onclick="redirectToProfile()">View</a>
+            </div>
+            <div id="searchResults" class="dropdown-content"></div>
+        </div>
+    </div>
+    <script src="/js/profile.js" th:src="@{/js/profile.js}"></script> 
+    <script>
+        function fetchUser() {
+            const username = document.getElementById('profileUsername').innerText;
+            const url = '/users/' + username;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('detailsUsername').innerText = data.username;
+                    document.getElementById('detailsEmail').innerText = data.email;
+                    document.getElementById('pfp').src = data.profilePictureURL;
+                });
+        }
+
+        function fetchUserRecords() {
+            const username = document.getElementById('profileUsername').innerText;
+            const url = '/records/' + username;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('snakeRecord').innerText = data.snakeHighScore;
+                    document.getElementById('easyPexesoRecord').innerText = data.pexesoHighScore_easy;
+                    document.getElementById('mediumPexesoRecord').innerText = data.pexesoHighScore_medium;
+                    document.getElementById('hardPexesoRecord').innerText = data.pexesoHighScore_hard;
+                });
+        } 
+
+        function redirectToProfile() {
+            const username = document.getElementById('searchInput').value;
+            window.location.href = '/profile/' + username;
+        }
+
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const query = this.value;
+            const viewButton = document.getElementById('viewButton');
+            viewButton.classList.add('a-unavailable'); // Make the button unavailable
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = ''; // Clear previous results
+
+            if (query.length > 0) {
+                const url = '/users?query=' + encodeURIComponent(query);
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            let list = '';
+                            for (let i = 0; i < data.length; i++) {
+                                list += `<div class="dropdown-item" data-username="${data[i].username}"><p style="margin: 0px;">${data[i].username} | ${data[i].email}</p></div>`;
+                            }
+                            resultsContainer.innerHTML = list;
+                            resultsContainer.style.display = 'block'; // Show the dropdown
+                            setupDropdownItemListeners(); // Setup listeners for each dropdown item
+                        } else {
+                            resultsContainer.style.display = 'none'; // Hide the dropdown if no results
+                        }
+                    });
+            } else {
+                resultsContainer.style.display = 'none'; // Hide the dropdown if input is cleared
+            }
+        });
+
+        function setupDropdownItemListeners() {
+            const items = document.querySelectorAll('.dropdown-item');
+            const resultsContainer = document.getElementById('searchResults');
+            items.forEach(item => {
+                item.addEventListener('click', function() {
+                    const username = this.getAttribute('data-username');
+                    const searchInput = document.getElementById('searchInput');
+                    searchInput.value = username; // Set input value to username from data attribute
+
+                    const viewButton = document.querySelector('.a-unavailable');
+                    viewButton.classList.remove('a-unavailable'); // Make the button available
+                    resultsContainer.style.display = 'none'; // Hide the dropdown
+                });
+            });
+        }
+
+        function showChangePasswordModal() {
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('profileEditDetails');
+            modalContent.innerHTML = `
+                <div class="password-container">
+                    <p>Old password:</p>
+                    <input type="password" id="oldPassword">
+                    <p>New password:</p>
+                    <input type="password" id="newPassword">
+                    <p>Confirm new password:</p>
+                    <input type="password" id="confirmPassword"></br>
+                    <a onclick="updatePassword()" style="margin-top: 10px">Save</a>
+                    <div class="error-message" id="errorMessage" style="color: red; margin: 10px;"></div>
+                </div>
+            `;
+            modal.style.display = "block";
+            setTimeout(() => {
+                modal.style.top = "0"; // This will trigger the transition
+            }, 10);
+
+        }
+
+        function updatePassword() {
+            const username = document.getElementById('username').innerText;
+            const url = `/users/${username}/password`;
+
+            const csrfToken = document
+                .querySelector('meta[name="_csrf"]')
+                .getAttribute("content");
+            const csrfHeader = document
+                .querySelector('meta[name="_csrf_header"]')
+                .getAttribute("content");
+
+            const oldPassword = document.getElementById('oldPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            // Setup the request options
+            const requestOptions = {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken
+                },
+                body: JSON.stringify({
+                    oldPassword: oldPassword,
+                    newPassword: newPassword,
+                    confirmPassword: confirmPassword
+                })
+            };
+
+            // Make the fetch request
+            fetch(url, requestOptions)
+                .then(response => {
+                    if (!response.ok) {
+                        // Convert non-2xx HTTP responses into errors
+                        return response.text().then(text => { throw new Error(text || 'Server error'); });
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    console.log('Password successfully updated:', data);
+                    alert('Password successfully updated!');
+                })
+                .catch(error => {
+                    document.getElementById('errorMessage').innerText = error.message;
+                });
+        }
+
+
+        window.onload = function() {
+            fetchUser();
+            fetchUserRecords();
+
+            
+            const setFixedHeight = () => {
+                const container = document.getElementById('search-container');
+                if (!container) {
+                    console.error('Container not found!');
+                    return;
+                }
+                console.log('Container offsetHeight before setting:', container.offsetHeight);
+                const currentHeight = container.offsetHeight - 40; // Get the current height in pixels
+                if (currentHeight > 0) { // Ensure the container has a height before setting it
+                    container.style.height = currentHeight + 'px'; // Set the fixed height
+                    console.log('Fixed height set to:', currentHeight);
+                } else {
+                    console.log('Container height not set or container is not visible.');
+                }
+            };
+
+            setFixedHeight();
+        };
+
+        function uploadPfp() {
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            const username = document.getElementById('username').innerText;
+            const pfpURL = document.getElementById('pfpURL').value; // Input element where users enter the URL
+            const url = '/users/' + username + '/pfp';
+
+            fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    [csrfHeader]: csrfToken
+                },
+                body: 'pfpURL=' + encodeURIComponent(pfpURL)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Profile picture uploaded successfully!');
+                } else {
+                    response.text().then(text => alert('Failed to upload profile picture: ' + text));
+                }
+            });
+        }
+    </script>
+</body>
+</html>

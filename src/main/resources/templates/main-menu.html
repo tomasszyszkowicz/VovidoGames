@@ -30,7 +30,7 @@
     <h1>Welcome to Fun Games</h1>
     <div class="top-right-container">
         <p><b>Logged in as:</b></p>
-        <p><span th:text="${username}">Username</span></p>
+        <p><span id="username" th:text="${username}">Username</span></p>
         <p><span th:text="${email}">email</span></p>
         <a href="/logout">Logout</a>
     </div>
@@ -46,6 +46,9 @@
         <a class="nav-link" href="/leaderboards">Leaderboards</a>
         <p><b>Forum</b></p>
         <a class="nav-link" href="/forum">Forum</a>
+        <p><b>Profiles</b></p>
+        <a class="nav-link" onclick="redirectToUserProfile()">Your Profile</a>
+        <a class="nav-link" href="/settings">Settings</a>
     </div>
 
     <div class="sub-container-wrapper">
@@ -91,12 +94,16 @@
         </div>
         <div class="right-wrapper">
             <div class="sub-container">
-                <h2>Placeholder</h2>
+                <h2>Your profile</h2>
+                <p>Check your profile</p>
+                <a onclick="redirectToUserProfile()">Your profile</a>
             </div>
         </div>
 
     </div>
     <script src="/js/dataOperations.js"></script>
+    <script src="/js/profile.js" th:src="@{/js/profile.js}"></script> 
+
     <script>
         var currentDifficulty = 1;
         var isFirstLoad = true;

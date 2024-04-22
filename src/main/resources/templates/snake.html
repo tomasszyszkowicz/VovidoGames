@@ -31,6 +31,9 @@
         <a class="nav-link" href="/leaderboards">Leaderboards</a>
         <p><b>Forum</b></p>
         <a class="nav-link" href="/forum">Forum</a>
+        <p><b>Profiles</b></p>
+        <a class="nav-link" onclick="redirectToUserProfile()">Your Profile</a>
+        <a class="nav-link" href="/settings">Settings</a>
     </div>
     <div class="middle-right-container">
         <p><b>Leaderboard</b></p>
@@ -72,6 +75,7 @@
 
     <script src="/js/dataOperations.js" th:src="@{/js/dataOperations.js}"></script>
     <script src="/js/snake.js" th:src="@{/js/snake.js}"></script>
+    <script src="/js/profile.js" th:src="@{/js/profile.js}"></script> 
 
     <script>
         window.onload = function() {
