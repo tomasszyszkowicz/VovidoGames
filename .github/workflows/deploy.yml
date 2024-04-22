@@ -1,0 +1,29 @@
+name: Deploy to Heroku
+
+on:
+  push:
+    branches:
+      - '**'  # Triggers the workflow on push to any branch
+  pull_request:
+    branches:
+      - '**'  # Triggers the workflow on pull requests to any branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Install Heroku CLI
+      run: |
+        curl https://cli-assets.heroku.com/install.sh | sh
+
+    - name: Heroku Login
+      run: heroku login --api-key ${{ secrets.HEROKU_API_KEY }}
+
+    - name: Add Heroku Git remote
+      run: git remote set-url heroku https://git.heroku.com/vovido-games.git
+
+    - name: Deploy to Heroku
+      run: git push heroku HEAD:master
