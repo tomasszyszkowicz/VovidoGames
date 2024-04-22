@@ -23,7 +23,8 @@ jobs:
 
     - name: Add Heroku remote
       run: |
-        git remote set-url https://git.heroku.com/vovido-games.git
+        git remote add heroku https://git.heroku.com/vovido-games.git
+        git remote set-url heroku https://git.heroku.com/vovido-games.git
 
 
     - name: Authenticate with Heroku
