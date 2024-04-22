@@ -23,6 +23,7 @@ jobs:
         heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
         heroku_email: tomasszyszkowicz@email.cz  # Replace with your Heroku account email
         usedocker: false  # Set this to true if you are deploying a Docker container
+        branch: ${{ github.ref }}
  
 
 
