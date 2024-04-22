@@ -9,20 +9,27 @@ on:
       - '**'  # Triggers the workflow on pull requests to any branch
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
 
-    # Deploy to Heroku
+    - name: Set up Heroku Git remote
+      run: heroku git:remote -a vovido-games
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
+    - name: List Git remotes
+      run: git remote -v
+
     - name: Deploy to Heroku
-      uses: akhileshns/heroku-deploy@v3.12.12 # This action simplifies Heroku deployments
+      uses: akhileshns/heroku-deploy@v3.12.12
       with:
         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
         heroku_app_name: vovido-games
         heroku_email: tomasszyszkowicz@email.cz
         branch: ${{ github.ref_name }}
+
 
  
 
