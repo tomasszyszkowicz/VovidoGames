@@ -22,7 +22,7 @@ jobs:
 
     - name: Setup Heroku
       run: |
-        git remote add heroku
+        git remote add heroku git@heroku.com:vovido-games.git
         git remote set-url heroku git@heroku.com:vovido-games.git
 
     - name: Push to Heroku
