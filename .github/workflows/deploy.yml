@@ -20,7 +20,7 @@ jobs:
       uses: akhileshns/heroku-deploy@v3.12.12 # This action simplifies Heroku deployments
       with:
         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-        heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+        heroku_app_name: vovido-games
         heroku_email: tomasszyszkowicz@email.cz  # Replace with your Heroku account email
         branch: ${{ github.ref }}
  
