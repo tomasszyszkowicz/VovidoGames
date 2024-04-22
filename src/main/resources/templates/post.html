@@ -32,6 +32,9 @@
         <a class="nav-link" href="/leaderboards">Leaderboards</a>
         <p><b>Forum</b></p>
         <a class="nav-link" href="/forum">Forum</a>
+        <p><b>Profiles</b></p>
+        <a class="nav-link" onclick="redirectToUserProfile()">Your Profile</a>
+        <a class="nav-link" href="/settings">Settings</a>
     </div>
     <h1 id="titleHeader"></h1>
     <div class="sub-container-wrapper">
@@ -70,6 +73,7 @@
             <a href="/forum">Back to Forum</a>
     </div>
     <script src="/js/post.js" th:src="@{/js/post.js}"></script>
+    <script src="/js/profile.js" th:src="@{/js/profile.js}"></script> 
     <script>
         window.onload  = function() {
             setTopAndBottom();

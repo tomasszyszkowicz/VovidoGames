@@ -31,6 +31,9 @@
         <a class="nav-link" href="/leaderboards">Leaderboards</a>
         <p><b>Forum</b></p>
         <a class="nav-link" href="/forum">Forum</a>
+        <p><b>Profiles</b></p>
+        <a class="nav-link" onclick="redirectToUserProfile()">Your Profile</a>
+        <a class="nav-link" href="/settings">Settings</a>
     </div>
     <h1><span id="profileUsername" th:text="${profileUsername}"></span></h1>
     <div class="sub-container-wrapper">
@@ -83,22 +86,7 @@
             <div id="searchResults" class="dropdown-content"></div>
         </div>
     </div>
-
-    <div class="sub-container-wrapper">
-        <div class="sub-container">
-            <h1>Upload Profile Picture</h1>
-            <input type="text" id="pfpURL" placeholder="Image URL" class="search-input">
-            <button onclick="uploadPfp()">Upload</button>
-        </div>
-    </div>
-    <div class="sub-container-wrapper" style="display: none;" id="editContainer">
-        <div class="sub-container">
-            <h2>Edit your profile</h2>
-            <a onclick="showChangePasswordModal()">Change password</a>
-            <a onclick="showEditProfileModal()">Edit profile</a>
-        </div>
-    </div>
-
+    <script src="/js/profile.js" th:src="@{/js/profile.js}"></script> 
     <script>
         function fetchUser() {
             const username = document.getElementById('profileUsername').innerText;
@@ -177,14 +165,6 @@
             });
         }
 
-        function setupEditContainer() {
-            const username = document.getElementById('profileUsername').innerText;
-            const loggedInUsername = document.getElementById('username').innerText;
-            if (username === loggedInUsername) {
-                document.getElementById('editContainer').style.display = 'block';
-            }
-        }
-
         function showChangePasswordModal() {
             const modal = document.getElementById('modal');
             const modalContent = document.getElementById('profileEditDetails');
@@ -255,7 +235,6 @@
 
 
         window.onload = function() {
-            setupEditContainer();
             fetchUser();
             fetchUserRecords();
 
