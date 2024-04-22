@@ -23,6 +23,16 @@ public class HtmlController {
     UserRepository userRepository;
 
     /**
+     * Handles the request for the root page.
+     * 
+     * @return the name of the login template
+     */
+    @GetMapping("/")
+    public String root() {
+        return "login";
+    }
+
+    /**
      * Handles the request for the players UI page.
      *  
      * @param model the model object to be populated with data
