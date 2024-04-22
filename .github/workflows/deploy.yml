@@ -9,28 +9,28 @@ on:
       - '**'  # Triggers the workflow on pull requests to any branch
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Check out code
+    - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install SSH Key
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-    - name: Setup Heroku
+    - name: Set up Git configuration
       run: |
-        git remote add heroku git@heroku.com:vovido-games.git
-        git remote set-url heroku git@heroku.com:vovido-games.git
+        git config --global user.name "tomasszyszkowicz"
+        git config --global user.email "tomasszyszkowicz@email.cz"
 
-    - name: Debug SSH connection
-      run: ssh -vT git@heroku.com
+    - name: Add Heroku remote
+      run: git remote add heroku https://git.heroku.com/vovido-games.git
 
+    - name: Authenticate with Heroku
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      run: |
+        git config --global http.extraheader "Authorization: Bearer ${HEROKU_API_KEY}"
 
     - name: Push to Heroku
-      run: |
-        git push heroku HEAD:master
+      run: git push heroku HEAD:master
 
 
