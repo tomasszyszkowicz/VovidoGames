@@ -15,19 +15,17 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2
 
-    - name: Install Heroku CLI
-      run: |
-        curl https://cli-assets.heroku.com/install.sh | sh
+    - name: Install SSH Key
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Configure Git for Heroku Push
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+    - name: Setup Heroku
       run: |
-        heroku git:remote -a vovido-games
-        git config --global user.email "tomasszyszkowicz@email.cz"
-        git config --global user.name "tomasszyszkowicz"
+        git remote set-url heroku git@heroku.com:vovido-games.git
 
     - name: Push to Heroku
       run: |
         git push heroku HEAD:master
+
 
