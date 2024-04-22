@@ -15,15 +15,9 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2
 
-    - name: Install Heroku CLI
+    - name: Push to Heroku
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: |
-        curl https://cli-assets.heroku.com/install.sh | sh
-
-    - name: Heroku Login
-      run: heroku login --api-key ${{ secrets.HEROKU_API_KEY }}
-
-    - name: Add Heroku Git remote
-      run: git remote set-url heroku https://git.heroku.com/vovido-games.git
-
-    - name: Deploy to Heroku
-      run: git push heroku HEAD:master
+        git remote set-url heroku https://git.heroku.com/vovido-games.git
+        git push heroku HEAD:master
