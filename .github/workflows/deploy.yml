@@ -21,11 +21,10 @@ jobs:
         git config user.name "tomasszyszkowicz"
         git config user.email "tomasszyszkowicz@email.cz"
 
-    - name: Add Heroku remote
+    - name: Set up Heroku remote
       run: |
+        git remote remove heroku || true  # Ensure no existing remote interferes
         git remote add heroku https://git.heroku.com/vovido-games.git
-        git remote set-url heroku https://git.heroku.com/vovido-games.git
-
 
     - name: Authenticate with Heroku
       env:
@@ -34,10 +33,4 @@ jobs:
         git config --global http.extraheader "Authorization: Bearer ${HEROKU_API_KEY}"
 
     - name: Push to Heroku
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      run: |
-        git push https://apikey:${HEROKU_API_KEY}@git.heroku.com/vovido-games.git HEAD:master
-
-
-
+      run: git push heroku HEAD:master
