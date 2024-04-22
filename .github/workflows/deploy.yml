@@ -44,7 +44,7 @@ jobs:
 
     - name: Push to Heroku
       run: |
-        git config --local http.extraheader "Authorization: Bearer HRKU-2b22b51b-9245-4027-8f84-31738f8cd790"
+        git config --local http.extraheader "Authorization: HRKU-605a543c-26c3-4476-9df4-4740a2eec5eb"
         git push heroku HEAD:master
 
 
