@@ -9,43 +9,30 @@ on:
       - '**'  # Triggers the workflow on pull requests to any branch
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Echo Heroku API key presence
-      run: |
-        if [ -z "${HEROKU_API_KEY}" ]; then
-          echo "HEROKU_API KEY is not set"
-        else
-          echo "HEROKU_API KEY is set"
-        fi
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+    - name: Set up SSH key
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Set up Git configuration
+    - name: Add Heroku remote
       run: |
-        git config user.name "tomasszyszkowicz"
-        git config user.email "tomasszyszkowicz@email.cz"
+        git remote add heroku git@heroku.com:vovido-games.git || true
+        git remote set-url heroku git@heroku.com:vovido-games.git
 
-    - name: Set up Heroku remote
+    - name: Deploy to Heroku
       run: |
-        git remote remove heroku || true  # Ensure no existing remote interferes
-        git remote add heroku https://git.heroku.com/vovido-games.git
+        git push heroku HEAD:master  # Pushes the HEAD of the current branch to the master branch on Heroku
 
-    - name: Authenticate with Heroku
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+    - name: Clean up
+      if: always()
       run: |
-        git config --global http.extraheader "Authorization: Bearer ${HEROKU_API_KEY}"
-
-    - name: Push to Heroku
-      run: |
-        git config --local http.extraheader "Authorization: HRKU-605a543c-26c3-4476-9df4-4740a2eec5eb"
-        git push heroku HEAD:master
+        git remote remove heroku
 
 
 
