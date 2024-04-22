@@ -21,8 +21,9 @@ jobs:
       with:
         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
         heroku_app_name: vovido-games
-        heroku_email: tomasszyszkowicz@email.cz  # Replace with your Heroku account email
-        branch: ${{ github.ref }}
+        heroku_email: tomasszyszkowicz@email.cz
+        branch: ${{ github.ref_name }}
+
  
 
 
