@@ -15,22 +15,30 @@ function showChangePasswordModal() {
     const modal = document.getElementById('modal');
     const modalContent = document.getElementById('profileEditDetails');
     modalContent.innerHTML = `
-        <div class="close">✖</div><br>
+        <div class="close" onclick="closeModal()">✖</div>
         <div class="password-container">
+        <form id="passwordForm">
             <p>Old password:</p>
-            <input type="password" id="oldPassword">
+            <input type="password" id="oldPassword" required>
             <p>New password:</p>
-            <input type="password" id="newPassword">
+            <input type="password" id="newPassword" required>
             <p>Confirm new password:</p>
-            <input type="password" id="confirmPassword"></br>
-            <a onclick="updatePassword()" style="margin-top: 10px">Save</a>
+            <input type="password" id="confirmPassword" required></br>
+            <button type="submit" style="margin-top: 10px;">Change Password</button>
             <div class="modal-error-message" id="errorMessage"></div>
+        </form>
         </div>
     `;
     modal.style.display = "block";
     setTimeout(() => {
         modal.style.top = "0"; // This will trigger the transition
     }, 10);
+
+    document.getElementById('passwordForm').onsubmit = function(event) {
+        event.preventDefault(); // Prevent the form from submitting traditionally
+        updatePassword(); // Call your function
+        return false; // Prevent the default form submission
+    }
 
 }
 
@@ -84,20 +92,30 @@ function showChangeEmailModal() {
     const modal = document.getElementById('modal');
     const modalContent = document.getElementById('profileEditDetails');
     modalContent.innerHTML = `
-        <div class="close">✖</div>
+        <div class="close" onclick="closeModal()">✖</div>
         <div class="password-container">
+        <form id="emailForm">
             <p>New email:</p>
-            <input type="email" id="newEmail"></br>
+            <input type="email" id="newEmail" required></br>
             <p>Password:</p>
-            <input type="password" id="emailPassword"></br>
-            <a onclick="updateEmail()" style="margin-top: 10px">Save</a>
+            <input type="password" id="emailPassword" required></br>
+            <div class="form-group">
+                <button type="submit" style="margin-top: 10px;">Change Email</button>
+            </div>
             <div class="modal-error-message" id="errorMessage"></div>
+        </form>
         </div>
     `;
     modal.style.display = "block";
     setTimeout(() => {
         modal.style.top = "0"; // This will trigger the transition
     }, 10);
+
+    document.getElementById('emailForm').onsubmit = function(event) {
+        event.preventDefault(); // Prevent the form from submitting traditionally
+        updateEmail(); // Call your function
+        return false; // Prevent the default form submission
+    };
 
 }
 
@@ -113,7 +131,8 @@ function updateEmail() {
         .getAttribute("content");
 
     const newEmail = document.getElementById('newEmail').value;
-    // Setup the request options
+    const password = document.getElementById('emailPassword').value;
+
     const requestOptions = {
         method: 'PATCH',
         headers: {
@@ -121,7 +140,8 @@ function updateEmail() {
             [csrfHeader]: csrfToken
         },
         body: JSON.stringify({
-            email: newEmail
+            email: newEmail,
+            password: password
         })
     };
 
@@ -147,20 +167,30 @@ function showChangeUsernameModal() {
     const modal = document.getElementById('modal');
     const modalContent = document.getElementById('profileEditDetails');
     modalContent.innerHTML = `
-        <div class="close">✖</div>
+        <div class="close" onclick="closeModal()">✖</div>
         <div class="password-container">
+        <form id="usernameForm">
+            <p style="color: red;">WARNING:</p>
+            <p style="color: red;">You will have to login with your new username.</p>
             <p>New username:</p>
-            <input type="text" id="newUsername"></br>
+            <input type="text" id="newUsername" required></br>
             <p>Password:</p>
-            <input type="password" id="usernamePassword"></br>
-            <a onclick="updateUsername()" style="margin-top: 10px">Save</a>
-            <div class="error-message" id="errorMessage" style="color: red; margin: 10px;"></div>
+            <input type="password" id="usernamePassword" required></br>
+            <button type="submit" style="margin-top: 10px;">Change Username</button>
+            <div class="modal-error-message" id="errorMessage" style="color: red; margin: 10px;"></div>
+        </form>
         </div>
     `;
     modal.style.display = "block";
     setTimeout(() => {
         modal.style.top = "0"; // This will trigger the transition
     }, 10);
+
+    document.getElementById('usernameForm').onsubmit = function(event) {
+        event.preventDefault(); // Prevent the form from submitting traditionally
+        updateUsername(); // Call your function
+        return false; // Prevent the default form submission
+    }
 }
 
 function updateUsername() {
@@ -175,7 +205,8 @@ function updateUsername() {
         .getAttribute("content");
 
     const newUsername = document.getElementById('newUsername').value;
-    // Setup the request options
+    const password = document.getElementById('usernamePassword').value;
+
     const requestOptions = {
         method: 'PATCH',
         headers: {
@@ -183,7 +214,8 @@ function updateUsername() {
             [csrfHeader]: csrfToken
         },
         body: JSON.stringify({
-            username: newUsername
+            username: newUsername,
+            password: password
         })
     };
 
@@ -197,8 +229,7 @@ function updateUsername() {
             return response.text();
         })
         .then(data => {
-            console.log('Username successfully updated:', data);
-            alert('Username successfully updated!');
+            window.location.href = `/login`;
         })
         .catch(error => {
             document.getElementById('errorMessage').innerText = error.message;
@@ -209,25 +240,33 @@ function showChangeAvatarModal() {
     const modal = document.getElementById('modal');
     const modalContent = document.getElementById('profileEditDetails');
     modalContent.innerHTML = `
-        <div class="close">✖</div>
+        <div class="close" onclick="closeModal()">✖</div>
         <div class="password-container">
+        <form id="avatarForm">
             <p>Avatar URL:</p>
-            <input type="text" id="avatarURL" placeholder="Image URL"></br>
+            <input type="text" id="avatarURL" placeholder="Image URL" required></br>
             <p>Password:</p>
-            <input type="password" id="AvatarPassword"></br>
-            <a onclick="updateAvatar()" style="margin-top: 10px">Save</a>
-            <div class="error-message" id="errorMessage" style="color: red; margin: 10px;"></div>
+            <input type="password" id="AvatarPassword" required></br>
+            <button type="submit" style="margin-top: 10px;">Change Avatar</button>
+            <div class="modal-error-message" id="errorMessage" style="color: red; margin: 10px;"></div>
+        </form>
         </div>
     `;
     modal.style.display = "block";
     setTimeout(() => {
         modal.style.top = "0"; // This will trigger the transition
     }, 10);
+
+    document.getElementById('avatarForm').onsubmit = function(event) {
+        event.preventDefault(); // Prevent the form from submitting traditionally
+        updateAvatar(); // Call your function
+        return false; // Prevent the default form submission
+    }
 }
 
 function updateAvatar() {
     const username = document.getElementById('username').innerText;
-    const url = `/users/${username}/avatar`;
+    const url = `/users/${username}/pfp`;
 
     const csrfToken = document
         .querySelector('meta[name="_csrf"]')
@@ -236,14 +275,20 @@ function updateAvatar() {
         .querySelector('meta[name="_csrf_header"]')
         .getAttribute("content");
 
-    const avatar = document.getElementById('avatar').files[0];
-    // Setup the request options
+    const avatarURL = document.getElementById('avatarURL').value;
+    console.log(avatarURL)
+    const password = document.getElementById('AvatarPassword').value;
+
     const requestOptions = {
         method: 'PATCH',
         headers: {
+            'Content-Type': 'application/json',
             [csrfHeader]: csrfToken
         },
-        body: avatar
+        body: JSON.stringify({
+            profilePictureURL: avatarURL,
+            password: password
+        })
     };
 
     // Make the fetch request
@@ -262,4 +307,12 @@ function updateAvatar() {
         .catch(error => {
             document.getElementById('errorMessage').innerText = error.message;
         });
+}
+
+function closeModal() {
+    const modal = document.getElementById('modal');
+    modal.style.top = "-100%";
+    setTimeout(() => {
+        modal.style.display = "none";
+    }, 500);
 }
