@@ -25,6 +25,10 @@ jobs:
         git remote add heroku git@heroku.com:vovido-games.git
         git remote set-url heroku git@heroku.com:vovido-games.git
 
+    - name: Debug SSH connection
+      run: ssh -vT git@heroku.com
+
+
     - name: Push to Heroku
       run: |
         git push heroku HEAD:master
