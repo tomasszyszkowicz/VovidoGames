@@ -19,10 +19,15 @@ jobs:
       run: |
         curl https://cli-assets.heroku.com/install.sh | sh
 
-    - name: Push to Heroku
+    - name: Configure Git for Heroku Push
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       run: |
-        heroku login -i
-        git remote add heroku https://git.heroku.com/vovido-games.git
+        heroku git:remote -a vovido-games
+        git config --global user.email "tomasszyszkowicz@email.cz"
+        git config --global user.name "tomasszyszkowicz"
+
+    - name: Push to Heroku
+      run: |
         git push heroku HEAD:master
+
