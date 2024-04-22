@@ -18,8 +18,8 @@ jobs:
 
     - name: Set up Git configuration
       run: |
-        git config --global user.name "tomasszyszkowicz"
-        git config --global user.email "tomasszyszkowicz@email.cz"
+        git config user.name "tomasszyszkowicz"
+        git config user.email "tomasszyszkowicz@email.cz"
 
     - name: Add Heroku remote
       run: |
