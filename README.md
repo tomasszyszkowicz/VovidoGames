@@ -40,3 +40,21 @@ You can start the app using this command:
 ```
 
 You can check if the app is running, on: http://127.0.0.1:8080/
+
+# Deploy
+
+## Manual Deploy
+
+If you want to manually deploy the app to heroku, you can do it by running this script:
+
+```bash
+./deploy.sh
+```
+
+Remember, that you need to login via heroku CLI to make this work
+
+## Github Actions Deploy
+
+The app is automatically deployed to heroku on every push to 'prod' branch. Look inside the '.github/workflows' directory to see the 'deploy.yml' file
+
+
