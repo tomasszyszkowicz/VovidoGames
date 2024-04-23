@@ -14,14 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Set up Heroku Git remote
-      run: heroku git:remote -a vovido-games
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-
-    - name: List Git remotes
-      run: git remote -v
-
     - name: Deploy to Heroku
       uses: akhileshns/heroku-deploy@v3.12.12
       with:
