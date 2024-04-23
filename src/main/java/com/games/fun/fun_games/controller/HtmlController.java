@@ -190,6 +190,32 @@ public class HtmlController {
     }
 
     /**
+     * Handles the request for the admin menu page.
+     *
+     * @param model the model object to be populated with data
+     * @return the name of the admin menu template
+     */
+    @GetMapping("/admin/admin-menu")
+    public String adminMenu(Model model) {
+        model.addAttribute("username", getLoggedInUsername());
+        model.addAttribute("email", getLoggedInUserEmail());
+        return "admin-menu";
+    }
+
+    /**
+     * Handles the request for the admin users page.
+     *
+     * @param model the model object to be populated with data
+     * @return the name of the admin users template
+     */
+    @GetMapping("/access-denied")
+    public String accessDenied(Model model) {
+        model.addAttribute("username", getLoggedInUsername());
+        model.addAttribute("email", getLoggedInUserEmail());
+        return "access-denied";
+    }
+
+    /**
      * Retrieves the logged in username.
      *
      * @return the logged in username

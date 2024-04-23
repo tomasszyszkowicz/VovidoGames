@@ -1,11 +1,20 @@
 package com.games.fun.fun_games.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
+import com.games.fun.fun_games.enums.Role;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents a user entity in the application.
@@ -24,6 +33,10 @@ public class User {
     private String password;
     private String email;
     private String profilePictureURL;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles = new HashSet<>();
 
     /**
      * Retrieves the ID of the user.
@@ -113,5 +126,23 @@ public class User {
      */
     public void setProfilePictureURL(String profilePictureURL) {
         this.profilePictureURL = profilePictureURL;
+    }
+
+    /**
+     * Retrieves the roles of the user.
+     * 
+     * @return The roles of the user.
+     */
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    /**
+     * Sets the roles of the user.
+     * 
+     * @param roles The roles of the user.
+     */
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
