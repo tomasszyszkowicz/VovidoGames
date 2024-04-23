@@ -3,10 +3,7 @@ name: Deploy to Heroku
 on:
   push:
     branches:
-      - '**'  # Triggers the workflow on push to any branch
-  pull_request:
-    branches:
-      - '**'  # Triggers the workflow on pull requests to any branch
+      - prod
 
 jobs:
   deploy:
