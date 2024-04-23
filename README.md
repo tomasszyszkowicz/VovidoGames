@@ -12,6 +12,8 @@ phone-number: +420606633440
 
 Game portal Vovido Games, with simple JavaScript games, Leaderboards, Forum and other features. The Backend is created with Java Spring.
 
+The app is deployed on heroku: https://vovido-games-11d4b19e42c0.herokuapp.com/
+
 # Usage
 
 ## Cloning the project
