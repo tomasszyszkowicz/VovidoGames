@@ -19,7 +19,7 @@ Game portal Vovido Games, with simple JavaScript games, Leaderboards, Forum and 
 You can clone the project using this:
 
 ```bash
-git git@github.com:tomasszyszkowicz/FunGames.git
+git clone git@github.com:tomasszyszkowicz/VovidoGames.git
 ```
 
 Remember that you need to setup the SSH key on your machine.
@@ -27,7 +27,7 @@ Remember that you need to setup the SSH key on your machine.
 Do this to navigate to the root of the project:
 
 ```bash
-cd FunGames
+cd VovidoGames
 ```
 
 ## Start the app
@@ -55,5 +55,3 @@ Remember, that you need to login via heroku CLI to make this work.
 ## Github Actions Deploy
 
 The app is automatically deployed to heroku on every push to 'prod' branch. Look inside the '.github/workflows' directory to see the 'deploy.yml' file.
-
-
