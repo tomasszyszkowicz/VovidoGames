@@ -21,9 +21,3 @@ jobs:
         heroku_app_name: vovido-games
         heroku_email: tomasszyszkowicz@email.cz
         branch: ${{ github.ref_name }}
-
-
- 
-
-
- 
