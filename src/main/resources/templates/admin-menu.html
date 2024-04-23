@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="/css/admin.css" th:href="@{/css/admin.css}">
     <title>Admin</title>
 </head>
 <body>
@@ -35,13 +36,137 @@
     <script src="/js/dataOperations.js"></script>
     <script src="/js/profile.js" th:src="@{/js/profile.js}"></script> 
 
-    <script>
-        window.onload = function() {
-            updateLeaderboard(); // Initial call to display the leaderboard
-            setInterval(updateLeaderboard, 6000); // Adjusted to account for animation time plus a little buffer
-        };
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <form>
+                <label for="entity">Entity:</label>
+                <select id="entity" name="entity">
+                    <option value="1">Users</option>
+                    <option value="2">Posts</option>
+                    <option value="3">Comments</option>
+                </select>
+                <button type="button" onclick="submitForm()">Show Entries</button>
+            </form>
+        </div>
+    </div>
 
-    </script>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <h2>Entries</h2>
+            <table id="resultsTable" class="results-table">
+            </table>
+        </div>
+
+        <script>
+            global_bottom = 0;
+            global_top = 9;
+            global_entity = 1;
+        
+            function submitForm() {
+                const global_entity = document.getElementById("entity").value;
+                let url;
+
+                switch (global_entity) {
+                    case '1':
+                        url = "/users";
+                        break;
+                    case '2':
+                        url = "/posts";
+                        break;
+                    case '3':
+                        url = "/comments";
+                        break;
+                    default:
+                        console.error('Invalid entity selection');
+                        return;
+                }
+
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const resultsTable = document.getElementById("resultsTable");
+                        resultsTable.innerHTML = "";  // Clear existing table data
+
+                        // Create header row
+                        let headerRow = resultsTable.insertRow();
+                        let headers = [];
+                        let fields = [];
+
+                        if (global_entity === '1') {
+                            headers = ["ID", "Username", "Email", "Avatar", "Actions"];
+                            fields = ["id", "username", "email", "profilePictureURL", "actions"];
+                        } else if (global_entity === '2') {
+                            headers = ["Post ID", "Author", "Title", "Actions"];
+                            fields = ["id", "user.username", "title", "actions"];
+                        } else if (global_entity === '3') {
+                            headers = ["Comment ID", "Post ID", "Author", "Actions"];
+                            fields = ["id", "post.id", "user.username", "actions"];
+                        }
+
+                        headers.forEach(text => {
+                            let headerCell = headerRow.insertCell();
+                            headerCell.textContent = text;
+                            headerCell.classList.add('table-header');
+                        });
+
+                        // Populate table with new rows from the fetched data
+                        data.forEach(element => {
+                            let row = resultsTable.insertRow();
+                            fields.forEach((field, index) => {
+                                let cell = row.insertCell();
+                                if (field === "profilePictureURL" && global_entity === '1') {
+                                    let img = document.createElement('img');
+                                    img.src = element[field];
+                                    img.alt = "Profile Picture";
+                                    img.style.width = "50px";
+                                    img.style.height = "50px";
+                                    cell.appendChild(img);
+                                } else if (field === "actions") {
+                                    let deleteButton = document.createElement('button');
+                                    deleteButton.textContent = 'Delete';
+                                    deleteButton.onclick = function() { deleteEntity(element.id); };
+                                    cell.appendChild(deleteButton);
+                                } else if (field === "user.username") {
+                                    cell.textContent = element.user.username;
+                                    cell.onclick = function() { viewProfile(element.user.id); };
+                                    cell.classList.add('clickable');  // Add the class for styling
+                                } else if (field === "post.id") {
+                                    cell.textContent = element.post.id;
+                                    cell.onclick = function() { viewProfile(element.post.id); };
+                                    cell.classList.add('clickable');  // Add the class for styling
+                                }
+                                else {
+                                    cell.textContent = element[field];
+                                    if (field === "username") {
+                                        cell.onclick = function() { alert('Username clicked: ' + element[field]); };
+                                        cell.classList.add('clickable');  // Add the class for styling  // Make it apparent it's clickable
+                                    }
+                                }
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Failed to fetch data:', error);
+                    });
+            }
+
+            function deleteEntity(id) {
+                console.log("Deleting entity with id:", id);
+                // Add actual deletion logic here (e.g., fetch call to a server endpoint)
+            }
+
+            function viewProfile(id) {
+                console.log("Viewing profile with id:", id);
+                // Navigate to the profile view page or perform any other view action
+                // Example: window.location.href = `/profile/${id}`;
+            }
+
+        </script>        
        
 </body>
 </html>
