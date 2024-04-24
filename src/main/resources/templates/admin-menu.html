@@ -117,7 +117,6 @@
                             headerCell.classList.add('table-header');
                         });
 
-                        // Populate table with new rows from the fetched data
                         data.forEach(element => {
                             let row = resultsTable.insertRow();
                             fields.forEach((field, index) => {
@@ -147,17 +146,21 @@
                                 } else if (field === "user.username") {
                                     cell.textContent = element.user.username;
                                     cell.onclick = function() { viewProfile(element.user.username); };
-                                    cell.classList.add('clickable');  // Add the class for styling
+                                    cell.classList.add('clickable');
                                 } else if (field === "post.id") {
                                     cell.textContent = element.post.id;
-                                    cell.onclick = function() { viewProfile(element.post.id); };
-                                    cell.classList.add('clickable');  // Add the class for styling
+                                    cell.onclick = function() { viewPost(element.post.id); };
+                                    cell.classList.add('clickable');
+                                } else if (field === "id" && global_entity === '2') {
+                                    cell.textContent = element.id;
+                                    cell.onclick = function() { viewPost(element.id); };
+                                    cell.classList.add('clickable');
                                 }
                                 else {
                                     cell.textContent = element[field];
                                     if (field === "username") {
                                         cell.onclick = function() { viewProfile(element.username); };
-                                        cell.classList.add('clickable');  // Add the class for styling  // Make it apparent it's clickable
+                                        cell.classList.add('clickable');
                                     }
                                 }
                             });
@@ -281,6 +284,10 @@
 
             function viewProfile(username) {
                 window.location.href = '/profile/' + username;
+            }
+
+            function viewPost(postId) {
+                window.location.href = '/post/' + postId;
             }
 
         </script>        
