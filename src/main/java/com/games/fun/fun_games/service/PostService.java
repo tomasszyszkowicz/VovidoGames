@@ -44,5 +44,9 @@ public class PostService {
         LocalDateTime dateCreated = LocalDateTime.now();
         return postRepository.save(new Post(user, dateCreated, postDto.getTitle(), postDto.getContent()));
     }
+
+    public void deletePost(Long id) {
+        postRepository.deleteById(id);
+    }
 }
 

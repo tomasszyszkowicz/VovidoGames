@@ -49,5 +49,8 @@ public class CommentService {
         LocalDateTime dateCreated = LocalDateTime.now();
         return commentRepository.save(new Comment(user, post, dateCreated, content));
     }
-}
 
+    public void deleteComment(Long id) {
+        commentRepository.deleteById(id);
+    }
+}
