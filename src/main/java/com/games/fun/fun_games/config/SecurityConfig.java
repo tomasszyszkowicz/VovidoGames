@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+
 /**
  * Configuration class for security settings.
  */
@@ -20,33 +21,30 @@ public class SecurityConfig {
      * @return the configured SecurityFilterChain
      * @throws Exception if an error occurs during configuration
      */
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({ "deprecation", "removal" })
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeRequests(authorize -> authorize
-                .requestMatchers("/register").permitAll()
-                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-                .anyRequest().authenticated())
+                .requestMatchers("/register", "/css/**", "/js/**", "/images/**").permitAll() // Allow everyone access to these paths
+                .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN") // Only allow users with ROLE_ADMIN to access admin paths
+                .anyRequest().authenticated()) // All other requests require authentication
             .formLogin(formLogin -> formLogin
                 .loginPage("/login")
                 .failureHandler((request, response, exception) -> {
-                    String errorMessage = "Your custom error message here.";
-                    if (exception.getMessage().equalsIgnoreCase("Bad credentials")) {
-                        errorMessage = "Invalid username or password.";
-                    }
+                    String errorMessage = "Invalid username or password.";
                     request.getSession().setAttribute("errorMessage", errorMessage);
                     response.sendRedirect("/login?error");
                 })
                 .successHandler((request, response, authentication) -> {
-                    // Your custom logic here
-                    response.sendRedirect("/home"); // Redirect to the page after successful login
+                    response.sendRedirect("/home"); // Redirect to home page after successful login
                 })
                 .permitAll())
             .logout(logout -> logout
                 .logoutSuccessUrl("/login?logout")
                 .invalidateHttpSession(true)
-                .permitAll());
+                .permitAll())
+            .exceptionHandling().accessDeniedPage("/access-denied"); // Custom access denied page
         return http.build();
     }
 
@@ -60,4 +58,3 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
-

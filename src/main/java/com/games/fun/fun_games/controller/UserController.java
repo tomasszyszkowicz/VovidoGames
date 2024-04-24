@@ -133,5 +133,15 @@ public class UserController {
         }
     }
 
+    @DeleteMapping("/{username}")
+    public ResponseEntity<?> deleteUser(@PathVariable String username) {
+        System.out.println("Deleting user: " + username);
+        try {
+            userService.deleteUser(username);
+            return ResponseEntity.ok("User deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not delete user");
+        }
+    }
 }
 

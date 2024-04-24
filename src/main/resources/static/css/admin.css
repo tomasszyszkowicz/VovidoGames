@@ -1,0 +1,52 @@
+/* Styles for the results table */
+.results-table {
+    width: 100%; /* Full-width table */
+    margin: 20px 0; /* Adds margin around the table */
+    background-color: #f4f4f4; /* Light grey background for the table */
+    border-style: solid; /* Adds a border around the table */
+    border-width: 2px; /* Sets the border width */
+    border-color: black;
+    border-radius: 8px; /* Rounded corners for the table */
+}
+
+.results-table th, .results-table td {
+    padding: 8px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table-header {
+    background-color: grey; /* Deep blue background for headers */
+    color: #ffffff; /* White text for headers */
+    font-weight: bold;
+}
+
+.results-table td {
+    background-color: #ffffff; /* White background for cells */
+    color: #333333; /* Dark text for readability */
+}
+
+.results-table tr:hover {
+    background-color: #e6f2ff; /* Very light blue background on hover */
+}
+
+.results-table button {
+    padding: 5px 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.results-table button:hover {
+    background-color: darkred;
+}
+
+.results-table td.clickable:hover {
+    color: black;
+    font-weight: bold;
+    background-color: #cce5ff;  /* Lighter blue to indicate interactivity */
+    cursor: pointer;
+}
+

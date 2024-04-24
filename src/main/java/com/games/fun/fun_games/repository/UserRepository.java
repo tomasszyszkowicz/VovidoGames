@@ -3,6 +3,9 @@ package com.games.fun.fun_games.repository;
 import com.games.fun.fun_games.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -28,4 +31,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return a list of User entities whose usernames contain the specified string
      */
     List<User> findByUsernameContaining(String query);
+
+    /**
+     * Deletes a user by their username.
+     *
+     * @param username the username of the user to delete
+     */
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM User u WHERE u.username = ?1")
+    void deleteByUsername(String username);
 }

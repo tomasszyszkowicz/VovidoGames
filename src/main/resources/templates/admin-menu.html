@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
-    <title>Pexeso Menu</title>
+    <link rel="stylesheet" href="/css/admin.css" th:href="@{/css/admin.css}">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>Admin</title>
 </head>
 <body>
-    <h1>Pexeso Menu</h1>
+    <h1>Admin menu</h1>
     <div class="top-right-container">
         <p><b>Logged in as:</b></p>
         <p><span id="username" th:text="${username}">Username</span></p>
@@ -31,14 +34,31 @@
         <p><b>Admin</b></p>
         <a class="nav-link" href="/admin/admin-menu">Admin</a>
     </div>
-    <div class="sub-container-wrapper">
 
-        <div class="sub-container">
-            <h2>Game Modes</h2>
-            <a style="background-color: green;"  href="/pexeso-game?difficulty=easy">Easy</a>
-            <a style="background-color: orange;" href="/pexeso-game?difficulty=medium">Medium</a>
-            <a style="background-color: red;" href="/pexeso-game?difficulty=hard">Hard</a>
-        </div>
+    <script src="/js/dataOperations.js"></script>
     <script src="/js/profile.js" th:src="@{/js/profile.js}"></script> 
+    <script src="/js/admin.js" th:src="@{/js/admin.js}"></script>
+
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <form>
+                <label for="entity">Entity:</label>
+                <select id="entity" name="entity">
+                    <option value="1">Users</option>
+                    <option value="2">Posts</option>
+                    <option value="3">Comments</option>
+                </select>
+                <button type="button" onclick="submitForm()">Show Entries</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <h2>Entries</h2>
+            <table id="resultsTable" class="results-table">
+            </table>
+        </div>      
+       
 </body>
 </html>

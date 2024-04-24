@@ -3,6 +3,7 @@ package com.games.fun.fun_games.controller;
 import com.games.fun.fun_games.dto.RegistrationUserDto;
 import com.games.fun.fun_games.entity.User;
 import com.games.fun.fun_games.service.UserService;
+import com.games.fun.fun_games.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +11,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/register")
@@ -50,6 +54,12 @@ public class RegistrationController {
         newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
         newUser.setEmail(userDto.getEmail());
         newUser.setProfilePictureURL("https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg");
+        
+        Set<Role> roles = new HashSet<>();
+        roles.add(Role.ROLE_USER);  // Add ROLE_USER as default role
+        
+        newUser.setRoles(roles);
+
         userService.registerUser(newUser);
 
         redirectAttributes.addFlashAttribute("successMessage", "Registration successful. Please login.");
@@ -57,4 +67,3 @@ public class RegistrationController {
         return "redirect:/login"; // Redirect to login page on successful registration
     }
 }
-
