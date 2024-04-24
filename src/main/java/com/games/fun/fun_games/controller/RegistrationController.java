@@ -67,4 +67,3 @@ public class RegistrationController {
         return "redirect:/login"; // Redirect to login page on successful registration
     }
 }
-
