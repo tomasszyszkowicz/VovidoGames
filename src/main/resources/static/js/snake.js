@@ -66,19 +66,19 @@ function changeDirection(event) {
     const goingRight = dx === 20;
     const goingLeft = dx === -20;
 
-    if (keyPressed === 37 && !goingRight) {
+    if ((keyPressed === 37 || keyPressed === 65) && !goingRight) { // Left arrow or 'A'
         dx = -20;
         dy = 0;
     }
-    if (keyPressed === 39 && !goingLeft) {
+    if ((keyPressed === 39 || keyPressed === 68) && !goingLeft) { // Right arrow or 'D'
         dx = 20;
         dy = 0;
     }
-    if (keyPressed === 38 && !goingDown) {
+    if ((keyPressed === 38 || keyPressed === 87) && !goingDown) { // Up arrow or 'W'
         dx = 0;
         dy = -20;
     }
-    if (keyPressed === 40 && !goingUp) {
+    if ((keyPressed === 40 || keyPressed === 83) && !goingUp) { // Down arrow or 'S'
         dx = 0;
         dy = 20;
     }
