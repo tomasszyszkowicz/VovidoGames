@@ -15,6 +15,7 @@ function fetchPost() {
 		.then((response) => response.json())
 		.then((data) => {
 			document.getElementById("titleHeader").innerText = data.title;
+			document.title = "Vovido Games | " + data.title;
 			document.getElementById("postTitle").innerText = data.title;
 			document.getElementById("postAuthor").innerText = data.user.username;
 			document.getElementById("postAuthor").onclick = function () {

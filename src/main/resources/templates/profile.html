@@ -7,7 +7,7 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
     <link rel="stylesheet" href="/css/forum.css" th:href="@{/css/forum.css}">
-    <title>Forum</title>
+    <title>Profile</title>
 </head>
 <body>
     <div id="modal" class="modal">
@@ -20,7 +20,7 @@
         <a href="/logout">Logout</a>
     </div>
     <div class="top-left-container">
-        <p><b>Fun Games</b></p>
+        <p><b>Vovido Games</b></p>
         <a href="/home">Home</a>
     </div>
     <div class="games-container">
@@ -100,6 +100,7 @@
                     document.getElementById('detailsUsername').innerText = data.username;
                     document.getElementById('detailsEmail').innerText = data.email;
                     document.getElementById('pfp').src = data.profilePictureURL;
+                    document.title = "Vovido Games | " + data.username;
                 });
         }
 
