@@ -149,9 +149,9 @@ function showStartModal() {
     const modal = document.getElementById('modal');
     const gameDetails = document.getElementById('game-details');
     gameDetails.innerHTML = `
-    <h1>Welcome to pexeso!</h1>
-    <p>Click on a card to flip it. Find all matching pairs to win!</p>
-    <a onclick="closeModal()">Start</a>
+    <h1 style="margin-top: 40px;">Welcome to Snake!</h1>
+    <p>Eat food to get bigger and try to survive as long as possible!</p>
+    <a style="margin-bottom: 40px;" onclick="closeModal()">Start</a>
     `;
 
     modal.style.display = 'block';
@@ -183,10 +183,10 @@ function showEndModal() {
     const modal = document.getElementById('modal');
     const gameDetails = document.getElementById('game-details');
     gameDetails.innerHTML = `
-    <h1>Game Over!</h1>
+    <h1 style="margin-top: 40px;">Game Over!</h1>
     <p>Your score: ${score}</p>
     <a onclick="closeModalAndRefresh()">Play again</a>
-    <a href="/home">Back to main menu</a>
+    <a style="margin-bottom: 40px" href="/home">Back to main menu</a>
     `;
     modal.style.display = 'block';
     setTimeout(() => {
