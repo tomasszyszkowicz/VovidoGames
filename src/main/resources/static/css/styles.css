@@ -447,6 +447,7 @@ h1, .sub-heading {
     font-size: 24px;
     cursor: pointer;
     color: lightgray;
+    user-select: none;
 }
 
 .card.flipped {
