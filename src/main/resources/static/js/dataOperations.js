@@ -88,6 +88,14 @@ function getResultsToLeaderboard(top) {
             leaderboardBody.innerHTML = ""; // Clear existing rows
             data.forEach((result, index) => {
                 const row = document.createElement("tr");
+                const rank = index + 1;
+                if (rank === 1) {
+                    row.classList.add('gold');
+                } else if (rank === 2) {
+                    row.classList.add('silver-color');
+                } else if (rank === 3) {
+                    row.classList.add('bronze');
+                }
                 const rankCell = document.createElement("td");
                 rankCell.textContent = (index + 1);
                 const playerCell = document.createElement("td");
@@ -117,6 +125,14 @@ function getSnakeResultsToLeaderboard(top, bottom) {
             leaderboardBody.innerHTML = ""; // Clear existing rows
             data.forEach((result, index) => {
                 const row = document.createElement("tr");
+                const rank = index + 1;
+                if (rank === 1) {
+                    row.classList.add('gold');
+                } else if (rank === 2) {
+                    row.classList.add('silver-color');
+                } else if (rank === 3) {
+                    row.classList.add('bronze');
+                }
                 const rankCell = document.createElement("td");
                 rankCell.textContent = (index + 1);
                 const playerCell = document.createElement("td");

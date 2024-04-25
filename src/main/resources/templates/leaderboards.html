@@ -11,15 +11,15 @@
     <div class="sub-container-wrapper">
         <div class="sub-container">
             <form id="leaderboardForm">
-                <label for="difficulty">Difficulty:</label>
+                <label for="difficulty">Game:</label>
                 <select id="difficulty" name="difficulty">
                     <option value="1">Easy pexeso</option>
                     <option value="2">Medium pexeso</option>
                     <option value="3">Hard pexeso</option>
                     <option value="4">Snake</option>
                 </select>
-                <button type="button" onclick="sumbitForm()">Show Leaderboard</button>
         </form>
+        <a style="margin-top: 15px;" onclick="sumbitForm()">Show Leaderboard</a>
         </div>
     </div>
     <div class="top-right-container">
@@ -98,6 +98,14 @@
                     leaderboardBody.innerHTML = ""; // Clear existing rows
                     data.forEach((result, index) => {
                         const row = document.createElement("tr");
+                        const rank = global_bottom + index + 1;
+                        if (rank === 1) {
+                            row.classList.add('gold');
+                        } else if (rank === 2) {
+                            row.classList.add('silver-color');
+                        } else if (rank === 3) {
+                            row.classList.add('bronze');
+                        }
                         const rankCell = document.createElement("td");
                         // Calculate rank based on global_bottom and index
                         rankCell.textContent = global_bottom + index + 1;
