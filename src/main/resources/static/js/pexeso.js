@@ -57,7 +57,6 @@ function flipCard() {
             if (firstFlippedCard.textContent === clickedCard.textContent) {
                 console.log("Match found!");
                 numberOfMatches++;
-                document.getElementById("matches").textContent = numberOfMatches;
                 firstFlippedCard.classList.add('matched');
                 clickedCard.classList.add('matched');
                 firstFlippedCard.removeEventListener('click', flipCard);
