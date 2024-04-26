@@ -8,6 +8,7 @@
     <title>Vovido Games | Snake</title>
     <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
     <link rel="stylesheet" href="/css/snakeStyles.css" th:href="@{/css/snakeStyles.css}">
+    <link rel="stylesheet" href="/css/forum.css" th:href="@{/css/forum.css}">
 </head>
 <body>
     <div id="modal" class="modal">
@@ -63,7 +64,6 @@
         <div class="left-wrapper">
             <div class="sub-container">
                 <p><span id="score">Score: 0</span></p>
-                <p>World Record: <span id="matches">0</span></p>
             </div>
         </div>
         <div class="right-wrapper">
@@ -74,14 +74,35 @@
             </div>
         </div>
     </div>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <p>World Record: <b><span id="record"></span></b></p>
+            
+            <p>Record Holder: <b><span id="recordHolder"></span></b></p><br>
+            <img class="profile-pfp" id="recordHolderPicture"></p>
+            
+        </div>
+    </div>
 
     <script src="/js/dataOperations.js" th:src="@{/js/dataOperations.js}"></script>
     <script src="/js/snake.js" th:src="@{/js/snake.js}"></script>
     <script src="/js/profile.js" th:src="@{/js/profile.js}"></script> 
 
     <script>
+        function getRecordHolder(){
+            fetch('/records')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('record').innerText = data.snake.score;
+                    document.getElementById('recordHolder').innerText = data.snake.user.username;
+                    document.getElementById('recordHolderPicture').src = data.snake.user.profilePictureURL;
+                });
+
+        }
+
         window.onload = function() {
             getSnakeResultsToLeaderboard(4,0);
+            getRecordHolder();
             showStartModal();
         }
     </script>
