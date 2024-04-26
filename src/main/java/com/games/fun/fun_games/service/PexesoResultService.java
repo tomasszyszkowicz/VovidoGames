@@ -60,4 +60,34 @@ public class PexesoResultService {
 
         return bestResults;
     }
+
+    public Map<String, PexesoResult> getOverallBestResults() {
+        Map<String, PexesoResult> resultsMap = new HashMap<>();
+    
+        // Retrieve the result for the "easy" level
+        List<PexesoResult> easyResults = getResults(0, 0, 1);
+        if (easyResults.isEmpty()) {
+            resultsMap.put("easy", null);
+        } else {
+            resultsMap.put("easy", easyResults.get(0));
+        }
+    
+        // Retrieve the result for the "medium" level
+        List<PexesoResult> mediumResults = getResults(0, 0, 2);
+        if (mediumResults.isEmpty()) {
+            resultsMap.put("medium", null);
+        } else {
+            resultsMap.put("medium", mediumResults.get(0));
+        }
+    
+        // Retrieve the result for the "hard" level
+        List<PexesoResult> hardResults = getResults(0, 0, 3);
+        if (hardResults.isEmpty()) {
+            resultsMap.put("hard", null);
+        } else {
+            resultsMap.put("hard", hardResults.get(0));
+        }
+    
+        return resultsMap;  // Return the HashMap with results mapped to difficulty levels
+    }
 }

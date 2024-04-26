@@ -1,7 +1,10 @@
 package com.games.fun.fun_games.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import com.games.fun.fun_games.service.RecordService;
+
+
 
 import java.util.Map;
 
@@ -16,9 +19,15 @@ public class RecordController {
         this.recordService = recordService;
     }
 
+    @GetMapping
+    public Map<String, Object> getRecords() {
+        return recordService.getRecords();
+        
+    }
+
     @GetMapping("/{username}")
     public Map<String, Object> getRecordsByUsername(@PathVariable String username) {
         return recordService.getRecordsByUsername(username);
-    } 
+    }
 }
 

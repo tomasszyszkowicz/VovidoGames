@@ -45,4 +45,12 @@ public class SnakeResultService {
         Page<SnakeResult> resultPage = snakeResultRepository.findTopResultByUser(user, pageRequest);
         return resultPage.stream().findFirst().orElse(null);  // returns null if no results
     }
+
+    public SnakeResult getOverallBestResult() {
+        List<SnakeResult> results = getResults(0, 0);
+        if (results.isEmpty()) {
+            return null;
+        }
+        return results.get(0);
+    }
 }
