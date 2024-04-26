@@ -11,20 +11,34 @@ function showPostModal() {
 
 	const postCreationDetails = document.getElementById("postCreationDetails");
 	postCreationDetails.innerHTML = `
-                <h2>Create Post</h2>
-                <form id="postCreationForm">
-                    <p>Title:</p>
-                    <input type="text" id="title" name="title" required><br>
-                    <p>Content:</p>
-                    <textarea id="content" name="content" required></textarea><br>
-                    <a onclick="submitPost()">Create Post</a>
-                </form>
+				<div class="close" onclick="closeModal()">✖</div>
+				<div style="margin-top: 40px;">
+					<form id="postCreationForm">
+						<p>Title:</p>
+						<input type="text" id="title" name="title" required><br>
+						<p>Content:</p>
+						<textarea id="content" name="content" required></textarea><br>
+						<a style="margin-bottom: 40px;" onclick="submitPost()">Create Post</a>
+					</form>
+				</div>
             `;
 
 	modal.style.display = "block";
 	setTimeout(() => {
 		modal.style.top = "0"; // This will trigger the transition
 	}, 10);
+}
+
+/**
+ * Closes the modal.
+ * @returns {void}
+ */
+function closeModal() {
+	var modal = document.getElementById("modal");
+	modal.style.top = "-100%"; // This will trigger the transition
+	setTimeout(() => {
+		modal.style.display = "none";
+	}, 500);
 }
 
 /**

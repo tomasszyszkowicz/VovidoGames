@@ -100,18 +100,31 @@ function showCommentModal() {
 		"commentCreationDetails"
 	);
 	commentCreationDetails.innerHTML = `
-        <h2>Create Comment</h2>
-        <form id="postCreationForm">
-            <p>Comment:</p>
-            <textarea id="content" name="content" required></textarea><br>
-            <a onclick="submitComment()">Create Comment</a>
-        </form>
+		<div class="close" onclick="closeModal()">✖</div>
+		<div style="margin-top: 40px;">
+			<form id="postCreationForm">
+				<p>Comment:</p>
+				<textarea id="content" name="content" required></textarea><br>
+				<a style="margin-bottom: 40px;" onclick="submitComment()">Create Comment</a>
+			</form>
+		</div>
     `;
 
 	modal.style.display = "block";
 	setTimeout(() => {
 		modal.style.top = "0"; // This will trigger the transition
 	}, 10);
+}
+
+/**
+ * Closes the modal.
+ */
+function closeModal() {
+	var modal = document.getElementById("modal");
+	modal.style.top = "-100%"; // This will trigger the transition
+	setTimeout(() => {
+		modal.style.display = "none";
+	}, 500);
 }
 
 /**
