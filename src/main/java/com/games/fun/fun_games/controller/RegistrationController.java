@@ -39,13 +39,30 @@ public class RegistrationController {
                                       BindingResult result, Model model,
                                       RedirectAttributes redirectAttributes) {
 
+        User existingUser = userService.getUserByUsername(userDto.getUsername());
+
+        if (existingUser != null) {
+            model.addAttribute("errorMessage", "An account with that username already exists.");
+            return "register";
+        }
+
         if (!userDto.getPassword().equals(userDto.getConfirmPassword())) {
             model.addAttribute("errorMessage", "Passwords do not match.");
             return "register"; // Return to registration page with error message
         }
 
         if (!(userDto.getPassword().length() > 6)) {
-            model.addAttribute("errorMessage", "Password too short. Must be at least 6 characters.");
+            model.addAttribute("errorMessage", "Password too short. Must be at least 7 characters.");
+            return "register"; // Return to registration page with error message
+        }
+
+        if (userDto.getUsername().length() > 20) {
+            model.addAttribute("errorMessage", "Username too long. Must be at most 20 characters.");
+            return "register"; // Return to registration page with error message
+        }
+
+        if (userDto.getEmail().length() > 35) {
+            model.addAttribute("errorMessage", "Email too long. Must be at most 35 characters.");
             return "register"; // Return to registration page with error message
         }
 
