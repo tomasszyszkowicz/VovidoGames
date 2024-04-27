@@ -5,7 +5,6 @@ import com.games.fun.fun_games.entity.User;
 import com.games.fun.fun_games.repository.PexesoResultRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -39,27 +38,28 @@ public class PexesoResultService {
     }
 
     public List<PexesoResult> getRecords(int bottom, int top, int difficulty) {
-        int size = top - bottom + 1;
-        int pageNumber = bottom / size;
-        Sort sort = Sort.by(Sort.Direction.ASC, "score");
-        PageRequest pageRequest = PageRequest.of(pageNumber, size, sort);
+        // Fetch all data filtered by difficulty
+        List<PexesoResult> allResults = pexesoResultRepository.findByDifficulty(difficulty);
     
-        // Fetch data with pagination
-        Page<PexesoResult> page = pexesoResultRepository.findByDifficulty(difficulty, pageRequest);
+        // Filter to find minimum scores per user and sort them
+        List<PexesoResult> filteredResults = allResults.stream()
+            .collect(Collectors.groupingBy(
+                PexesoResult::getUser,
+                Collectors.minBy(Comparator.comparing(PexesoResult::getScore))
+            ))
+            .values()
+            .stream()
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .sorted(Comparator.comparing(PexesoResult::getScore))
+            .collect(Collectors.toList());
     
-        // Further process to ensure one record per user with the best score
-        return page.getContent().stream()
-                   .collect(Collectors.groupingBy(
-                       PexesoResult::getUser,
-                       Collectors.minBy(Comparator.comparing(PexesoResult::getScore))
-                   ))
-                   .values()
-                   .stream()
-                   .filter(Optional::isPresent)
-                   .map(Optional::get)
-                   .sorted(Comparator.comparing(PexesoResult::getScore)) // Re-sort by score ASC
-                   .collect(Collectors.toList());
+        int fromIndex = Math.min(bottom, filteredResults.size());
+        int toIndex = Math.min(top + 1, filteredResults.size());
+    
+        return filteredResults.subList(fromIndex, toIndex);
     }
+    
 
     public PexesoResult createResult(String username, int score, int difficulty) {
         User user = userService.getUserByUsername(username);
