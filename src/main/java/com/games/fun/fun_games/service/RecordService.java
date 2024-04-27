@@ -9,6 +9,9 @@ import com.games.fun.fun_games.entity.PexesoResult;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Service class for managing game records.
+ */
 @Service
 public class RecordService {
 
@@ -24,6 +27,12 @@ public class RecordService {
         this.pexesoResultService = pexesoResultService;
     }
 
+    /**
+     * Retrieves the game records for a specific user.
+     *
+     * @param username The username of the user.
+     * @return A map containing the game records.
+     */
     public Map<String, Object> getRecordsByUsername(String username) {
         Map<String, Object> response = new HashMap<>();
         User user = userService.getUserByUsername(username);
@@ -56,6 +65,11 @@ public class RecordService {
         return response;
     }
 
+    /**
+     * Retrieves the overall game records.
+     *
+     * @return A map containing the overall game records.
+     */
     public Map<String, Object> getRecords() {
         Map<String, Object> response = new HashMap<>();
         

@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controller class for handling HTTP requests related to posts.
+ */
 @RestController
 @RequestMapping("/posts")
 public class PostController {
@@ -21,6 +24,13 @@ public class PostController {
         this.postService = postService;
     }
 
+    /**
+     * Get a list of posts within the specified range.
+     *
+     * @param bottom The starting index of the range (default: 0)
+     * @param top    The ending index of the range (default: 9)
+     * @return A ResponseEntity containing the list of posts and the HTTP status code
+     */
     @GetMapping
     public ResponseEntity<List<Post>> getPosts(@RequestParam(defaultValue = "0") int bottom,
                                                @RequestParam(defaultValue = "9") int top) {
@@ -33,6 +43,12 @@ public class PostController {
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
+    /**
+     * Get a post by its ID.
+     *
+     * @param id The ID of the post
+     * @return A ResponseEntity containing the post and the HTTP status code
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Post> getPost(@PathVariable Long id) {
         Post post = postService.getPost(id);
@@ -42,6 +58,12 @@ public class PostController {
         return ResponseEntity.ok(post);
     }
 
+    /**
+     * Create a new post.
+     *
+     * @param postDto The DTO object containing the post data
+     * @return A ResponseEntity containing the created post and the HTTP status code
+     */
     @PostMapping
     public ResponseEntity<Post> createPost(@RequestBody PostDto postDto) {
         Post newPost = postService.createPost(postDto);
@@ -51,6 +73,12 @@ public class PostController {
         return new ResponseEntity<>(newPost, HttpStatus.CREATED);
     }
 
+    /**
+     * Delete a post by its ID.
+     *
+     * @param id The ID of the post to delete
+     * @return A ResponseEntity containing a success message and the HTTP status code
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePost(@PathVariable Long id) {
         postService.deletePost(id);

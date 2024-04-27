@@ -15,6 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Controller class for handling registration operations.
+ */
 @Controller
 @RequestMapping("/register")
 public class RegistrationController {
@@ -28,12 +31,27 @@ public class RegistrationController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Displays the registration form.
+     *
+     * @param model the model object to be populated with data
+     * @return the name of the registration view template
+     */
     @GetMapping
     public String showRegistrationForm(Model model) {
         model.addAttribute("registrationUserDto", new RegistrationUserDto());
         return "register";
     }
 
+    /**
+     * Registers a new user account.
+     *
+     * @param userDto             the registration user DTO containing user data
+     * @param result              the binding result object for validation errors
+     * @param model               the model object to be populated with data
+     * @param redirectAttributes  the redirect attributes object for flash messages
+     * @return the name of the view template to be displayed after registration
+     */
     @PostMapping
     public String registerUserAccount(@ModelAttribute("registrationUserDto") RegistrationUserDto userDto,
                                       BindingResult result, Model model,
