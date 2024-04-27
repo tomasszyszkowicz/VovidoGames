@@ -74,7 +74,7 @@ function getResultsToLeaderboard(top) {
         difficulty = 3;
     }
 
-    var url = '/pexeso/results';
+    var url = '/pexeso/records';
     if (top) {
         url += `?top=${top}`;
     }
@@ -111,7 +111,7 @@ function getResultsToLeaderboard(top) {
 }
 
 function getSnakeResultsToLeaderboard(top, bottom) {
-    var url = '/snake/results';
+    var url = '/snake/records';
     if (top) {
         url += `?top=${top}`;
     }
