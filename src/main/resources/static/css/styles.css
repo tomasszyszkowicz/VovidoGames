@@ -645,3 +645,12 @@ tbody td {
     text-decoration: underline;
 }
 
+.game-picture {
+    width: 200px;
+    height: 200px;
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: black;
+}
+
