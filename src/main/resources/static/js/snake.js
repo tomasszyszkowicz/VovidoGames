@@ -44,7 +44,7 @@ function moveSnake() {
         console.log('Eating food');
         score += 1;
         updateScore();
-        food = randomFoodPosition(); // Ensure this generates a new position not overlapping with the snake.
+        food = randomFoodPosition();
     } else {
         snake.pop(); // Remove the tail segment unless the food is eaten
     }
@@ -156,8 +156,8 @@ function showStartModal() {
 
     modal.style.display = 'block';
     setTimeout(() => {
-        modal.style.top = '0'; // This will trigger the transition
-    }, 10); // A slight delay to ensure 'display: block' is applied first
+        modal.style.top = '0';
+    }, 10);
 
 }
 
@@ -169,7 +169,7 @@ function closeModal() {
     modal.style.top = '-100%';
     setTimeout(() => {
         modal.style.display = 'none';
-    }, 500); // The transition duration is 0.5s
+    }, 500);
 
     document.addEventListener('keydown', changeDirection);
     gameLoopInterval = setInterval(gameLoop, 170);
@@ -206,6 +206,9 @@ function closeModalAndRefresh() {
     }, 500);
 }
 
+/**
+ * Creates a new snake result by sending a POST request to the server.
+ */
 function createSnakeResult() {
 
     const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');

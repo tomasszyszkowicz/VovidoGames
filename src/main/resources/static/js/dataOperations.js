@@ -60,6 +60,12 @@ function createResult() {
         });
 }
 
+/**
+ * Fetches and updates the leaderboard for the pexeso game from the server.
+ *
+ * @param {number} top - The highest rank to be retrieved for the leaderboard.
+ * @param {number} bottom - The lowest rank to be retrieved for the leaderboard.
+ */
 function getResultsToLeaderboard(top) {
 
     var difficulty = getQueryParamater("difficulty");
@@ -110,6 +116,12 @@ function getResultsToLeaderboard(top) {
         });
 }
 
+/**
+ * Fetches and updates the leaderboard for the snake game from the server.
+ *
+ * @param {number} top - The highest rank to be retrieved for the leaderboard.
+ * @param {number} bottom - The lowest rank to be retrieved for the leaderboard.
+ */
 function getSnakeResultsToLeaderboard(top, bottom) {
     var url = '/snake/records';
     if (top) {
@@ -148,6 +160,14 @@ function getSnakeResultsToLeaderboard(top, bottom) {
 
 }
 
+/**
+ * Retrieves the value of a specified query parameter from the current URL.
+ *
+ * This function uses the URLSearchParams API to parse the query string of
+ * the current page's URL and returns the value associated with a given parameter.
+ *
+ * @param {string} parameter - The name of the query parameter to retrieve.
+ */
 function getQueryParamater(paramater){
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(paramater);
