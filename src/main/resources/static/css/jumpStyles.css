@@ -10,10 +10,13 @@
 }
 
 .player-cube {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     background-color: red;
     position: absolute;
+    border-style: solid;
+    border-color: black;
+    border-width: 0.5px;
 }
 
 .obstacle {

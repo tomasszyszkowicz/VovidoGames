@@ -189,9 +189,11 @@ function showEndModal() {
     <a style="margin-bottom: 40px" href="/home">Back to main menu</a>
     `;
     modal.style.display = 'block';
-    setTimeout(() => {
-        modal.style.top = '0';
-    }, 10);
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            modal.style.top = '0'; // Start the animation
+        });
+    });
 }
 
 /**
