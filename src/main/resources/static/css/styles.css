@@ -28,14 +28,14 @@ a {
 .a-unavailable {
     display: inline-block;
     padding: 10px 10px;
-    background-color: #6c757d; /* A grayish color indicating unavailability */
+    background-color: #6c757d;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
     transition: background-color 0.3s;
-    cursor: not-allowed; /* Changes the cursor to indicate that the item is not available */
-    opacity: 0.5; /* Makes the button look faded */
-    pointer-events: none; /* Prevents the link from being clickable */
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
 }
 
 a:hover {
@@ -222,10 +222,10 @@ button {
 
 .sub-container-wrapper {
     display: flex;
-    flex-wrap: wrap; /* Allow items to wrap */
+    flex-wrap: wrap;
     align-items: flex-start; 
-    justify-content: center; /* Center the items horizontally */
-    margin: 0 auto;/* Adjust based on your layout's width */
+    justify-content: center;
+    margin: 0 auto;
     max-width: 660px;
 }
 
@@ -271,44 +271,43 @@ h1, .sub-heading {
     margin: 20px auto;
     font-size: 14px;
     position: relative;
-    display: flex; /* Use flexbox to place items next to each other */
-    justify-content: space-between; /* Add space between items */
+    display: flex;
+    justify-content: space-between;
 }
 
 .day-container {
     background-color: #ffffff;
     padding: 10px;
-    width: calc(100% / 7 - 20px); /* Divide the width equally among 7 containers and adjust for margin */
+    width: calc(100% / 7 - 20px);
     font-size: 7px;
     position: relative;
     border-radius: 8px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     margin: 5px;
     margin-top: 0px;
-    transition: background-color 0.3s ease; /* Add transition for smooth color change */
+    transition: background-color 0.3s ease;
 }
 
 .day-container:hover {
-    background-color: #cccccc; /* Change background color on hover */
+    background-color: #cccccc;
 }
 
 .day-container p {
-    font-size: 12px; /* Override the font-size */
-    color: black; /* Override the color */
+    font-size: 12px;
+    color: black;
 }
 
-/* CSS for modal */
 .modal {
-    display: none; /* Initially hidden */
+    display: none;
     position: fixed;
     z-index: 1;
     left: 0;
-    top: -100%; /* Start off-screen */
+    top: -100%;
     width: 100%;
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
-    transition: top 0.5s ease-out; /* Add transition for the 'top' property */
+    transition: top 0.5s ease-out;
 }
 .modal-content {
     background-color: #fefefe;
@@ -319,11 +318,11 @@ h1, .sub-heading {
     border: 1px solid #888;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    width: 40%; /* Responsive width */
-    height: auto; /* Flexible height based on content */
-    min-width: 300px; /* Minimum width */
-    max-height: 80%; /* Maximum height to avoid touching the viewport's top and bottom */
-    overflow: auto; /* Allows scrolling within the modal if content is too large */
+    width: 40%;
+    height: auto;
+    min-width: 300px;
+    max-height: 80%;
+    overflow: auto;
 }
 
 
@@ -342,7 +341,7 @@ h1, .sub-heading {
 .modal-error-message {
     height: 20px;
     color: red;
-    margin: 10px 0; /* Maintain consistent spacing above and below */
+    margin: 10px 0;
 }
 
 .close {
@@ -473,13 +472,11 @@ h1, .sub-heading {
     height: 65px;
 }
 
-/* Style the table */
 table {
     border-collapse: collapse;
     width: 100%;
 }
 
-/* Style the table header */
 thead th {
     background-color: #f2f2f2;
     border: 1px solid #dddddd;
@@ -487,12 +484,10 @@ thead th {
     padding: 8px;
 }
 
-/* Style the table rows */
 tbody tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
-/* Style the cells */
 tbody td {
     border: 1px solid #dddddd;
     padding: 8px;
@@ -520,75 +515,75 @@ tbody td {
 }
 
 .dropdown-content {
-    display: none; /* Hidden initially, displayed on input */
+    display: none;
     position: relative;
-    width: calc(100% - 2px); /* Match width to the search input minus border */
-    background-color: #ffffff; /* Consistent with other elements */
-    border: 1px solid #ccc; /* Matching border to input */
-    z-index: 100; /* Ensure it appears on top */
+    width: calc(100% - 2px);
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    z-index: 100;
 }
 
 .dropdown-item {
-    color: black; /* Standard text color */
-    padding: 12px 16px; /* Comfortable padding */
-    text-decoration: none; /* No underline */
-    display: block; /* Each item is a block element */
-    background-color: #ffffff; /* Background matches dropdown */
-    transition: background-color 0.3s; /* Smooth transition for interaction */
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    background-color: #ffffff;
+    transition: background-color 0.3s;
 }
 
 .dropdown-item:hover {
-    background-color: #f1f1f1; /* Light grey on hover for better visibility */
+    background-color: #f1f1f1;
 }
 
 .search-input:focus + .dropdown-content,
-.search-input + .dropdown-content:hover { /* Show dropdown on input focus or hover over dropdown */
+.search-input + .dropdown-content:hover {
     display: block;
 }
 
 .input-group {
-    display: flex; /* Enables Flexbox */
-    align-items: center; /* Centers the items vertically */
+    display: flex;
+    align-items: center;
 }
 
 .record-table {
-    width: 50%; /* Adjusts the width of the table to half of the window */
-    margin: 10px auto; /* Centers the table horizontally and adds spacing */
-    border-collapse: collapse; /* Removes space between borders */
-    border: 2px solid #333; /* Adds border around the table */
+    width: 50%;
+    margin: 10px auto;
+    border-collapse: collapse;
+    border: 2px solid #333;
 }
 .record-table th, .record-table td {
-    border: 1px solid #999; /* Adds border to each cell */
-    padding: 8px; /* Adds padding inside each cell */
-    text-align: left; /* Aligns text to the left */
+    border: 1px solid #999;
+    padding: 8px;
+    text-align: left;
 }
 .record-table th {
-    background-color: #f2f2f2; /* Sets background color of header */
+    background-color: #f2f2f2;
 }
 .record-table td {
-    background-color: #ffffff; /* Sets background color of cells */
+    background-color: #ffffff;
 }
 
 .profile-container {
-    display: flex;       /* Enables flexbox layout */
-    align-items: center; /* Vertically centers the items in the container */
-    justify-content: space-between; /* Space between the child elements */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .profile-details {
-    flex: 1; /* Allows the details div to grow and fill space */
-    margin-right: 20px; /* Optional spacing between the text and image */
+    flex: 1;
+    margin-right: 20px;
     padding-top: 10px;
     
 }
 
 .profile-pfp {
-    width: 100px; /* Sets the width of the profile picture */
-    height: 100px; /* Sets the height of the profile picture */
-    border-style: solid; /* Adds a border around the profile picture */
-    border-width: 2px; /* Sets the width of the border */
-    border-color: black; /* Sets the color of the border */
-    display: inline-block; /* Makes the profile picture a block element */
+    width: 100px;
+    height: 100px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: black;
+    display: inline-block;
     margin-right: 3px;
 }
 
