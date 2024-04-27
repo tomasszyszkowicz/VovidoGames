@@ -66,7 +66,7 @@ public class CommentService {
         Post post = postService.getPost(postId);
 
         if (user == null || post == null) {
-            return null; // Or handle error appropriately
+            return null;
         }
 
         LocalDateTime dateCreated = LocalDateTime.now();

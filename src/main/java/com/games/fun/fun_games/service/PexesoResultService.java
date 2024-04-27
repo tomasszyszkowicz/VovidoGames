@@ -102,7 +102,7 @@ public class PexesoResultService {
      */
     public Map<String, PexesoResult> getBestResultsByUser(User user) {
         Map<String, PexesoResult> bestResults = new HashMap<>();
-        int[] difficulties = {1, 2, 3}; // Assuming difficulties are 1 (easy), 2 (medium), 3 (hard)
+        int[] difficulties = {1, 2, 3};
         PageRequest pageRequest = PageRequest.of(0, 1, Sort.by(Sort.Direction.ASC, "score"));
 
         for (int difficulty : difficulties) {
@@ -152,6 +152,6 @@ public class PexesoResultService {
             resultsMap.put("hard", hardResults.get(0));
         }
 
-        return resultsMap; // Return the HashMap with results mapped to difficulty levels
+        return resultsMap;
     }
 }

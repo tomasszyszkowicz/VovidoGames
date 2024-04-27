@@ -53,7 +53,6 @@ public class SnakeResultService {
      * @return a list of SnakeResult entities
      */
     public List<SnakeResult> getRecords(int bottom, int top) {
-        // Fetch all data
         List<SnakeResult> allResults = snakeResultRepository.findAll();
 
         // Group by user and find the maximum score per user
