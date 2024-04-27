@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/results")
+@RequestMapping("/pexeso")
 public class PexesoResultController {
 
     private final PexesoResultService pexesoResultService;
@@ -21,7 +21,7 @@ public class PexesoResultController {
         this.pexesoResultService = pexesoResultService;
     }
 
-    @GetMapping
+    @GetMapping("/results")
     public ResponseEntity<List<PexesoResult>> getResults(
             @RequestParam(name = "top", defaultValue = "20") int top,
             @RequestParam(name = "bottom", defaultValue = "0") int bottom,

@@ -25,7 +25,7 @@ function createResult() {
     }
 
     // Replace the URL with the actual endpoint
-    const url = '/results';
+    const url = '/pexeso';
     const result = {
         score: numberOfClicks,
         username: username,
@@ -74,7 +74,7 @@ function getResultsToLeaderboard(top) {
         difficulty = 3;
     }
 
-    var url = 'results';
+    var url = '/pexeso/results';
     if (top) {
         url += `?top=${top}`;
     }

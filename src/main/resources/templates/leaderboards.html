@@ -148,13 +148,13 @@
             const difficulty = document.getElementById("difficulty").value;
             if(difficulty === "1") {
                 document.getElementById("difficultyText").textContent = "Easy pexeso ";
-                globalBaseUrl = "/results"
+                globalBaseUrl = "/pexeso/results"
             } else if(difficulty === "2") {
                 document.getElementById("difficultyText").textContent = "Medium pexeso ";
-                globalBaseUrl = "/results"
+                globalBaseUrl = "/pexeso/results"
             } else if(difficulty === "3") {
                 document.getElementById("difficultyText").textContent = "Hard pexeso ";
-                globalBaseUrl = "/results"
+                globalBaseUrl = "/pexeso/results"
             } else if(difficulty === "4") {
                 document.getElementById("difficultyText").textContent = "Snake ";
                 globalBaseUrl = "/snake/results"
@@ -164,8 +164,8 @@
         }
 
         window.onload = function() {
-            globalBaseUrl = "/results";
-            getResultsToLeaderboard("/results",19, 0, 1);
+            globalBaseUrl = "/pexeso/results";
+            getResultsToLeaderboard("/pexeso/results",19, 0, 1);
             updateNavigationButtonVisibility(); // This call might be redundant if getResultsToLeaderboard already handles it
          };
     </script>
