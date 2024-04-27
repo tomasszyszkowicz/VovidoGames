@@ -11,9 +11,6 @@ import org.springframework.data.domain.Pageable;
 public interface PexesoResultRepository extends JpaRepository<PexesoResult, Long> {
 
     Page<PexesoResult> findByDifficulty(int difficulty, Pageable pageable);
-    
-    @Query("SELECT new PexesoResult(pr.user, MIN(pr.score)) FROM PexesoResult pr WHERE pr.difficulty = ?1 GROUP BY pr.user")
-    Page<PexesoResult> findBestByDifficulty(int difficulty, Pageable pageable);
 
     @Query("SELECT pr FROM PexesoResult pr WHERE pr.user = :user AND pr.difficulty = :difficulty ORDER BY pr.score ASC")
     Page<PexesoResult> findTopResultByUserAndDifficulty(User user, int difficulty, Pageable pageable);

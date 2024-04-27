@@ -5,13 +5,18 @@ import com.games.fun.fun_games.entity.User;
 import com.games.fun.fun_games.repository.PexesoResultRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 @Service
 public class PexesoResultService {
@@ -38,8 +43,23 @@ public class PexesoResultService {
         int pageNumber = bottom / size;
         Sort sort = Sort.by(Sort.Direction.ASC, "score");
         PageRequest pageRequest = PageRequest.of(pageNumber, size, sort);
-        return pexesoResultRepository.findBestByDifficulty(difficulty, pageRequest).getContent();
-    }    
+    
+        // Fetch data with pagination
+        Page<PexesoResult> page = pexesoResultRepository.findByDifficulty(difficulty, pageRequest);
+    
+        // Further process to ensure one record per user with the best score
+        return page.getContent().stream()
+                   .collect(Collectors.groupingBy(
+                       PexesoResult::getUser,
+                       Collectors.minBy(Comparator.comparing(PexesoResult::getScore))
+                   ))
+                   .values()
+                   .stream()
+                   .filter(Optional::isPresent)
+                   .map(Optional::get)
+                   .sorted(Comparator.comparing(PexesoResult::getScore)) // Re-sort by score ASC
+                   .collect(Collectors.toList());
+    }
 
     public PexesoResult createResult(String username, int score, int difficulty) {
         User user = userService.getUserByUsername(username);
@@ -51,12 +71,12 @@ public class PexesoResultService {
 
     public Map<String, PexesoResult> getBestResultsByUser(User user) {
         Map<String, PexesoResult> bestResults = new HashMap<>();
-        int[] difficulties = {1, 2, 3}; // Assuming difficulties are 1 (easy), 2 (medium), 3 (hard)
+        int[] difficulties = { 1, 2, 3 }; // Assuming difficulties are 1 (easy), 2 (medium), 3 (hard)
         PageRequest pageRequest = PageRequest.of(0, 1, Sort.by(Sort.Direction.ASC, "score"));
 
         for (int difficulty : difficulties) {
             PexesoResult result = pexesoResultRepository.findTopResultByUserAndDifficulty(user, difficulty, pageRequest)
-                                                       .stream().findFirst().orElse(null);
+                    .stream().findFirst().orElse(null);
             String key = switch (difficulty) {
                 case 1 -> "easy";
                 case 2 -> "medium";
@@ -71,7 +91,7 @@ public class PexesoResultService {
 
     public Map<String, PexesoResult> getOverallBestResults() {
         Map<String, PexesoResult> resultsMap = new HashMap<>();
-    
+
         // Retrieve the result for the "easy" level
         List<PexesoResult> easyResults = getResults(0, 0, 1);
         if (easyResults.isEmpty()) {
@@ -79,7 +99,7 @@ public class PexesoResultService {
         } else {
             resultsMap.put("easy", easyResults.get(0));
         }
-    
+
         // Retrieve the result for the "medium" level
         List<PexesoResult> mediumResults = getResults(0, 0, 2);
         if (mediumResults.isEmpty()) {
@@ -87,7 +107,7 @@ public class PexesoResultService {
         } else {
             resultsMap.put("medium", mediumResults.get(0));
         }
-    
+
         // Retrieve the result for the "hard" level
         List<PexesoResult> hardResults = getResults(0, 0, 3);
         if (hardResults.isEmpty()) {
@@ -95,7 +115,7 @@ public class PexesoResultService {
         } else {
             resultsMap.put("hard", hardResults.get(0));
         }
-    
-        return resultsMap;  // Return the HashMap with results mapped to difficulty levels
+
+        return resultsMap; // Return the HashMap with results mapped to difficulty levels
     }
 }

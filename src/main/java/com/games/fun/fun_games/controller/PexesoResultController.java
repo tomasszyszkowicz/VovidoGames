@@ -31,13 +31,13 @@ public class PexesoResultController {
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
-    @GetMapping("records")
+    @GetMapping("/records")
     public ResponseEntity<List<PexesoResult>> getRecords(
             @RequestParam(name = "top", defaultValue = "20") int top,
             @RequestParam(name = "bottom", defaultValue = "0") int bottom,
             @RequestParam(name = "difficulty", defaultValue = "1") int difficulty) {
 
-        List<PexesoResult> results = pexesoResultService.getResults(bottom, top, difficulty);
+        List<PexesoResult> results = pexesoResultService.getRecords(bottom, top, difficulty);
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
