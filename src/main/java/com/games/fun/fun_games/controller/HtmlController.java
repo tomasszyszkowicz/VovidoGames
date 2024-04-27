@@ -190,6 +190,19 @@ public class HtmlController {
     }
 
     /**
+     * Handles the request for the jump game page.
+     *
+     * @param model the model object to be populated with data
+     * @return the name of the jump template
+     */
+    @GetMapping("/jump-game")
+    public String jump(Model model) {
+        model.addAttribute("username", getLoggedInUsername());
+        model.addAttribute("email", getLoggedInUserEmail());
+        return "jump";
+    }
+
+    /**
      * Handles the request for the admin menu page.
      *
      * @param model the model object to be populated with data

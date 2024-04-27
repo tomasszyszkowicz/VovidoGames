@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>Vovido Games | Jump Jump</title>
+    <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" href="/css/forum.css" th:href="@{/css/forum.css}">
+    <link rel="stylesheet" href="/css/jumpStyles.css" th:href="@{/css/jumpStyles.css}">
+</head>
+<body>
+    <div id="modal" class="modal">
+        <div class="modal-content" id="game-details"></div>
+    </div>
+    <div class="top-right-container">
+        <p><b>Logged in as:</b></p>
+        <p><span id="username" th:text="${username}">Username</span></p>
+        <p><span th:text="${email}">email</span></p>
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="top-left-container">
+        <p><b>Vovido Games</b></p>
+        <a href="/home">Home</a>
+    </div>
+    <div class="games-container">
+        <p><b>Games</b></p>
+        <a class="nav-link" href="/pexeso-menu">Pexeso</a>
+        <a class="nav-link" href="/snake-game">Snake</a>
+        <p><b>Leaderboards</b></p>
+        <a class="nav-link" href="/leaderboards">Leaderboards</a>
+        <p><b>Forum</b></p>
+        <a class="nav-link" href="/forum">Forum</a>
+        <p><b>Profiles</b></p>
+        <a class="nav-link" onclick="redirectToUserProfile()">Your Profile</a>
+        <a class="nav-link" href="/settings">Settings</a>
+        <p><b>Admin</b></p>
+        <a class="nav-link" href="/admin/admin-menu">Admin</a>
+    </div>
+    <h1>Jump jump</h1>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <div class="gameArea" id="gameArea"></div>
+        </div>
+    </div>
+    <div class="sub-container-wrapper">
+        <div class="left-wrapper">
+            <div class="sub-container">
+                <p><span id="score">Score: <b>0</b></span></p>
+            </div>
+        </div>
+        <div class="right-wrapper">
+            <div style="padding: 29.5px;" class="sub-container">
+                <a href="/home">Back to Menu</a>
+                <a href="/snake-game">Restart Game</a>
+            </div>
+        </div>
+    </div>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <p>World Record: <b><span id="record"></span></b></p>
+            <p>Record Holder: <b><span id="recordHolder"></span></b></p>
+            <img class="profile-pfp" id="recordHolderPicture">
+            
+        </div>
+    </div>
+
+    <script src="/js/dataOperations.js" th:src="@{/js/dataOperations.js}"></script>
+    <script src="/js/profile.js" th:src="@{/js/profile.js}"></script> 
+    <script src="/js/jump.js" th:src="@{/js/jump.js}"></script>
+</body>
+</html>
