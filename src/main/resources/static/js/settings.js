@@ -80,8 +80,8 @@ function updatePassword() {
             return response.text();
         })
         .then(data => {
-            console.log('Password successfully updated:', data);
             alert('Password successfully updated!');
+            closeModal();
         })
         .catch(error => {
             document.getElementById('errorMessage').innerText = error.message;
@@ -155,8 +155,8 @@ function updateEmail() {
             return response.text();
         })
         .then(data => {
-            console.log('Email successfully updated:', data);
             alert('Email successfully updated!');
+            closeModalAndReload();
         })
         .catch(error => {
             document.getElementById('errorMessage').innerText = error.message;
@@ -301,8 +301,8 @@ function updateAvatar() {
             return response.text();
         })
         .then(data => {
-            console.log('Avatar successfully updated:', data);
             alert('Avatar successfully updated!');
+            closeModalAndReload();
         })
         .catch(error => {
             document.getElementById('errorMessage').innerText = error.message;
@@ -314,5 +314,14 @@ function closeModal() {
     modal.style.top = "-100%";
     setTimeout(() => {
         modal.style.display = "none";
+    }, 500);
+}
+
+function closeModalAndReload() {
+    const modal = document.getElementById('modal');
+    modal.style.top = "-100%";
+    setTimeout(() => {
+        modal.style.display = "none";
+        window.location.reload();
     }, 500);
 }

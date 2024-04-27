@@ -1,5 +1,12 @@
+/**
+ * Global variable to store the selected entity.
+ * @type {number}
+ */
 var global_entity = 1;
 
+/**
+ * Submits the form and fetches data based on the selected entity.
+ */
 function submitForm() {
 	global_entity = document.getElementById("entity").value;
 
@@ -129,6 +136,10 @@ function submitForm() {
 		});
 }
 
+/**
+ * Deletes an entity based on the selected entity type.
+ * @param {string} identifier - The identifier of the entity to be deleted.
+ */
 function deleteEntity(identifier) {
 	if (global_entity === "1") {
 		deleteUser(identifier);
@@ -139,6 +150,10 @@ function deleteEntity(identifier) {
 	}
 }
 
+/**
+ * Deletes a user entity.
+ * @param {string} username - The username of the user to be deleted.
+ */
 function deleteUser(username) {
 	const csrfToken = document
 		.querySelector('meta[name="_csrf"]')
@@ -174,6 +189,10 @@ function deleteUser(username) {
 		});
 }
 
+/**
+ * Deletes a comment entity.
+ * @param {string} identifier - The identifier of the comment to be deleted.
+ */
 function deleteComment(identifier) {
 	const csrfToken = document
 		.querySelector('meta[name="_csrf"]')
@@ -209,6 +228,10 @@ function deleteComment(identifier) {
 		});
 }
 
+/**
+ * Deletes a post entity.
+ * @param {string} identifier - The identifier of the post to be deleted.
+ */
 function deletePost(identifier) {
 	const csrfToken = document
 		.querySelector('meta[name="_csrf"]')
@@ -244,10 +267,18 @@ function deletePost(identifier) {
 		});
 }
 
+/**
+ * Redirects to the profile page of a user.
+ * @param {string} username - The username of the user.
+ */
 function viewProfile(username) {
 	window.location.href = "/profile/" + username;
 }
 
+/**
+ * Redirects to the post page.
+ * @param {string} postId - The ID of the post.
+ */
 function viewPost(postId) {
 	window.location.href = "/post/" + postId;
 }

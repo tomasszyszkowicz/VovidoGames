@@ -25,7 +25,7 @@ function createResult() {
     }
 
     // Replace the URL with the actual endpoint
-    const url = '/results';
+    const url = '/pexeso';
     const result = {
         score: numberOfClicks,
         username: username,
@@ -60,6 +60,12 @@ function createResult() {
         });
 }
 
+/**
+ * Fetches and updates the leaderboard for the pexeso game from the server.
+ *
+ * @param {number} top - The highest rank to be retrieved for the leaderboard.
+ * @param {number} bottom - The lowest rank to be retrieved for the leaderboard.
+ */
 function getResultsToLeaderboard(top) {
 
     var difficulty = getQueryParamater("difficulty");
@@ -74,7 +80,7 @@ function getResultsToLeaderboard(top) {
         difficulty = 3;
     }
 
-    var url = 'results';
+    var url = '/pexeso/records';
     if (top) {
         url += `?top=${top}`;
     }
@@ -88,6 +94,14 @@ function getResultsToLeaderboard(top) {
             leaderboardBody.innerHTML = ""; // Clear existing rows
             data.forEach((result, index) => {
                 const row = document.createElement("tr");
+                const rank = index + 1;
+                if (rank === 1) {
+                    row.classList.add('gold');
+                } else if (rank === 2) {
+                    row.classList.add('silver-color');
+                } else if (rank === 3) {
+                    row.classList.add('bronze');
+                }
                 const rankCell = document.createElement("td");
                 rankCell.textContent = (index + 1);
                 const playerCell = document.createElement("td");
@@ -102,8 +116,14 @@ function getResultsToLeaderboard(top) {
         });
 }
 
+/**
+ * Fetches and updates the leaderboard for the snake game from the server.
+ *
+ * @param {number} top - The highest rank to be retrieved for the leaderboard.
+ * @param {number} bottom - The lowest rank to be retrieved for the leaderboard.
+ */
 function getSnakeResultsToLeaderboard(top, bottom) {
-    var url = '/snake/results';
+    var url = '/snake/records';
     if (top) {
         url += `?top=${top}`;
     }
@@ -117,6 +137,14 @@ function getSnakeResultsToLeaderboard(top, bottom) {
             leaderboardBody.innerHTML = ""; // Clear existing rows
             data.forEach((result, index) => {
                 const row = document.createElement("tr");
+                const rank = index + 1;
+                if (rank === 1) {
+                    row.classList.add('gold');
+                } else if (rank === 2) {
+                    row.classList.add('silver-color');
+                } else if (rank === 3) {
+                    row.classList.add('bronze');
+                }
                 const rankCell = document.createElement("td");
                 rankCell.textContent = (index + 1);
                 const playerCell = document.createElement("td");
@@ -132,6 +160,14 @@ function getSnakeResultsToLeaderboard(top, bottom) {
 
 }
 
+/**
+ * Retrieves the value of a specified query parameter from the current URL.
+ *
+ * This function uses the URLSearchParams API to parse the query string of
+ * the current page's URL and returns the value associated with a given parameter.
+ *
+ * @param {string} parameter - The name of the query parameter to retrieve.
+ */
 function getQueryParamater(paramater){
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(paramater);

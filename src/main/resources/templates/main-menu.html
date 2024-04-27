@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
-    <title>Pexeso Menu</title>
+    <title>Vovido Games</title>
     <style>
         .fade-out {
             animation: fadeOut 0.5s;
@@ -27,7 +27,7 @@
     </style>
 </head>
 <body>
-    <h1>Welcome to Fun Games</h1>
+    <h1>Welcome to Vovido Games</h1>
     <div class="top-right-container">
         <p><b>Logged in as:</b></p>
         <p><span id="username" th:text="${username}">Username</span></p>
@@ -35,7 +35,7 @@
         <a href="/logout">Logout</a>
     </div>
     <div class="top-left-container">
-        <p><b>Fun Games</b></p>
+        <p><b>Vovido Games</b></p>
         <a href="/home">Home</a>
     </div>
     <div class="games-container">
@@ -143,6 +143,14 @@
                         leaderboardBody.innerHTML = ""; // Clear existing rows within the body
                         data.forEach((result, index) => {
                             const row = document.createElement("tr");
+                            const rank = index + 1;
+                            if (rank === 1) {
+                                row.classList.add('gold');
+                            } else if (rank === 2) {
+                                row.classList.add('silver-color');
+                            } else if (rank === 3) {
+                                row.classList.add('bronze');
+                            }
                             const rankCell = document.createElement("td");
                             rankCell.textContent = (index + 1);
                             const playerCell = document.createElement("td");
@@ -190,9 +198,9 @@
 
         function updateLeaderboard() {
             if (currentDifficulty === 4) {
-                getResultsToLeaderboard("/snake/results", 2, 0, currentDifficulty);
+                getResultsToLeaderboard("/snake/records", 2, 0, currentDifficulty);
             } else {
-                getResultsToLeaderboard("/results", 2, 0, currentDifficulty);
+                getResultsToLeaderboard("/pexeso/records", 2, 0, currentDifficulty);
             }
             currentDifficulty += 1;
             if (currentDifficulty > 4) {

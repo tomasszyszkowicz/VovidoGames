@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controller class for handling comments related endpoints.
+ */
 @RestController
 @RequestMapping("/comments")
 public class CommentController {
@@ -20,7 +23,17 @@ public class CommentController {
     public CommentController(CommentService commentService) {
         this.commentService = commentService;
     }
-
+    
+    /**
+     * Retrieves a list of comments based on the provided parameters.
+     * If postId is specified, retrieves comments for a specific post.
+     * If postId is not specified, retrieves all comments.
+     *
+     * @param postId the ID of the post to retrieve comments for (optional)
+     * @param bottom the starting index of the comments to retrieve (default: 0)
+     * @param top the ending index of the comments to retrieve (default: 9)
+     * @return a ResponseEntity containing the list of comments and the HTTP status code
+     */
     @GetMapping
     public ResponseEntity<List<Comment>> getComments(
             @RequestParam(name = "postId", required = false) Long postId,
@@ -42,6 +55,12 @@ public class CommentController {
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
+    /**
+     * Creates a new comment based on the provided CommentDto.
+     *
+     * @param commentDto the CommentDto object containing the comment details
+     * @return a ResponseEntity containing the created comment and the HTTP status code
+     */
     @PostMapping
     public ResponseEntity<Comment> createComment(@RequestBody CommentDto commentDto) {
         Comment newComment = commentService.createComment(commentDto.getUsername(), commentDto.getPostId(), commentDto.getContent());
@@ -51,6 +70,12 @@ public class CommentController {
         return new ResponseEntity<>(newComment, HttpStatus.CREATED);
     }
 
+    /**
+     * Deletes a comment with the specified ID.
+     *
+     * @param id the ID of the comment to delete
+     * @return a ResponseEntity containing a success message and the HTTP status code
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);

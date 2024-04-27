@@ -2,11 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
-    <title>Vovido Games | Game Menu</title>
+    <link rel="stylesheet" href="/css/forum.css" th:href="@{/css/forum.css}">
+    <title>Vovido Games | Not Found</title>
 </head>
 <body>
-    <h1>Games</h1>
+    <div id="modal" class="modal">
+        <div class="modal-content" id="profileEditDetails"></div>
+    </div>
     <div class="top-right-container">
         <p><b>Logged in as:</b></p>
         <p><span id="username" th:text="${username}">Username</span></p>
@@ -31,24 +37,7 @@
         <p><b>Admin</b></p>
         <a class="nav-link" href="/admin/admin-menu">Admin</a>
     </div>
-    <div class="sub-container-wrapper">
-        <div class="left-wrapper">
-            <div class="sub-container">
-                <h2>Pexeso</h2>
-                <p>Find all the pairs</p>
-                <img class="game-picture" th:src="@{/images/pexeso.png}" src="/images/pexeso.png" alt="Pexeso">
-                <a style="margin-top: 10px;" href="/pexeso-menu">Play Pexeso</a>
-            </div>
-        </div>
-        <div class="right-wrapper">
-            <div class="sub-container">
-                <h2>Snake</h2>
-                <p>Collect the food</p>
-                <img class="game-picture" th:src="@{/images/snake.png}" src="/images/snake.png" alt="Snake">
-                <a style="margin-top: 10px;" href="/snake-game">Play Snake</a>
-            </div>
-        </div>
-    </div>
-    <script src="/js/profile.js" th:src="@{/js/profile.js}"></script> 
+    <h1>404 - Not Found</h1>
+    <p>The page you are looking for does not exist.</p>
 </body>
 </html>

@@ -44,7 +44,7 @@ function moveSnake() {
         console.log('Eating food');
         score += 1;
         updateScore();
-        food = randomFoodPosition(); // Ensure this generates a new position not overlapping with the snake.
+        food = randomFoodPosition();
     } else {
         snake.pop(); // Remove the tail segment unless the food is eaten
     }
@@ -129,7 +129,7 @@ function drawFood() {
  */
 function updateScore() {
     const scoreElement = document.getElementById('score');
-    scoreElement.innerText = `Score: ${score}`;
+    scoreElement.innerHTML = `Score: <b>${score}</b>`;
 }
 
 /**
@@ -149,15 +149,15 @@ function showStartModal() {
     const modal = document.getElementById('modal');
     const gameDetails = document.getElementById('game-details');
     gameDetails.innerHTML = `
-    <h1>Welcome to pexeso!</h1>
-    <p>Click on a card to flip it. Find all matching pairs to win!</p>
-    <a onclick="closeModal()">Start</a>
+    <h1 style="margin-top: 40px;">Welcome to Snake!</h1>
+    <p>Eat food to get bigger and try to survive as long as possible!</p>
+    <a style="margin-bottom: 40px;" onclick="closeModal()">Start</a>
     `;
 
     modal.style.display = 'block';
     setTimeout(() => {
-        modal.style.top = '0'; // This will trigger the transition
-    }, 10); // A slight delay to ensure 'display: block' is applied first
+        modal.style.top = '0';
+    }, 10);
 
 }
 
@@ -169,7 +169,7 @@ function closeModal() {
     modal.style.top = '-100%';
     setTimeout(() => {
         modal.style.display = 'none';
-    }, 500); // The transition duration is 0.5s
+    }, 500);
 
     document.addEventListener('keydown', changeDirection);
     gameLoopInterval = setInterval(gameLoop, 170);
@@ -183,10 +183,10 @@ function showEndModal() {
     const modal = document.getElementById('modal');
     const gameDetails = document.getElementById('game-details');
     gameDetails.innerHTML = `
-    <h1>Game Over!</h1>
+    <h1 style="margin-top: 40px;">Game Over!</h1>
     <p>Your score: ${score}</p>
     <a onclick="closeModalAndRefresh()">Play again</a>
-    <a href="/home">Back to main menu</a>
+    <a style="margin-bottom: 40px" href="/home">Back to main menu</a>
     `;
     modal.style.display = 'block';
     setTimeout(() => {
@@ -206,6 +206,9 @@ function closeModalAndRefresh() {
     }, 500);
 }
 
+/**
+ * Creates a new snake result by sending a POST request to the server.
+ */
 function createSnakeResult() {
 
     const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');

@@ -216,6 +216,19 @@ public class HtmlController {
     }
 
     /**
+     * Handles the request for the error page.
+     *
+     * @param model the model object to be populated with data
+     * @return the name of the error template
+     */
+    @GetMapping("/error")
+    public String error(Model model) {
+        model.addAttribute("username", getLoggedInUsername());
+        model.addAttribute("email", getLoggedInUserEmail());
+        return "error";
+    }
+
+    /**
      * Retrieves the logged in username.
      *
      * @return the logged in username

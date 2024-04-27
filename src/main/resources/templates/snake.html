@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <title>Snake</title>
+    <title>Vovido Games | Snake</title>
     <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
     <link rel="stylesheet" href="/css/snakeStyles.css" th:href="@{/css/snakeStyles.css}">
+    <link rel="stylesheet" href="/css/forum.css" th:href="@{/css/forum.css}">
 </head>
 <body>
     <div id="modal" class="modal">
@@ -20,7 +21,7 @@
         <a href="/logout">Logout</a>
     </div>
     <div class="top-left-container">
-        <p><b>Fun Games</b></p>
+        <p><b>Vovido Games</b></p>
         <a href="/home">Home</a>
     </div>
     <div class="games-container">
@@ -53,7 +54,7 @@
         </table>
         <a href="/leaderboards" style="margin-top: 10px;">Full Leadeboards</a>
     </div>
-    <h1>Pexeso</h1>
+    <h1>Snake</h1>
     <div class="sub-container-wrapper">
         <div class="sub-container">
             <div id="gameArea"></div>
@@ -62,16 +63,22 @@
     <div class="sub-container-wrapper">
         <div class="left-wrapper">
             <div class="sub-container">
-                <p>Score: <span id="score">0</span></p>
-                <p>World Record: <span id="matches">0</span></p>
+                <p><span id="score">Score: <b>0</b></span></p>
             </div>
         </div>
         <div class="right-wrapper">
-            <div class="sub-container">
-                <a href="/pexeso-menu">Back to Menu</a>
-                <a th:href="@{/pexeso-game(difficulty=${difficulty})}">Restart Game</a>
-
+            <div style="padding: 29.5px;" class="sub-container">
+                <a href="/home">Back to Menu</a>
+                <a href="/snake-game">Restart Game</a>
             </div>
+        </div>
+    </div>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <p>World Record: <b><span id="record"></span></b></p>
+            <p>Record Holder: <b><span id="recordHolder"></span></b></p>
+            <img class="profile-pfp" id="recordHolderPicture">
+            
         </div>
     </div>
 
@@ -80,8 +87,20 @@
     <script src="/js/profile.js" th:src="@{/js/profile.js}"></script> 
 
     <script>
+        function getRecordHolder(){
+            fetch('/records')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('record').innerText = data.snake.score;
+                    document.getElementById('recordHolder').innerText = data.snake.user.username;
+                    document.getElementById('recordHolderPicture').src = data.snake.user.profilePictureURL;
+                });
+
+        }
+
         window.onload = function() {
             getSnakeResultsToLeaderboard(4,0);
+            getRecordHolder();
             showStartModal();
         }
     </script>

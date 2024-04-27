@@ -15,6 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Controller class for handling registration operations.
+ */
 @Controller
 @RequestMapping("/register")
 public class RegistrationController {
@@ -28,16 +31,38 @@ public class RegistrationController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Displays the registration form.
+     *
+     * @param model the model object to be populated with data
+     * @return the name of the registration view template
+     */
     @GetMapping
     public String showRegistrationForm(Model model) {
         model.addAttribute("registrationUserDto", new RegistrationUserDto());
         return "register";
     }
 
+    /**
+     * Registers a new user account.
+     *
+     * @param userDto             the registration user DTO containing user data
+     * @param result              the binding result object for validation errors
+     * @param model               the model object to be populated with data
+     * @param redirectAttributes  the redirect attributes object for flash messages
+     * @return the name of the view template to be displayed after registration
+     */
     @PostMapping
     public String registerUserAccount(@ModelAttribute("registrationUserDto") RegistrationUserDto userDto,
                                       BindingResult result, Model model,
                                       RedirectAttributes redirectAttributes) {
+
+        User existingUser = userService.getUserByUsername(userDto.getUsername());
+
+        if (existingUser != null) {
+            model.addAttribute("errorMessage", "An account with that username already exists.");
+            return "register";
+        }
 
         if (!userDto.getPassword().equals(userDto.getConfirmPassword())) {
             model.addAttribute("errorMessage", "Passwords do not match.");
@@ -45,7 +70,17 @@ public class RegistrationController {
         }
 
         if (!(userDto.getPassword().length() > 6)) {
-            model.addAttribute("errorMessage", "Password too short. Must be at least 6 characters.");
+            model.addAttribute("errorMessage", "Password too short. Must be at least 7 characters.");
+            return "register"; // Return to registration page with error message
+        }
+
+        if (userDto.getUsername().length() > 20) {
+            model.addAttribute("errorMessage", "Username too long. Must be at most 20 characters.");
+            return "register"; // Return to registration page with error message
+        }
+
+        if (userDto.getEmail().length() > 35) {
+            model.addAttribute("errorMessage", "Email too long. Must be at most 35 characters.");
             return "register"; // Return to registration page with error message
         }
 

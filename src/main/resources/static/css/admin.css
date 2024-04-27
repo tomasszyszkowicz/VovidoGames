@@ -1,12 +1,11 @@
-/* Styles for the results table */
 .results-table {
-    width: 100%; /* Full-width table */
-    margin: 20px 0; /* Adds margin around the table */
-    background-color: #f4f4f4; /* Light grey background for the table */
-    border-style: solid; /* Adds a border around the table */
-    border-width: 2px; /* Sets the border width */
+    width: 100%;
+    margin: 20px 0;
+    background-color: #f4f4f4;
+    border-style: solid;
+    border-width: 2px;
     border-color: black;
-    border-radius: 8px; /* Rounded corners for the table */
+    border-radius: 8px;
 }
 
 .results-table th, .results-table td {
@@ -16,18 +15,18 @@
 }
 
 .table-header {
-    background-color: grey; /* Deep blue background for headers */
-    color: #ffffff; /* White text for headers */
+    background-color: grey;
+    color: #ffffff;
     font-weight: bold;
 }
 
 .results-table td {
-    background-color: #ffffff; /* White background for cells */
-    color: #333333; /* Dark text for readability */
+    background-color: #ffffff;
+    color: #333333;
 }
 
 .results-table tr:hover {
-    background-color: #e6f2ff; /* Very light blue background on hover */
+    background-color: #e6f2ff;
 }
 
 .results-table button {
@@ -46,7 +45,7 @@
 .results-table td.clickable:hover {
     color: black;
     font-weight: bold;
-    background-color: #cce5ff;  /* Lighter blue to indicate interactivity */
+    background-color: #cce5ff;
     cursor: pointer;
 }
 

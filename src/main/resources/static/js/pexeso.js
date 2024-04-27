@@ -57,7 +57,6 @@ function flipCard() {
             if (firstFlippedCard.textContent === clickedCard.textContent) {
                 console.log("Match found!");
                 numberOfMatches++;
-                document.getElementById("matches").textContent = numberOfMatches;
                 firstFlippedCard.classList.add('matched');
                 clickedCard.classList.add('matched');
                 firstFlippedCard.removeEventListener('click', flipCard);
@@ -95,13 +94,11 @@ function checkEndGame() {
         const difficulty = getQueryParamater("difficulty");
         createResult();
         gameDetails.innerHTML = `
-        <h1>You have solved the pexeso!</h1>
+        <h1 style="margin-top: 40px;">You have solved the pexeso!</h1>
         <p>Clicks: ${numberOfClicks}</p>
         <a onclick="closeModalandRestart()">Play again</a>
-        <a href="/pexeso-menu">Choose a different pexeso</a>
-        <a href="/home">Back to main menu</a>
-        <a href="/leaderboards">Leaderboards</a>
-        <a onclick="closeModal()">Close</a>
+        <a href="/pexeso-menu">Back to pexeso menu</a>
+        <a style="margin-bottom: 40px;" href="/home">Back to main menu</a>
         `;
         modal.style.display = 'block';
         setTimeout(() => {
@@ -110,14 +107,17 @@ function checkEndGame() {
     }
 }
 
+/**
+ * Shows start modal.
+ */
 function showStartModal() {
     
     const modal = document.getElementById('modal');
     const gameDetails = document.getElementById('game-details');
     gameDetails.innerHTML = `
-    <h1>Welcome to pexeso!</h1>
+    <h1 style="margin-top: 40px";>Welcome to pexeso!</h1>
     <p>Click on a card to flip it. Find all matching pairs to win!</p>
-    <a onclick="closeModal()">Start</a>
+    <a style="margin-bottom: 40px;" onclick="closeModal()">Start</a>
     `;
 
     modal.style.display = 'block';
@@ -127,6 +127,9 @@ function showStartModal() {
 
 }
 
+/**
+ * Closes the modal.
+ */
 function closeModal() {
     startPexeso();
     const modal = document.getElementById('modal');
@@ -158,6 +161,9 @@ function setupValues(){
     }
 }
 
+/**
+ * Starts the pexeso game.
+ */
 function startPexeso() {
     setupValues();
     assignCardValues();
@@ -166,6 +172,9 @@ function startPexeso() {
     cards.forEach(card => card.addEventListener('click', flipCard));
 }
 
+/**
+ * Restarts the game.
+ */
 function closeModalandRestart() {
     closeModal();
     setTimeout(() => {

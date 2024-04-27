@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <title>Pexeso Board</title>
+    <title>Vovido Games | Pexeso</title>
     <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
 </head>
 <body>
@@ -19,7 +19,7 @@
         <a href="/logout">Logout</a>
     </div>
     <div class="top-left-container">
-        <p><b>Fun Games</b></p>
+        <p><b>Vovido Games</b></p>
         <a href="/home">Home</a>
     </div>
     <div class="games-container">
@@ -64,16 +64,22 @@
     <div class="sub-container-wrapper">
         <div class="left-wrapper">
             <div class="sub-container">
-                <p>Clicks: <span id="clicks">0</span></p>
-                <p>Matches: <span id="matches">0</span></p>
+                <p>Clicks: <b><span id="clicks">0</span></b></p>
             </div>
         </div>
         <div class="right-wrapper">
-            <div class="sub-container">
+            <div style="padding: 29.5px;" class="sub-container">
                 <a href="/pexeso-menu">Back to Menu</a>
                 <a th:href="@{/pexeso-game(difficulty=${difficulty})}">Restart Game</a>
 
             </div>
+        </div>
+    </div>
+    <div class="sub-container-wrapper">
+        <div class="sub-container">
+            <p>World Record: <b><span id="record"></span></b></p>
+            <p>Record Holder: <b><span id="recordHolder"></span></b></p>
+            <img class="profile-pfp" id="recordHolderPicture">
         </div>
     </div>
     <script src="/js/dataOperations.js" th:src="@{/js/dataOperations.js}"></script>
@@ -81,7 +87,30 @@
     <script src="/js/profile.js" th:src="@{/js/profile.js}"></script> 
 
     <script>
+        function getRecordHolder(){
+            const urlParams = new URLSearchParams(window.location.search);
+            const difficulty = urlParams.get('difficulty');
+            fetch('/records')
+                .then(response => response.json())
+                .then(data => {
+                    if (difficulty === 'easy') {
+                        document.getElementById('record').innerText = data.easy.score;
+                        document.getElementById('recordHolder').innerText = data.easy.user.username;
+                        document.getElementById('recordHolderPicture').src = data.easy.user.profilePictureURL;
+                    } else if (difficulty === 'medium') {
+                        document.getElementById('record').innerText = data.medium.score;
+                        document.getElementById('recordHolder').innerText = data.medium.user.username;
+                        document.getElementById('recordHolderPicture').src = data.medium.user.profilePictureURL;
+                    } else {
+                        document.getElementById('record').innerText = data.hard.score;
+                        document.getElementById('recordHolder').innerText = data.hard.user.username;
+                        document.getElementById('recordHolderPicture').src = data.hard.user.profilePictureURL;
+                    }
+                });
+        }
+
         window.onload = function() {
+            getRecordHolder();
             getResultsToLeaderboard(4,0);
             showStartModal();
         };

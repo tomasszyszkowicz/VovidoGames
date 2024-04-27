@@ -56,4 +56,4 @@ Remember, that you need to login via heroku CLI to make this work.
 
 ## Github Actions Deploy
 
-The app is automatically deployed to heroku on every push to 'prod' branch. Look inside the '.github/workflows' directory to see the 'deploy.yml' file.
+The app is automatically deployed to heroku on every push to 'main' branch. Look inside the '.github/workflows' directory to see the 'deploy.yml' file.

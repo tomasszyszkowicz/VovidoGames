@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}">
-    <title>Leaderboards</title>
+    <title>Vovido Games | Leaderboards</title>
 </head>
 <body>
     <h1>Leaderboard</h1>
@@ -11,15 +11,22 @@
     <div class="sub-container-wrapper">
         <div class="sub-container">
             <form id="leaderboardForm">
-                <label for="difficulty">Difficulty:</label>
+                <label for="difficulty">Game:</label>
                 <select id="difficulty" name="difficulty">
                     <option value="1">Easy pexeso</option>
                     <option value="2">Medium pexeso</option>
                     <option value="3">Hard pexeso</option>
                     <option value="4">Snake</option>
-                </select>
-                <button type="button" onclick="sumbitForm()">Show Leaderboard</button>
+                </select><br>
+                
+                <input style="margin-top: 15px;" type="radio" id="records" name="recordResults" value="records" checked>
+                <label for="contactChoice1">Records</label>
+                
+                <input type="radio" id="results" name="recordResults" value="results">
+                <label for="contactChoice2">Results</label>
+                
         </form>
+        <a style="margin-top: 15px;" onclick="sumbitForm()">Show Leaderboard</a>
         </div>
     </div>
     <div class="top-right-container">
@@ -29,7 +36,7 @@
         <a href="/logout">Logout</a>
     </div>
     <div class="top-left-container">
-        <p><b>Fun Games</b></p>
+        <p><b>Vovido Games</b></p>
         <a href="/home">Home</a>
     </div>
     <div class="games-container">
@@ -48,7 +55,7 @@
     </div>
     <div class="sub-container-wrapper">
         <div class="sub-container">
-            <h2><span id="difficultyText">Easy pexeso</span> leaderboard</h2>
+            <h2><span id="difficultyText">Easy pexeso records</span></h2>
             <table>
                 <thead>
                     <tr>
@@ -67,98 +74,13 @@
     </div>
 
     <script src="/js/profile.js" th:src="@{/js/profile.js}"></script> 
+    <script src="/js/leaderboard.js" th:src="@{/js/leaderboard.js}"></script>
 
     <script>
-        var global_bottom = 0;
-        var global_top = 19;
-
-        var global_difficulty = 1;
-
-        var globalBaseUrl;
-
-        function getResultsToLeaderboard(baseUrl, top, bottom, difficulty) {
-            var url = baseUrl;
-            if (top) {
-                url += '?top=' + top;
-            }
-            if (bottom) {
-                url += '&bottom=' + bottom;
-            }
-            if (difficulty<4) {
-                url += '&difficulty=' + difficulty;
-            }
-
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    updateNavigationButtonVisibility();
-                    document.getElementById("globalBottom").textContent = global_bottom + 1;
-                    document.getElementById("globalTop").textContent = global_top + 1;
-                    const leaderboardBody = document.getElementById("leaderboardBody");
-                    leaderboardBody.innerHTML = ""; // Clear existing rows
-                    data.forEach((result, index) => {
-                        const row = document.createElement("tr");
-                        const rankCell = document.createElement("td");
-                        // Calculate rank based on global_bottom and index
-                        rankCell.textContent = global_bottom + index + 1;
-                        const playerCell = document.createElement("td");
-                        playerCell.textContent = result.user.username;
-                        const scoreCell = document.createElement("td");
-                        scoreCell.textContent = result.score;
-                        row.appendChild(rankCell);
-                        row.appendChild(playerCell);
-                        row.appendChild(scoreCell);
-                        leaderboardBody.appendChild(row);
-                    });
-                });
-        }
-
-        function turnPageUp() {
-            global_bottom += 20;
-            global_top += 20;
-            getResultsToLeaderboard(globalBaseUrl, global_top, global_bottom, global_difficulty);
-        }
-
-        function turnPageDown() {
-            global_bottom -= 20;
-            global_top -= 20;
-            getResultsToLeaderboard(globalBaseUrl, global_top, global_bottom, global_difficulty);
-        }
-
-        function updateNavigationButtonVisibility() {
-            const turnPageDownButton = document.getElementById("turnPageDownButton");
-            if (global_bottom === 0) {
-                turnPageDownButton.style.visibility = "hidden";
-            } else {
-                turnPageDownButton.style.visibility = "visible";
-            }
-        }
-
-        function sumbitForm() {
-            global_bottom = 0;
-            global_top = 19;
-            const difficulty = document.getElementById("difficulty").value;
-            if(difficulty === "1") {
-                document.getElementById("difficultyText").textContent = "Easy pexeso ";
-                globalBaseUrl = "/results"
-            } else if(difficulty === "2") {
-                document.getElementById("difficultyText").textContent = "Medium pexeso ";
-                globalBaseUrl = "/results"
-            } else if(difficulty === "3") {
-                document.getElementById("difficultyText").textContent = "Hard pexeso ";
-                globalBaseUrl = "/results"
-            } else if(difficulty === "4") {
-                document.getElementById("difficultyText").textContent = "Snake ";
-                globalBaseUrl = "/snake/results"
-            }
-            global_difficulty = difficulty;
-            getResultsToLeaderboard(globalBaseUrl, 19, 0, global_difficulty);
-        }
-
         window.onload = function() {
-            globalBaseUrl = "/results";
-            getResultsToLeaderboard("/results",19, 0, 1);
-            updateNavigationButtonVisibility(); // This call might be redundant if getResultsToLeaderboard already handles it
+            globalBaseUrl = "/pexeso/records";
+            getResultsToLeaderboard("/pexeso/records",19, 0, 1);
+            updateNavigationButtonVisibility();
          };
     </script>
 </body>
