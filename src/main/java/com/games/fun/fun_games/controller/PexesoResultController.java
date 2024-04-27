@@ -31,6 +31,16 @@ public class PexesoResultController {
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
+    @GetMapping("records")
+    public ResponseEntity<List<PexesoResult>> getRecords(
+            @RequestParam(name = "top", defaultValue = "20") int top,
+            @RequestParam(name = "bottom", defaultValue = "0") int bottom,
+            @RequestParam(name = "difficulty", defaultValue = "1") int difficulty) {
+
+        List<PexesoResult> results = pexesoResultService.getResults(bottom, top, difficulty);
+        return new ResponseEntity<>(results, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<PexesoResult> createResult(@RequestBody PexesoResultDto resultDto) {
         PexesoResult newResult = pexesoResultService.createResult(resultDto.getUsername(), resultDto.getScore(), resultDto.getDifficulty());

@@ -33,6 +33,14 @@ public class PexesoResultService {
         return pexesoResultRepository.findByDifficulty(difficulty, pageRequest).getContent();
     }
 
+    public List<PexesoResult> getRecords(int bottom, int top, int difficulty) {
+        int size = top - bottom + 1;
+        int pageNumber = bottom / size;
+        Sort sort = Sort.by(Sort.Direction.ASC, "score");
+        PageRequest pageRequest = PageRequest.of(pageNumber, size, sort);
+        return pexesoResultRepository.findBestByDifficulty(difficulty, pageRequest).getContent();
+    }    
+
     public PexesoResult createResult(String username, int score, int difficulty) {
         User user = userService.getUserByUsername(username);
         if (user == null) {
