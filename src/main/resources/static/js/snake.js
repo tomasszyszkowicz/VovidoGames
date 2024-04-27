@@ -129,7 +129,7 @@ function drawFood() {
  */
 function updateScore() {
     const scoreElement = document.getElementById('score');
-    scoreElement.innerText = `Score: ${score}`;
+    scoreElement.innerHTML = `Score: <b>${score}</b>`;
 }
 
 /**
