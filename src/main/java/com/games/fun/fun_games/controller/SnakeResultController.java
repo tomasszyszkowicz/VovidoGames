@@ -29,6 +29,14 @@ public class SnakeResultController {
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
+    @GetMapping("/records")
+    public ResponseEntity<List<SnakeResult>> getRecords(
+            @RequestParam(name = "top", defaultValue = "20") int top,
+            @RequestParam(name = "bottom", defaultValue = "0") int bottom) {
+        List<SnakeResult> results = snakeResultService.getRecords(bottom, top);
+        return new ResponseEntity<>(results, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<SnakeResult> createResult(@RequestBody SnakeResultDto resultDto) {
         SnakeResult newResult = snakeResultService.createResult(resultDto);

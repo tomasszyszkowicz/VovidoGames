@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.Comparator;
 
 @Service
 public class SnakeResultService {
@@ -30,6 +33,29 @@ public class SnakeResultService {
         Sort sort = Sort.by(Sort.Direction.DESC, "score");
         PageRequest pageRequest = PageRequest.of(pageNumber, size, sort);
         return snakeResultRepository.findAll(pageRequest).getContent();
+    }
+
+    public List<SnakeResult> getRecords(int bottom, int top) {
+        // Fetch all data
+        List<SnakeResult> allResults = snakeResultRepository.findAll();
+
+        // Group by user and find the maximum score per user
+        List<SnakeResult> filteredResults = allResults.stream()
+            .collect(Collectors.groupingBy(
+                SnakeResult::getUser,
+                Collectors.maxBy(Comparator.comparing(SnakeResult::getScore))
+            ))
+            .values()
+            .stream()
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .sorted(Comparator.comparing(SnakeResult::getScore).reversed()) // Sort by score DESC
+            .collect(Collectors.toList());
+
+        int fromIndex = Math.min(bottom, filteredResults.size());
+        int toIndex = Math.min(top + 1, filteredResults.size());
+
+        return filteredResults.subList(fromIndex, toIndex);
     }
 
     public SnakeResult createResult(SnakeResultDto resultDto) {
