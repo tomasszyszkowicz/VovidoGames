@@ -7,7 +7,7 @@ let playerPosition = {
 	onGround: true,
 };
 let obstaclePosition = { x: 380, y: 180 };
-let speed = 2;
+let speed = 2.5;
 let speedIncreaseInterval = 10000; // Increase speed every 10 seconds
 let lastIncreaseTime = Date.now(); // Initialize the last increase time
 let gameInterval;
@@ -39,14 +39,17 @@ function drawPlayer() {
 function updateObstacle() {
 	let obstacle = document.querySelector(".obstacle");
 	if (obstaclePosition.x <= 5) {
-		let random = Math.floor(Math.random() * 3) + 1;
+		let random = Math.floor(Math.random() * 4) + 1;
 		updateScore();
 		obstaclePosition.x = 380;
 		if (random === 1) {
 			obstaclePosition.y = 180;
 		} else if (random === 2) {
-			obstaclePosition.y = 150;
-		} else {
+			obstaclePosition.y = 160;
+		} else if (random === 3) {
+            obstaclePosition.y = 140;
+        }
+        else {
 			obstaclePosition.y = 110;
 		}
 	} else {
