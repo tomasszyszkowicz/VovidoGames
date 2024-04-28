@@ -5,17 +5,53 @@ var values = [];
 
 var firstFlippedCard = null;
 
+let cryptoKey;
+
+async function generateKey() {
+    cryptoKey = await window.crypto.subtle.generateKey(
+        { name: "AES-GCM", length: 256 },
+        true,
+        ["encrypt", "decrypt"]
+    );
+}
+
+async function encryptValue(value) {
+    const iv = window.crypto.getRandomValues(new Uint8Array(12));
+    const encoded = new TextEncoder().encode(value);
+    const encrypted = await window.crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, cryptoKey, encoded);
+    const encryptedArr = new Uint8Array(encrypted);
+    const combined = new Uint8Array(iv.length + encryptedArr.length);
+    combined.set(iv);
+    combined.set(encryptedArr, iv.length);
+    return btoa(String.fromCharCode.apply(null, combined));
+}
+
+async function decryptValue(encryptedValue) {
+    const data = atob(encryptedValue);
+    const bytes = new Uint8Array(data.length).map((_, i) => data.charCodeAt(i));
+    const iv = bytes.slice(0, 12);
+    const encryptedData = bytes.slice(12);
+    const decrypted = await window.crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, cryptoKey, encryptedData);
+    return new TextDecoder().decode(decrypted);
+}
+
+generateKey(); // Initialize the crypto key
+
+
 /**
 * Assigns shuffled values to cards on the board.
 */
-function assignCardValues() {
+async function assignCardValues() {
     var cards = document.querySelectorAll('.card');
     var randomIndexes = generateRandomIndexes(cards.length);
 
     for (var i = 0; i < cards.length; i++) {
-        cards[i].textContent = values[randomIndexes[i]];
+        const encodedValue = await encryptValue(values[randomIndexes[i]]);
+        cards[i].setAttribute('data-value', encodedValue);
+        cards[i].textContent = ""; // Clear text content as it's a hidden value
     }
 }
+
 
 /**
 * Generates a shuffled array of indexes to randomly assign card values.
@@ -40,21 +76,27 @@ function generateRandomIndexes(length) {
 /**
 * Flips the card and checks for a match.
 */
-function flipCard() {
+async function flipCard() {
     var clickedCard = this;
     numberOfClicks++;
     document.getElementById("clicks").textContent = numberOfClicks;
 
     if (clickedCard.classList.contains('flipped')) {
+        // Hide the value when flipping back
+        clickedCard.textContent = '';
         clickedCard.classList.remove('flipped');
     } else {
+        // Decode and show the value when flipped
+        let decodedValue = await decryptValue(clickedCard.getAttribute('data-value'));
+        clickedCard.textContent = decodedValue;
         clickedCard.classList.add('flipped');
 
         if (firstFlippedCard === null) {
             firstFlippedCard = clickedCard;
             firstFlippedCard.removeEventListener('click', flipCard);
         } else {
-            if (firstFlippedCard.textContent === clickedCard.textContent) {
+            let firstCardValue = await decryptValue(firstFlippedCard.getAttribute('data-value'));
+            if (firstCardValue === decodedValue) {
                 console.log("Match found!");
                 numberOfMatches++;
                 firstFlippedCard.classList.add('matched');
@@ -63,26 +105,28 @@ function flipCard() {
                 clickedCard.removeEventListener('click', flipCard);
                 setTimeout(checkEndGame, 200);
             } else {
-
                 var cards = document.querySelectorAll('.card');
-                cards.forEach(card => {
-                    card.removeEventListener('click', flipCard);
-                });
+                cards.forEach(card => card.removeEventListener('click', flipCard));
 
-                setTimeout(function(card1, card2) {
+                setTimeout(async function(card1, card2) {
+                    card1.textContent = '';
+                    card2.textContent = '';
                     card1.classList.remove('flipped');
                     card2.classList.remove('flipped');
                     cards.forEach(card => {
-                        if (!card.classList.contains('flipped')) {
+                        if (!card.classList.contains('matched')) {
                             card.addEventListener('click', flipCard);
                         }
                     });
                 }, 1000, firstFlippedCard, clickedCard);
             }
-        firstFlippedCard = null;
+            firstFlippedCard = null;
         }
     }
 }
+
+
+
 
 /**
 * Checks if the game has ended.
@@ -166,9 +210,9 @@ function setupValues(){
 /**
  * Starts the pexeso game.
  */
-function startPexeso() {
-    setupValues();
-    assignCardValues();
+async function startPexeso() {
+    await setupValues();
+    await assignCardValues();
 
     var cards = document.querySelectorAll('.card');
     cards.forEach(card => card.addEventListener('click', flipCard));
