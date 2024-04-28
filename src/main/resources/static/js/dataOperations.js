@@ -161,6 +161,50 @@ function getSnakeResultsToLeaderboard(top, bottom) {
 }
 
 /**
+ * Fetches and updates the leaderboard for the jump game from the server.
+ *
+ * @param {number} top - The highest rank to be retrieved for the leaderboard.
+ * @param {number} bottom - The lowest rank to be retrieved for the leaderboard.
+ */
+function getJumpResultsToLeaderboard(top, bottom) {
+    var url = '/jump/records';
+    if (top) {
+        url += `?top=${top}`;
+    }
+    if (bottom) {
+        url += `&bottom=${bottom}`;
+    }
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const leaderboardBody = document.getElementById("leaderboardBody");
+            leaderboardBody.innerHTML = ""; // Clear existing rows
+            data.forEach((result, index) => {
+                const row = document.createElement("tr");
+                const rank = index + 1;
+                if (rank === 1) {
+                    row.classList.add('gold');
+                } else if (rank === 2) {
+                    row.classList.add('silver-color');
+                } else if (rank === 3) {
+                    row.classList.add('bronze');
+                }
+                const rankCell = document.createElement("td");
+                rankCell.textContent = (index + 1);
+                const playerCell = document.createElement("td");
+                playerCell.textContent = result.user.username;
+                const scoreCell = document.createElement("td");
+                scoreCell.textContent = result.score;
+                row.appendChild(rankCell);
+                row.appendChild(playerCell);
+                row.appendChild(scoreCell);
+                leaderboardBody.appendChild(row);
+            });
+        });
+
+}
+
+/**
  * Retrieves the value of a specified query parameter from the current URL.
  *
  * This function uses the URLSearchParams API to parse the query string of
