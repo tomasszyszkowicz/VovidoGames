@@ -5,6 +5,14 @@ var values = [];
 
 var firstFlippedCard = null;
 
+function encodeValue(value) {
+    return btoa(value); // Base64 encode
+}
+
+function decodeValue(encodedValue) {
+    return atob(encodedValue); // Base64 decode
+}
+
 /**
 * Assigns shuffled values to cards on the board.
 */
@@ -13,9 +21,12 @@ function assignCardValues() {
     var randomIndexes = generateRandomIndexes(cards.length);
 
     for (var i = 0; i < cards.length; i++) {
-        cards[i].textContent = values[randomIndexes[i]];
+        // Encode each value before setting it
+        cards[i].setAttribute('data-value', encodeValue(values[randomIndexes[i]]));
+        cards[i].textContent = ""; // Optionally, remove text content if any
     }
 }
+
 
 /**
 * Generates a shuffled array of indexes to randomly assign card values.
@@ -46,15 +57,19 @@ function flipCard() {
     document.getElementById("clicks").textContent = numberOfClicks;
 
     if (clickedCard.classList.contains('flipped')) {
+        // Hide the value when flipping back
+        clickedCard.textContent = '';
         clickedCard.classList.remove('flipped');
     } else {
+        // Decode and show the value when flipped
+        clickedCard.textContent = decodeValue(clickedCard.getAttribute('data-value'));
         clickedCard.classList.add('flipped');
 
         if (firstFlippedCard === null) {
             firstFlippedCard = clickedCard;
             firstFlippedCard.removeEventListener('click', flipCard);
         } else {
-            if (firstFlippedCard.textContent === clickedCard.textContent) {
+            if (decodeValue(firstFlippedCard.getAttribute('data-value')) === decodeValue(clickedCard.getAttribute('data-value'))) {
                 console.log("Match found!");
                 numberOfMatches++;
                 firstFlippedCard.classList.add('matched');
@@ -63,26 +78,30 @@ function flipCard() {
                 clickedCard.removeEventListener('click', flipCard);
                 setTimeout(checkEndGame, 200);
             } else {
-
                 var cards = document.querySelectorAll('.card');
                 cards.forEach(card => {
                     card.removeEventListener('click', flipCard);
                 });
 
                 setTimeout(function(card1, card2) {
+                    // Hide values again when flipping back
+                    card1.textContent = '';
+                    card2.textContent = '';
                     card1.classList.remove('flipped');
                     card2.classList.remove('flipped');
                     cards.forEach(card => {
-                        if (!card.classList.contains('flipped')) {
+                        if (!card.classList.contains('matched')) {
                             card.addEventListener('click', flipCard);
                         }
                     });
                 }, 1000, firstFlippedCard, clickedCard);
             }
-        firstFlippedCard = null;
+            firstFlippedCard = null;
         }
     }
 }
+
+
 
 /**
 * Checks if the game has ended.
