@@ -6,11 +6,16 @@ var values = [];
 var firstFlippedCard = null;
 
 function encodeValue(value) {
-    return btoa(value); // Base64 encode
+    let salt = Math.random().toString().slice(2, 10); // Generate a random salt
+    let valueWithSalt = value + ':' + salt; // Append salt to the value
+    return btoa(valueWithSalt); // Base64 encode the value with salt
 }
 
+
 function decodeValue(encodedValue) {
-    return atob(encodedValue); // Base64 decode
+    let decoded = atob(encodedValue); // Base64 decode
+    let valueParts = decoded.split(':'); // Split the decoded value to separate the value and the salt
+    return valueParts[0]; // Return only the value, ignoring the salt
 }
 
 /**
