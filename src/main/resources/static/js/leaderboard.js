@@ -116,6 +116,10 @@ function sumbitForm() {
 		document.getElementById("difficultyText").textContent =
 			"Snake " + endpoint;
 		globalBaseUrl = "/snake/" + endpoint;
+	} else if (difficulty === "5") {
+		document.getElementById("difficultyText").textContent =
+			"Jump jump " + endpoint;
+		globalBaseUrl = "/jump/" + endpoint;
 	}
 	global_difficulty = difficulty;
 	getResultsToLeaderboard(globalBaseUrl, 19, 0, global_difficulty);

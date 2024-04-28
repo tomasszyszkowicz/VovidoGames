@@ -38,6 +38,22 @@
         <p><b>Admin</b></p>
         <a class="nav-link" href="/admin/admin-menu">Admin</a>
     </div>
+    <div class="middle-right-container">
+        <p><b>Leaderboard</b></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboardBody">
+                <!-- Leaderboard data will be populated here -->
+            </tbody>
+        </table>
+        <a href="/leaderboards" style="margin-top: 10px;">Full Leadeboards</a>
+    </div>
     <h1>Jump jump</h1>
     <div class="sub-container-wrapper">
         <div class="sub-container">
@@ -69,5 +85,13 @@
     <script src="/js/dataOperations.js" th:src="@{/js/dataOperations.js}"></script>
     <script src="/js/profile.js" th:src="@{/js/profile.js}"></script> 
     <script src="/js/jump.js" th:src="@{/js/jump.js}"></script>
+
+    <script>
+        window.onload = function () {
+            getJumpResultsToLeaderboard(4,0);
+            fetchUser();
+            showStartModal();
+        };
+    </script>
 </body>
 </html>

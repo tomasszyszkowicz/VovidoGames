@@ -145,15 +145,11 @@ function fetchUser() {
 		});
 }
 
-window.onload = function () {
-	fetchUser();
-	showStartModal();
-};
-
 /**
  * Shows the end modal with the final score and options to play again or return to the main menu.
  */
 function showEndModal() {
+    createJumpResult();
 	const modal = document.getElementById("modal");
 	const gameDetails = document.getElementById("game-details");
 	gameDetails.innerHTML = `
@@ -211,4 +207,45 @@ function closeModalAndRefresh() {
 		modal.style.display = "none";
 		window.location.reload();
 	}, 500);
+}
+
+/**
+ * Creates a new jump jump result by sending a POST request to the server.
+ */
+function createJumpResult() {
+
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    username = document.getElementById("username").textContent;
+
+    const url = '/jump';
+    const result = {
+        score: score,
+        username: username
+    };
+    console.log(result);
+    
+    const requestOptions = {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            [csrfHeader]: csrfToken
+        },
+        body: JSON.stringify(result)
+    };
+
+    fetch(url, requestOptions)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Network response was not ok.');
+        })
+        .then(data => {
+            console.log('Result created:', data);
+        })
+        .catch(error => {
+            console.error('There was a problem with your fetch operation:', error);
+        });
 }
