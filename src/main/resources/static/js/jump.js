@@ -173,7 +173,7 @@ function showStartModal() {
 	const modal = document.getElementById("modal");
 	const gameDetails = document.getElementById("game-details");
 	gameDetails.innerHTML = `
-    <h1 style="margin-top: 40px;">Welcome to Jump jump!</h1>
+    <h1 style="margin-top: 40px;">Welcome to Jump Jump!</h1>
     <p>Jump with spacebar to avoid the obstacles!</p>
     <a style="margin-bottom: 40px;" onclick="closeModal()">Start</a>
     `;
