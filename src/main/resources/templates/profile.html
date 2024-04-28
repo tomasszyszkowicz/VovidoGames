@@ -61,6 +61,9 @@
                       <td><b><span id="snakeRecord"></span></b></td>
                     </tr>
                     <tr>
+                      <td>Jump Jump</td>
+                      <td><b><span id="jumpRecord"></span></b></td>
+                    <tr>
                       <td>Easy Pexeso</td>
                       <td><b><span id="easyPexesoRecord"></span></b></td>
                     </tr>
@@ -115,6 +118,7 @@
                     document.getElementById('easyPexesoRecord').innerText = data.pexesoHighScore_easy;
                     document.getElementById('mediumPexesoRecord').innerText = data.pexesoHighScore_medium;
                     document.getElementById('hardPexesoRecord').innerText = data.pexesoHighScore_hard;
+                    document.getElementById('jumpRecord').innerText = data.jumpHighScore;
                 });
         } 
 

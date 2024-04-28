@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.games.fun.fun_games.entity.User;
 import com.games.fun.fun_games.entity.SnakeResult;
+import com.games.fun.fun_games.entity.JumpResult;
 import com.games.fun.fun_games.entity.PexesoResult;
 
 import java.util.HashMap;
@@ -18,13 +19,15 @@ public class RecordService {
     private final UserService userService;
     private final SnakeResultService snakeResultService;
     private final PexesoResultService pexesoResultService;
+    private final JumpResultService jumpResultService;
 
     @Autowired
     public RecordService(UserService userService, SnakeResultService snakeResultService,
-            PexesoResultService pexesoResultService) {
+            PexesoResultService pexesoResultService, JumpResultService jumpResultService) {
         this.userService = userService;
         this.snakeResultService = snakeResultService;
         this.pexesoResultService = pexesoResultService;
+        this.jumpResultService = jumpResultService;
     }
 
     /**
@@ -50,6 +53,14 @@ public class RecordService {
             response.put("snakeHighScore", snakeResult.getScore());
         } else {
             response.put("snakeHighScore", "No results");
+        }
+
+        // Fetching and adding the best Jump result.
+        JumpResult jumpResult = jumpResultService.getBestResultByUser(user);
+        if (jumpResult != null) {
+            response.put("jumpHighScore", jumpResult.getScore());
+        } else {
+            response.put("jumpHighScore", "No results");
         }
 
         // Fetching and adding the best Pexeso results for all difficulties.
@@ -78,6 +89,13 @@ public class RecordService {
             response.put("snake", snakeResult);
         } else {
             response.put("snake", "No results");
+        }
+
+        JumpResult jumpResult = jumpResultService.getOverallBestResult();
+        if (jumpResult != null) {
+            response.put("jump", jumpResult);
+        } else {
+            response.put("jump", "No results");
         }
 
         Map<String, PexesoResult> pexesoResults = pexesoResultService.getOverallBestResults();

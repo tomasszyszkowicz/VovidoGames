@@ -54,7 +54,7 @@
         </table>
         <a href="/leaderboards" style="margin-top: 10px;">Full Leadeboards</a>
     </div>
-    <h1>Jump jump</h1>
+    <h1>Jump Jump</h1>
     <div class="sub-container-wrapper">
         <div class="sub-container">
             <div class="gameArea" id="gameArea"></div>
@@ -87,7 +87,18 @@
     <script src="/js/jump.js" th:src="@{/js/jump.js}"></script>
 
     <script>
+        function getRecordHolder(){
+            fetch('/records')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('record').innerText = data.jump.score;
+                    document.getElementById('recordHolder').innerText = data.jump.user.username;
+                    document.getElementById('recordHolderPicture').src = data.jump.user.profilePictureURL;
+                });
+
+        }
         window.onload = function () {
+            getRecordHolder();
             getJumpResultsToLeaderboard(4,0);
             fetchUser();
             showStartModal();
