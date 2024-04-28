@@ -101,9 +101,11 @@ function checkEndGame() {
         <a style="margin-bottom: 40px;" href="/home">Back to main menu</a>
         `;
         modal.style.display = 'block';
-        setTimeout(() => {
-            modal.style.top = '0'; // This will trigger the transition
-        }, 10); // A slight delay to ensure 'display: block' is applied first
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                modal.style.top = '0'; // Start the animation
+            });
+        });
     }
 }
 

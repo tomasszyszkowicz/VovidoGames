@@ -42,6 +42,7 @@
         <p><b>Games</b></p>
         <a class="nav-link" href="/pexeso-menu">Pexeso</a>
         <a class="nav-link" href="/snake-game">Snake</a>
+        <a class="nav-link" href="/jump-game">Jump Jump</a>
         <p><b>Leaderboards</b></p>
         <a class="nav-link" href="/leaderboards">Leaderboards</a>
         <p><b>Forum</b></p>
@@ -193,24 +194,30 @@
                 case 4:
                     difficultySpan.textContent = "Snake";
                     break;
+                case 5:
+                    difficultySpan.textContent = "Jump Jump";
+                    break;
             }
         }
 
         function updateLeaderboard() {
             if (currentDifficulty === 4) {
                 getResultsToLeaderboard("/snake/records", 2, 0, currentDifficulty);
-            } else {
+            } else if (currentDifficulty === 5) {
+                getResultsToLeaderboard("/jump/records", 2, 0, currentDifficulty);
+            }
+            else {
                 getResultsToLeaderboard("/pexeso/records", 2, 0, currentDifficulty);
             }
             currentDifficulty += 1;
-            if (currentDifficulty > 4) {
+            if (currentDifficulty > 5) {
                 currentDifficulty = 1; // Reset difficulty after 4
             }
         }
 
         window.onload = function() {
             updateLeaderboard(); // Initial call to display the leaderboard
-            setInterval(updateLeaderboard, 6000); // Adjusted to account for animation time plus a little buffer
+            setInterval(updateLeaderboard, 4000); // Adjusted to account for animation time plus a little buffer
         };
 
     </script>
