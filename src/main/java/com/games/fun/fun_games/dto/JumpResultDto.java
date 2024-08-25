@@ -34,7 +34,7 @@ public class JumpResultDto {
     /**
      * Set the username of the player.
      * 
-     * @param username the username of the player
+     * @param the username of the player
      */
     public void setUsername(String username) {
         this.username = username;
